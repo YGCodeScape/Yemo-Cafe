@@ -162,12 +162,12 @@ export default function OnboardingPage() {
             {/* Text block */}
             <div className="relative z-10 px-6 pt-20 pb-5 pointer-events-none">
               <h1
-                className="text-[36px] font-bold leading-[1.12] text-[#2C1A0E] mb-4 whitespace-pre-line"
+                className="text-[38px] font-bold leading-[1.12] text-[#2C1A0E] mb-4 whitespace-pre-line"
                 style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
               >
                 {slide.title}
               </h1>
-              <p className="text-[14px] leading-relaxed text-[#A89080] whitespace-pre-line">
+              <p className="text-[18px] leading-relaxed text-[#A89080] whitespace-pre-line">
                 {slide.body}
               </p>
             </div>

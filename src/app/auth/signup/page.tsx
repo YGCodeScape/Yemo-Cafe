@@ -49,16 +49,10 @@ export default function SignupPage() {
 
   return (
     <div className='flex flex-col min-h-dvh p-6 pt-10'>
-      <button
-        onClick={() => router.back()}
-        className='w-9 h-9 bg-[#F2EAE1] rounded-xl flex items-center justify-center mb-6 border border-[#E2DDD8]'
-      >
-        <ChevronLeft size={18} className='text-[#6B3F2A]' />
-      </button>
 
       <div className='mb-6'>
-        <h1 className='font-display text-[26px] font-bold text-[#2C1A0E] leading-tight'>
-          Join<br />yemo°
+        <h1 className='font-display text-[36px] font-bold text-[#2C1A0E] leading-tight'>
+          Join <span style={{ fontFamily: '"Lily Script One", system-ui' }} className='text-[#6B3F2A]' >yemo</span>
         </h1>
         <p className='text-sm text-[#A89080] mt-2'>Create your account to start ordering</p>
       </div>
@@ -67,33 +61,33 @@ export default function SignupPage() {
 
         {/* Full Name */}
         <div>
-          <label className='text-xs font-semibold text-[#2C1A0E] block mb-1.5'>Full Name</label>
+          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Full Name</label>
           <input
             type='text'
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder='Your name'
             required
-            className='w-full h-11 px-4 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
+            className='w-full h-12 px-4 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className='text-xs font-semibold text-[#2C1A0E] block mb-1.5'>Email address</label>
+          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Email address</label>
           <input
             type='email'
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder='you@email.com'
             required
-            className='w-full h-11 px-4 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
+            className='w-full h-12 px-4 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
           />
         </div>
 
         {/* Password */}
         <div>
-          <label className='text-xs font-semibold text-[#2C1A0E] block mb-1.5'>Password</label>
+          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Password</label>
           <div className='relative'>
             <input
               type={showPw ? 'text' : 'password'}
@@ -101,7 +95,7 @@ export default function SignupPage() {
               onChange={e => setPassword(e.target.value)}
               placeholder='Min. 8 characters'
               required
-              className='w-full h-11 px-4 pr-11 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
+              className='w-full h-12 px-4 pr-11 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
             />
             <button
               type='button'
@@ -130,14 +124,14 @@ export default function SignupPage() {
 
         {/* Confirm Password */}
         <div>
-          <label className='text-xs font-semibold text-[#2C1A0E] block mb-1.5'>Confirm Password</label>
+          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Confirm Password</label>
           <input
             type='password'
             value={confirm}
             onChange={e => setConfirm(e.target.value)}
             placeholder='Repeat password'
             required
-            className={`w-full h-11 px-4 bg-[#F2EAE1] border-2 rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none transition-colors ${
+            className={`w-full h-12 px-4 bg-[#F2EAE1] border-2 rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none transition-colors ${
               confirm && confirm !== password
                 ? 'border-red-400'
                 : 'border-[#E2DDD8] focus:border-[#6B3F2A]'
@@ -159,14 +153,14 @@ export default function SignupPage() {
           {loading ? 'Creating account…' : 'Create Account →'}
         </button>
 
-        <p className='text-center text-[10px] text-[#A89080] leading-relaxed'>
+        <p className='text-center text-[14px] text-[#A89080] leading-relaxed'>
           By signing up you agree to our{' '}
           <span className='text-[#D4956A]'>Terms</span>
           {' & '}
           <span className='text-[#D4956A]'>Privacy Policy</span>
         </p>
 
-        <p className='text-center text-xs text-[#A89080] mt-auto pt-2'>
+        <p className='text-center text-md text-[#A89080] mt-auto pt-2'>
           Have an account?{' '}
           <Link href='/auth/login' className='text-[#6B3F2A] font-bold'>Log in</Link>
         </p>
