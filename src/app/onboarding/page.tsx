@@ -130,13 +130,53 @@ export default function OnboardingPage() {
 
   return (
     <div
-      className="flex flex-col bg-[#FDFAF6] overflow-hidden"
+      className="relative flex flex-col justify-between bg-[#FDFAF6] overflow-hidden"
       style={{ minHeight: '100dvh' }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
+      {/* ── Slide Full-Screen Animated Layer ── */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={idx}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="absolute left-0 bottom-0 w-full h-full flex flex-col justify-between"
+          >
+            {/* Mascot image taking full width and height of the screen */}
+            <div className="absolute bottom-0 left-0 w-full h-[80%] pointer-events-none">
+              <Image
+                src={slide.mascot}
+                alt={slide.alt}
+                fill
+                sizes="(max-width: 430px) 100vw, 430px"
+                className="absolute inset-0 w-full h-full object-contain object-center pointer-events-none drop-shadow-md"
+                priority
+              />
+            </div>
+
+            {/* Text block */}
+            <div className="relative z-10 px-6 pt-20 pb-5 pointer-events-none">
+              <h1
+                className="text-[36px] font-bold leading-[1.12] text-[#2C1A0E] mb-4 whitespace-pre-line"
+                style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+              >
+                {slide.title}
+              </h1>
+              <p className="text-[14px] leading-relaxed text-[#A89080] whitespace-pre-line">
+                {slide.body}
+              </p>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
       {/* ── Header ── */}
-      <div className="shrink-0 flex items-center justify-between px-6 pt-12 pb-2">
+      <div className="relative z-20 shrink-0 flex items-center justify-between px-6 pt-8 pb-2 pointer-events-auto">
         <span
           className="text-[11px] font-semibold tracking-[0.2em] text-[#A89080] uppercase"
           style={{ fontFamily: '"DM Mono", monospace' }}
@@ -151,58 +191,11 @@ export default function OnboardingPage() {
         </button>
       </div>
 
-      {/* ── Animated slide body ── */}
-      <div className="flex-1 relative overflow-hidden">
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={idx}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            className="absolute inset-0 flex flex-col"
-          >
-            {/* Text block */}
-            <div className="shrink-0 px-6 pt-3 pb-5">
-              <h1
-                className="text-[36px] font-bold leading-[1.12] text-[#2C1A0E] mb-4 whitespace-pre-line"
-                style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-              >
-                {slide.title}
-              </h1>
-              <p className="text-[14px] leading-relaxed text-[#A89080] whitespace-pre-line">
-                {slide.body}
-              </p>
-            </div>
-
-            {/* Mascot arch */}
-            <div className="flex-1 relative mx-3 min-h-0">
-              {/* Arch background */}
-              <div
-                className="absolute inset-x-0 bottom-0 bg-[#F2EAE1]"
-                style={{ top: '8%', borderRadius: '50% 50% 0 0' }}
-              />
-              {/* Mascot */}
-              <div className="absolute inset-0 flex items-end justify-center pb-0">
-                <div className="relative" style={{ width: '72%', aspectRatio: '1 / 1' }}>
-                  <Image
-                    src={slide.mascot}
-                    alt={slide.alt}
-                    fill
-                    sizes="(max-width: 430px) 72vw, 300px"
-                    className="object-contain drop-shadow-lg"
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      {/* Spacer */}
+      <div className="flex-1 pointer-events-none" />
 
       {/* ── Footer: back · dots · next ── */}
-      <div className="shrink-0 flex items-center justify-between px-5 py-6 bg-[#FDFAF6]">
+      <div className="relative z-20 shrink-0 flex items-center justify-between px-5 py-6 bg-transparent pointer-events-auto">
 
         {/* Back button */}
         <motion.button
