@@ -1,0 +1,38 @@
+﻿@import "tailwindcss";
+
+/* ── yemo° brand tokens ── */
+:root {
+  --bg:       #FDFAF6;
+  --surface:  #F2EAE1;
+  --card:     #F5F0EB;
+  --border:   #E2DDD8;
+  --primary:  #6B3F2A;
+  --dark:     #2C1A0E;
+  --accent:   #D4956A;
+  --muted:    #A89080;
+}
+
+/* ── Base ── */
+html {
+  background-color: var(--bg);
+  color: var(--dark);
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  position: relative;
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+
+/* ── Scrollbar hide ── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Font helpers ── */
+.font-display { font-family: "Playfair Display", Georgia, serif; }
+.font-mono    { font-family: "DM Mono", monospace; }
