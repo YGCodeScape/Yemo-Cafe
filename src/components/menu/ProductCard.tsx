@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Heart, Plus } from 'lucide-react'
+import { useCartStore } from '@/store/useCartStore'
 
 export type CardItem = {
   id: string
@@ -12,6 +13,9 @@ export type CardItem = {
   originalPrice?: number
   offer?: number
   image: string
+  rating?: number
+  category?: string
+  temp?: 'hot' | 'cold' | 'room'
 }
 
 type Props = {
@@ -24,15 +28,33 @@ type Props = {
 /**
  * Reusable product card — used in Popular Drinks (home) and Menu page grid.
  * Two variants: 'scroll' (fixed 148px width) and 'grid' (full-width, 2-col).
+ * Clicking card opens full screen ProductDetailModal; clicking '+' adds item directly.
  */
 export default function ProductCard({ item, onAdd, variant = 'scroll' }: Props) {
   const [fav, setFav] = useState(false)
   const isGrid = variant === 'grid'
 
+  const openProductDetail = useCartStore(state => state.openProductDetail)
+  const addItem = useCartStore(state => state.addItem)
+
+  const handleCardClick = () => {
+    openProductDetail(item)
+  }
+
+  const handlePlusClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (onAdd) {
+      onAdd(item.id)
+    } else {
+      addItem(item, '200 ml', [])
+    }
+  }
+
   return (
     <div
+      onClick={handleCardClick}
       className={
-        'bg-[#FDFAF6] rounded-[20px] overflow-hidden border border-[#EDE8E3] shadow-sm ' +
+        'bg-[#FDFAF6] rounded-[20px] overflow-hidden border border-[#EDE8E3] shadow-sm cursor-pointer hover:shadow-md transition-shadow active:scale-[0.98] ' +
         (isGrid ? 'w-full' : 'shrink-0 w-[148px]')
       }
     >
@@ -44,7 +66,10 @@ export default function ProductCard({ item, onAdd, variant = 'scroll' }: Props) 
           </span>
         )}
         <button
-          onClick={() => setFav(!fav)}
+          onClick={(e) => {
+            e.stopPropagation()
+            setFav(!fav)
+          }}
           className="absolute top-2 right-2 z-10 w-7 h-7 bg-white/85 rounded-full flex items-center justify-center shadow-sm active:scale-90 transition-transform"
           aria-label={fav ? 'Remove from favourites' : 'Add to favourites'}
         >
@@ -82,8 +107,8 @@ export default function ProductCard({ item, onAdd, variant = 'scroll' }: Props) 
             )}
           </div>
           <button
-            onClick={() => onAdd?.(item.id)}
-            className="w-7 h-7 bg-[#D4956A] rounded-full flex items-center justify-center shadow-sm active:scale-90 transition-transform"
+            onClick={handlePlusClick}
+            className="w-7 h-7 bg-[#D4956A] hover:bg-[#b87d55] rounded-full flex items-center justify-center shadow-sm active:scale-90 transition-transform"
             aria-label={'Add ' + item.name + ' to cart'}
           >
             <Plus size={14} className="text-white" strokeWidth={2.5} />

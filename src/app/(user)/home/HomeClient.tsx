@@ -9,8 +9,13 @@ import HomeBanner, { getGreeting } from '@/components/layout/HomeBanner'
 import FilterTabs, { type FilterTab, type SubFilter } from '@/components/menu/FilterTabs'
 import SpecialsCarousel from '@/components/menu/SpecialsCarousel'
 import ProductCard from '@/components/menu/ProductCard'
+import ProductDetailModal from '@/components/menu/ProductDetailModal'
+import AddToCartToast from '@/components/cart/AddToCartToast'
+import MiniCartBar from '@/components/cart/MiniCartBar'
+import CartDrawer from '@/components/cart/CartDrawer'
 
 import { SPECIALS, POPULAR_DRINKS } from '@/data/menuData'
+import { useCartStore } from '@/store/useCartStore'
 
 type Props = {
   profile: { name: string; email: string } | null
@@ -24,9 +29,20 @@ export default function HomeClient({ profile }: Props) {
   const [activeTab, setActiveTab] = useState<FilterTab>('beverages')
   const [subFilter, setSubFilter] = useState<SubFilter>('all')
 
+  const addItem = useCartStore(state => state.addItem)
+
   const handleAddToCart = (id: string) => {
-    // TODO: wire up Zustand cart store
-    console.log('Add to cart:', id)
+    const item = POPULAR_DRINKS.find(d => d.id === id) || SPECIALS.find(s => s.id === id)
+    if (item) {
+      addItem(
+        {
+          ...item,
+          temp: (item as any).temp ?? 'cold',
+        },
+        '200 ml',
+        []
+      )
+    }
   }
 
   // Filter items based on activeTab & subFilter
@@ -138,6 +154,12 @@ export default function HomeClient({ profile }: Props) {
         </div>
 
       </div>
+
+      {/* ── Global Cart & Product Detail Overlays ── */}
+      <ProductDetailModal />
+      <AddToCartToast />
+      <MiniCartBar />
+      <CartDrawer />
     </>
   )
 }

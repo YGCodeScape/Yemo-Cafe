@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Coffee, Flame, Star, Plus } from 'lucide-react'
 import type { SpecialItem } from '@/data/menuData'
+import { useCartStore } from '@/store/useCartStore'
 
 type Props = {
   items: SpecialItem[]
@@ -18,11 +19,15 @@ type Props = {
  * Left/right items are partially visible, scaled down and rotated.
  * Supports swipe (touch) and arrow button navigation.
  * Info card floats below the carousel with offer badge, rating, price, add-to-cart.
+ * Clicking center image or info card opens full screen ProductDetailModal.
  */
 export default function SpecialsCarousel({ items, onAdd }: Props) {
   const [current, setCurrent] = useState(0)
   const [direction, setDirection] = useState(1)
   const touchStart = useRef(0)
+
+  const openProductDetail = useCartStore(state => state.openProductDetail)
+  const addItem = useCartStore(state => state.addItem)
 
   const total = items.length
   const prevIdx = (current - 1 + total) % total
@@ -48,8 +53,33 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
     if (delta < -44) goPrev()
   }
 
+  const handleCardClick = () => {
+    openProductDetail({
+      ...item,
+      category: 'special',
+      temp: item.temp as any,
+    })
+  }
+
+  const handleAddClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (onAdd) {
+      onAdd(item.id)
+    } else {
+      addItem(
+        {
+          ...item,
+          category: 'special',
+          temp: item.temp as any,
+        },
+        '200 ml',
+        []
+      )
+    }
+  }
+
   return (
-    <div className=" mt-6 mb-8">
+    <div className="mt-6 mb-8">
       {/* ── Section header ── */}
       <div className="flex items-end justify-between px-5 mb-3">
         <div>
@@ -71,9 +101,7 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
         onTouchEnd={onTouchEnd}
       >
         {/* Warm gradient background */}
-        <div
-          className="absolute inset-0"
-        />
+        <div className="absolute inset-0" />
 
         {/* Left side item */}
         <div
@@ -125,8 +153,8 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
           </div>
         </div>
 
-        {/* Center item (animated) */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        {/* Center item (animated & clickable) */}
+        <div className="absolute inset-0 flex items-center justify-center">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={current}
@@ -135,8 +163,9 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
               animate={{ x: 0, opacity: 1, scale: 1 }}
               exit={{ x: direction < 0 ? '55%' : '-55%', opacity: 0, scale: 0.85 }}
               transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-              className="relative z-10"
+              className="relative z-10 cursor-pointer active:scale-95 transition-transform"
               style={{ width: '58%', height: 250 }}
+              onClick={handleCardClick}
             >
               <Image
                 src={item.image}
@@ -167,7 +196,10 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
 
       {/* ── Info card (overlaps carousel bottom) ── */}
       <div className="mx-4 relative z-20">
-        <div className="relative bg-white rounded-[22px] px-4 pb-4 pt-2 shadow-lg border border-[#EDE8E3]">
+        <div
+          onClick={handleCardClick}
+          className="relative bg-white rounded-[22px] px-4 pb-4 pt-2 shadow-lg border border-[#EDE8E3] cursor-pointer hover:shadow-xl transition-shadow"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -178,7 +210,7 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
             >
               {/* Offer badge */}
               {item.offer > 0 && (
-                <span className="inline-block bg-[#D4956A] text-white text-[9px] font-bold px-3 py-2 mb-2 rounded-full uppercase tracking-wide">
+                <span className="inline-block bg-[#D4956A] text-white text-[9px] font-bold px-3 py-1 mb-2 rounded-full uppercase tracking-wide">
                   {item.offer}% OFF
                 </span>
               )}
@@ -222,8 +254,8 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
 
                 {/* Add to cart */}
                 <button
-                  onClick={() => onAdd?.(item.id)}
-                  className="w-11 h-11 bg-[#2C1A0E] rounded-full flex items-center justify-center shadow-md active:scale-90 transition-transform shrink-0 mt-auto"
+                  onClick={handleAddClick}
+                  className="w-11 h-11 bg-[#2C1A0E] hover:bg-[#1E110A] rounded-full flex items-center justify-center shadow-md active:scale-90 transition-transform shrink-0 mt-auto z-10"
                   aria-label={'Add ' + item.name + ' to cart'}
                 >
                   <Plus size={18} className="text-[#FDFAF6]" strokeWidth={2.5} />
@@ -239,7 +271,10 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
         {items.map((_, i) => (
           <motion.button
             key={i}
-            onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i) }}
+            onClick={() => {
+              setDirection(i > current ? 1 : -1)
+              setCurrent(i)
+            }}
             className="rounded-full bg-[#6B3F2A]"
             animate={{ width: i === current ? 18 : 7, height: 7, opacity: i === current ? 1 : 0.28 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
