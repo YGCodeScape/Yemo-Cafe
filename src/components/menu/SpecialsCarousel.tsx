@@ -49,7 +49,7 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
   }
 
   return (
-    <div className=" mt-8 mb-8">
+    <div className=" mt-6 mb-8">
       {/* ── Section header ── */}
       <div className="flex items-end justify-between px-5 mb-3">
         <div>

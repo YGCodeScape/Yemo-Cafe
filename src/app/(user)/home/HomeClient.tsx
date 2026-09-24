@@ -77,7 +77,7 @@ export default function HomeClient({ profile }: Props) {
           <div className="flex items-center justify-between px-5 mb-3">
             <h2
               className="text-[18px] font-bold text-[#2C1A0E] capitalize"
-              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+              style={{ fontFamily: '"Montserrat", sans-serif' }}
             >
               {activeTab === 'food'
                 ? 'Food & Bakery'

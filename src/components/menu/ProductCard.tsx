@@ -64,7 +64,8 @@ export default function ProductCard({ item, onAdd, variant = 'scroll' }: Props) 
 
       {/* ── Info ── */}
       <div className="p-3">
-        <p className="text-[13px] font-bold text-[#2C1A0E] leading-tight mb-0.5 line-clamp-1">
+        <p className="text-[13px] font-bold text-[#2C1A0E] leading-tight mb-0.5 line-clamp-1"
+          style={{ fontFamily: '"Playfair Display", Georgia, serif' }}>
           {item.name}
         </p>
         <p className="text-[10px] text-[#A89080] mb-2.5 line-clamp-1">{item.desc}</p>
