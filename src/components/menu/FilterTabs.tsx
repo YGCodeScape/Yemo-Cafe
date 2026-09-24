@@ -21,7 +21,7 @@ export default function FilterTabs({ active, onChange, onFilter, className = '' 
       <button
         onClick={() => onChange('beverages')}
         className={
-          'flex items-center gap-1.5 px-4 py-2.5 rounded-full text-[13px] font-semibold transition-all duration-200 ' +
+          'flex items-center gap-1.5 px-4 py-3 rounded-full text-[14px] font-semibold transition-all duration-200 ' +
           (active === 'beverages'
             ? 'bg-[#2C1A0E] text-[#FDFAF6] shadow-md'
             : 'bg-[#F2EAE1] text-[#A89080] border border-[#E2DDD8]')

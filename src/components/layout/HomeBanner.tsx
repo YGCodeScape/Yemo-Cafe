@@ -41,7 +41,7 @@ export default function HomeBanner({ greeting, userName, banners = DEFAULT_BANNE
   }, [banners.length])
 
   return (
-    <div className="relative mb-4 overflow-hidden shadow-lg" style={{ height: 280, borderBottomLeftRadius: 34, borderBottomRightRadius: 34 }}>
+    <div className="relative mb-4 overflow-hidden shadow-lg" style={{ height: 260, borderBottomLeftRadius: 34, borderBottomRightRadius: 34 }}>
       {/* ── Sliding banner images ── */}
       <AnimatePresence mode="wait" custom={dir}>
         <motion.div

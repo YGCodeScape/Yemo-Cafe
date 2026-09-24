@@ -49,17 +49,17 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
   }
 
   return (
-    <div className="mb-2">
+    <div className=" mt-8 mb-8">
       {/* ── Section header ── */}
       <div className="flex items-end justify-between px-5 mb-3">
         <div>
           <h2
-            className="text-[20px] font-bold text-[#2C1A0E] leading-tight"
-            style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+            className="text-[24px] font-semibold text-[#2C1A0E] leading-tight"
+            style={{ fontFamily: '"Montserrat", sans-serif' }}
           >
             {"Today's Specials"}
           </h2>
-          <p className="text-[11px] text-[#A89080] mt-0.5">Fresh sips, better days ✨</p>
+          <p className="text-[12px] text-[#A89080] mt-0.5">Fresh sips, better days ✨</p>
         </div>
       </div>
 
@@ -73,7 +73,6 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
         {/* Warm gradient background */}
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(180deg, #F8EDD8 0%, #FDF8F2 100%)' }}
         />
 
         {/* Left side item */}
@@ -143,7 +142,7 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
                 src={item.image}
                 alt={item.name}
                 fill
-                className="object-contain drop-shadow-2xl"
+                className="object-cover drop-shadow-2xl"
                 sizes="58vw"
                 priority
               />
@@ -167,8 +166,8 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
       </div>
 
       {/* ── Info card (overlaps carousel bottom) ── */}
-      <div className="mx-4 -mt-3 relative z-20">
-        <div className="bg-white rounded-[22px] p-4 shadow-lg border border-[#EDE8E3]">
+      <div className="mx-4 relative z-20">
+        <div className="relative bg-white rounded-[22px] px-4 pb-4 pt-2 shadow-lg border border-[#EDE8E3]">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -179,7 +178,7 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
             >
               {/* Offer badge */}
               {item.offer > 0 && (
-                <span className="inline-block bg-[#D4956A] text-white text-[9px] font-bold px-2.5 py-1 rounded-full mb-2.5 uppercase tracking-wide">
+                <span className="inline-block bg-[#D4956A] text-white text-[9px] font-bold px-3 py-2 mb-2 rounded-full uppercase tracking-wide">
                   {item.offer}% OFF
                 </span>
               )}
@@ -187,7 +186,7 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
               <div className="flex items-start gap-3">
                 <div className="flex-1 min-w-0">
                   <h3
-                    className="text-[17px] font-bold text-[#2C1A0E] leading-tight mb-1"
+                    className="text-[18px] font-bold text-[#2C1A0E] leading-tight mb-1"
                     style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
                   >
                     {item.name}

@@ -45,16 +45,16 @@ export default function HomeClient({ profile }: Props) {
           <HomeBanner greeting={greeting} userName={firstName} />
         </div>
 
-        {/* 2. Filter tabs */}
+        {/* 2. Today's Specials — 3D carousel */}
+        <SpecialsCarousel items={SPECIALS} onAdd={handleAddToCart} />
+
+        {/* 3. Filter tabs */}
         <FilterTabs
           active={activeTab}
           onChange={setActiveTab}
           onFilter={() => {/* open filter sheet */}}
-          className="px-4 mb-5"
+          className="py-2 mx-4 mb-5 px-2 rounded-3xl"
         />
-
-        {/* 3. Today's Specials — 3D carousel */}
-        <SpecialsCarousel items={SPECIALS} onAdd={handleAddToCart} />
 
         {/* 4. Popular Drinks */}
         <div className="mt-6">
