@@ -21,6 +21,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm]   = useState('')
   const [showPw, setShowPw]     = useState(false)
+  const [showConfirmPw, setShowConfirmPw] = useState(false)
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState<string | null>(null)
 
@@ -40,11 +41,10 @@ export default function SignupPage() {
       password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: `${location.origin}/auth/verify`,
       },
     })
     if (error) { setError(error.message); setLoading(false) }
-    else { router.push(`/auth/verify?email=${encodeURIComponent(email)}`) }
+    else { router.push('/home') }
   }
 
   return (
@@ -52,7 +52,7 @@ export default function SignupPage() {
 
       <div className='mb-6'>
         <h1 className='font-display text-[36px] font-bold text-[#2C1A0E] leading-tight'>
-          Join <span style={{ fontFamily: '"Lily Script One", system-ui' }} className='text-[#6B3F2A]' >yemo</span>
+          Be a Part of <br /> <span style={{ fontFamily: '"Lily Script One", system-ui' }} className='text-[#6B3F2A]' >yemo</span> Family
         </h1>
         <p className='text-sm text-[#A89080] mt-2'>Create your account to start ordering</p>
       </div>
@@ -102,7 +102,7 @@ export default function SignupPage() {
               onClick={() => setShowPw(!showPw)}
               className='absolute right-3 top-1/2 -translate-y-1/2 text-[#A89080]'
             >
-              {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showPw ? <Eye size={16} /> : <EyeOff size={16} />}
             </button>
           </div>
           {password && (
@@ -125,18 +125,27 @@ export default function SignupPage() {
         {/* Confirm Password */}
         <div>
           <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Confirm Password</label>
-          <input
-            type='password'
-            value={confirm}
-            onChange={e => setConfirm(e.target.value)}
-            placeholder='Repeat password'
-            required
-            className={`w-full h-12 px-4 bg-[#F2EAE1] border-2 rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none transition-colors ${
-              confirm && confirm !== password
-                ? 'border-red-400'
-                : 'border-[#E2DDD8] focus:border-[#6B3F2A]'
-            }`}
-          />
+          <div className='relative'>
+            <input
+              type={showConfirmPw ? 'text' : 'password'}
+              value={confirm}
+              onChange={e => setConfirm(e.target.value)}
+              placeholder='Repeat password'
+              required
+              className={`w-full h-12 px-4 pr-11 bg-[#F2EAE1] border-2 rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none transition-colors ${
+                confirm && confirm !== password
+                  ? 'border-red-400'
+                  : 'border-[#E2DDD8] focus:border-[#6B3F2A]'
+              }`}
+            />
+            <button
+              type='button'
+              onClick={() => setShowConfirmPw(!showConfirmPw)}
+              className='absolute right-3 top-1/2 -translate-y-1/2 text-[#A89080]'
+            >
+              {showConfirmPw ? <Eye size={16} /> : <EyeOff size={16} />}
+            </button>
+          </div>
         </div>
 
         {error && (

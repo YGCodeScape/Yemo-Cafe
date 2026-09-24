@@ -9,26 +9,19 @@ import { ArrowRight, ChevronLeft } from 'lucide-react'
 /* ─── Slide data ─── */
 const SLIDES = [
   {
-    step: '01 / 03',
+    step: '01 / 02',
     title: 'The Best Coffee\nin Town',
     body: 'Rich aroma. Smooth taste.\nCrafted with love, just for you.',
-    mascot: '/onboarding-screens-1.png',
+    mascot: '/assets/onboarding-mascot-1.png',
     alt: 'yemo mascot holding a latte',
   },
   {
-    step: '02 / 03',
+    step: '02 / 02',
     title: 'Tasty Food Made\nfor Real Moments',
     body: 'From fresh bites to cozy meals,\nwe serve happiness on every plate.',
-    mascot: '/onboarding-screens-2.png',
-    alt: 'yemo mascot juggling cups',
-  },
-  {
-    step: '03 / 03',
-    title: 'Good Food.\nBetter Days.',
-    body: 'Great coffee, tasty food\nand a space to just be you.',
-    mascot: '/onboarding-screens-3.png',
-    alt: 'yemo mascot cheering',
-  },
+    mascot: '/assets/onboarding-mascot-2.png',
+    alt: 'yemo mascot cooking in kitchen',
+  }
 ]
 
 /* ─── Framer Motion variants ─── */
@@ -63,7 +56,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     try {
       if (localStorage.getItem('yemo-onboarded') === 'true') {
-        // router.replace('/auth/login')
+        // router.replace('/auth/login')  need to undo after testing 
       }
     } catch {
       /* localStorage blocked (private/incognito) — proceed normally */
@@ -130,7 +123,7 @@ export default function OnboardingPage() {
 
   return (
     <div
-      className="relative flex flex-col justify-between bg-[#FDFAF6] overflow-hidden"
+      className="relative flex flex-col justify-between bg-[#FDFAF6] overflow-hidden select-none"
       style={{ minHeight: '100dvh' }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
@@ -147,27 +140,29 @@ export default function OnboardingPage() {
             exit="exit"
             className="absolute left-0 bottom-0 w-full h-full flex flex-col justify-between"
           >
-            {/* Mascot image taking full width and height of the screen */}
-            <div className="absolute bottom-0 left-0 w-full h-[80%] pointer-events-none">
-              <Image
-                src={slide.mascot}
-                alt={slide.alt}
-                fill
-                sizes="(max-width: 430px) 100vw, 430px"
-                className="absolute inset-0 w-full h-full object-contain object-center pointer-events-none drop-shadow-md"
-                priority
-              />
+            {/* Mascot illustration container: anchored to bottom baseline above footer across all screen aspect ratios */}
+            <div className="absolute inset-x-0 bottom-[84px] h-[54dvh] max-h-[480px] min-h-[300px] pointer-events-none flex items-end justify-center px-4">
+              <div className="relative w-full h-full max-w-[390px]">
+                <Image
+                  src={slide.mascot}
+                  alt={slide.alt}
+                  fill
+                  sizes="(max-width: 430px) 100vw, 390px"
+                  className="object-contain object-bottom pointer-events-none drop-shadow-[0_8px_20px_rgba(44,26,14,0.08)]"
+                  priority
+                />
+              </div>
             </div>
 
             {/* Text block */}
-            <div className="relative z-10 px-6 pt-20 pb-5 pointer-events-none">
+            <div className="relative z-10 px-6 pt-20 sm:pt-20 pb-4 pointer-events-none max-w-[380px]">
               <h1
-                className="text-[38px] font-bold leading-[1.12] text-[#2C1A0E] mb-4 whitespace-pre-line"
+                className="text-[30px] sm:text-[32px] font-bold leading-[1.14] text-[#2C1A0E] mb-3 whitespace-pre-line"
                 style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
               >
                 {slide.title}
               </h1>
-              <p className="text-[18px] leading-relaxed text-[#A89080] whitespace-pre-line">
+              <p className="text-[15px] sm:text-[16px] leading-relaxed text-[#A89080] whitespace-pre-line">
                 {slide.body}
               </p>
             </div>

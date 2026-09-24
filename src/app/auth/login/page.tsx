@@ -85,7 +85,7 @@ export default function LoginPage() {
             />
             <button type='button' onClick={() => setShowPw(!showPw)}
               className='absolute right-3 top-1/2 -translate-y-1/2 text-[#A89080]'>
-              {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showPw ? <Eye size={16} /> : <EyeOff size={16} />}
             </button>
           </div>
           <div className='text-right mt-1'>
