@@ -23,7 +23,7 @@ export default function MiniCartBar() {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 50, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-        className="fixed bottom-20 inset-x-4 z-40 max-w-[400px] mx-auto"
+        className="fixed bottom-28 inset-x-4 z-40 max-w-[400px] mx-auto"
       >
         <div className="flex items-center justify-between bg-[#1C120C]/95 text-white p-3.5 pl-4 rounded-full shadow-2xl border border-white/10 backdrop-blur-md">
           {/* Left info */}

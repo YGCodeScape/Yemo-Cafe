@@ -2,8 +2,9 @@
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Home, UtensilsCrossed, ScanLine, ClipboardList, User } from 'lucide-react'
+import { useCartStore } from '@/store/useCartStore'
 
 type NavItem = {
   href: string
@@ -23,6 +24,7 @@ const NAV: NavItem[] = [
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [activeHref, setActiveHref] = useState(pathname)
+  const isProductDetailOpen = useCartStore(state => Boolean(state.selectedProduct))
 
   useEffect(() => {
     setActiveHref(pathname)
@@ -35,9 +37,18 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
         {children}
       </main>
 
-      {/* Floating Nav */}
-      <nav className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
-        <div className="flex items-end gap-1.5 bg-[#1C1008]/95 backdrop-blur-xl rounded-[28px] px-4 pt-1 pb-3 border border-white/[0.08] shadow-2xl">
+      {/* Floating Nav - Hidden when Product Detail Modal is open */}
+      <AnimatePresence>
+        {!isProductDetailOpen && (
+          <motion.nav
+            key="bottom-floating-nav"
+            initial={{ opacity: 0, y: 30, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 30, x: '-50%' }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className="fixed bottom-5 left-1/2 z-50 pointer-events-auto"
+          >
+            <div className="flex items-end gap-1.5 bg-[#1C1008]/95 backdrop-blur-xl rounded-[28px] px-4 pt-1 pb-3 border border-white/[0.08] shadow-2xl">
           {NAV.map(({ href, icon: Icon, label, isCta }) => {
             const active = activeHref === href || (href !== '#' && activeHref.startsWith(href + '/'))
             return (
@@ -113,7 +124,9 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
             )
           })}
         </div>
-      </nav>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -17,7 +17,7 @@ export default function AddToCartToast() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.9 }}
           transition={{ type: 'spring', stiffness: 380, damping: 26 }}
-          className="fixed bottom-24 right-4 z-50 flex items-center gap-3 bg-[#1C120C]/95 text-white pl-4 pr-3 py-3 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-md max-w-[340px]"
+          className="fixed top-4 right-4 z-50 flex items-center gap-3 bg-[#1C120C]/95 text-white pl-4 pr-3 py-3 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-md max-w-[340px]"
         >
           {/* Check icon badge */}
           <div className="w-8 h-8 rounded-full bg-[#D4956A] flex items-center justify-center shrink-0 shadow-md">
