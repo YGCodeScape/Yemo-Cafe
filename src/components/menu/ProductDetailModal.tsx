@@ -26,6 +26,25 @@ export default function ProductDetailModal() {
     setFav(false)
   }, [product?.id])
 
+  // Prevent background scrolling when product detail modal is open
+  useEffect(() => {
+    if (!product) return
+
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+    const prevBodyTouchAction = document.body.style.touchAction
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.touchAction = 'none'
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+      document.body.style.touchAction = prevBodyTouchAction
+    }
+  }, [product])
+
   if (!product) return null
 
   // Calculate size price adjustment
@@ -49,11 +68,11 @@ export default function ProductDetailModal() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex flex-col bg-[#FDFAF6] overflow-y-auto"
+        className="fixed inset-0 z-50 flex flex-col bg-[#FDFAF6] overflow-y-auto overscroll-contain"
         style={{ minHeight: '100dvh' }}
       >
         {/* ── Top Floating Action Nav ── */}
-        <div className="absolute top-0 inset-x-0 z-30 flex items-center justify-between p-5 pt-7">
+        <div className="absolute top-0 inset-x-0 z-30 flex items-center justify-between p-5 pt-4">
           <button
             onClick={closeProductDetail}
             className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-md active:scale-90 transition-transform"
@@ -74,14 +93,7 @@ export default function ProductDetailModal() {
         </div>
 
         {/* ── Top Hero Product Banner ── */}
-        <div className="relative w-full bg-gradient-to-b from-[#E7D6C4] via-[#F4ECE2] to-[#FDFAF6] pt-16 pb-6 flex flex-col items-center justify-center overflow-hidden min-h-[340px]">
-          {/* Discount Tag */}
-          {product.offer && (
-            <div className="absolute right-6 bottom-10 z-20 bg-[#D4956A] text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-lg">
-              {product.offer}% OFF
-            </div>
-          )}
-
+        <div className="relative w-full h-[340px] sm:h-[380px] bg-gradient-to-b from-[#E7D6C4] via-[#F4ECE2] to-[#FDFAF6] overflow-hidden flex items-center justify-center">
           {/* Decorative artistic background strokes */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
             <div className="w-72 h-72 rounded-full border-2 border-dashed border-[#6B3F2A]" />
@@ -89,19 +101,31 @@ export default function ProductDetailModal() {
 
           {/* Big Hero Image */}
           <motion.div
-            initial={{ scale: 0.85, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-            className="relative w-64 h-64 z-10"
+            className="absolute inset-0 w-full h-full z-10"
           >
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-contain drop-shadow-2xl"
+              sizes="(max-width: 430px) 100vw, 500px"
+              className={
+                product.image.endsWith('.png')
+                  ? 'object-contain p-8 drop-shadow-2xl'
+                  : 'object-cover'
+              }
               priority
             />
           </motion.div>
+
+          {/* Discount Tag */}
+          {product.offer && (
+            <div className="absolute right-6 bottom-10 z-20 bg-[#D4956A] text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-lg">
+              {product.offer}% OFF
+            </div>
+          )}
         </div>
 
         {/* ── Bottom Content Info Sheet ── */}
@@ -125,11 +149,13 @@ export default function ProductDetailModal() {
             <div className="flex items-center gap-1 bg-[#F5EDE4] px-2.5 py-1 rounded-full text-[11px] font-bold text-[#2C1A0E]">
               <Star size={12} className="text-[#D4956A] fill-[#D4956A]" />
               <span>{product.rating ?? 4.8}</span>
-              <span className="text-[#8C7362] font-normal">(2.4k reviews)</span>
+              <span className="text-[#8C7362] font-normal">({product.reviewsCount ?? '2.4k reviews'})</span>
             </div>
-            <span className="bg-[#FFF4EC] text-[#D4956A] text-[11px] font-bold px-2.5 py-1 rounded-full border border-[#FAD6C2]/60">
-              Popular 🌟
-            </span>
+            {product.tag && (
+              <span className="bg-[#FFF4EC] text-[#D4956A] text-[11px] font-bold px-2.5 py-1 rounded-full border border-[#FAD6C2]/60">
+                {product.tag}
+              </span>
+            )}
           </div>
 
           {/* Price display */}
@@ -146,15 +172,28 @@ export default function ProductDetailModal() {
 
           {/* Feature Chips */}
           <div className="flex items-center gap-2 mb-6 flex-wrap">
-            <span className="bg-[#F2EAE1] text-[#6B3F2A] text-[12px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
-              {product.temp === 'hot' ? '☕ Hot' : '❄️ Cold'}
-            </span>
-            <span className="bg-[#F2EAE1] text-[#6B3F2A] text-[12px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
-              🥛 Contains Milk
-            </span>
-            <span className="bg-[#F2EAE1] text-[#6B3F2A] text-[12px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
-              🌡️ Medium
-            </span>
+            {product.features && product.features.length > 0 ? (
+              product.features.map((feature, idx) => (
+                <span
+                  key={idx}
+                  className="bg-[#F2EAE1] text-[#6B3F2A] text-[12px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1"
+                >
+                  {feature}
+                </span>
+              ))
+            ) : (
+              <>
+                <span className="bg-[#F2EAE1] text-[#6B3F2A] text-[12px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
+                  {product.temp === 'hot' ? '☕ Hot' : '❄️ Cold'}
+                </span>
+                <span className="bg-[#F2EAE1] text-[#6B3F2A] text-[12px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
+                  🥛 Contains Milk
+                </span>
+                <span className="bg-[#F2EAE1] text-[#6B3F2A] text-[12px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
+                  🌡️ Medium
+                </span>
+              </>
+            )}
           </div>
 
           {/* Choose Size Section */}

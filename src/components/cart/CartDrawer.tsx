@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Trash2, Plus, Minus, ArrowRight, CheckCircle2, Utensils } from 'lucide-react'
@@ -35,28 +35,48 @@ export default function CartDrawer() {
     }, 2500)
   }
 
-  if (!isCartOpen) return null
+  // Prevent background scrolling when cart drawer is open
+  useEffect(() => {
+    if (!isCartOpen) return
+
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+    const prevBodyTouchAction = document.body.style.touchAction
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.touchAction = 'none'
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+      document.body.style.touchAction = prevBodyTouchAction
+    }
+  }, [isCartOpen])
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-end justify-center">
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={closeCart}
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs"
-        />
+      {isCartOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeCart}
+            onTouchMove={e => e.preventDefault()}
+            onWheel={e => e.preventDefault()}
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+          />
 
-        {/* Drawer Sheet */}
-        <motion.div
-          initial={{ y: '100%' }}
-          animate={{ y: 0 }}
-          exit={{ y: '100%' }}
-          transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-          className="relative w-full max-w-[430px] bg-[#FDFAF6] rounded-t-[32px] max-h-[90vh] flex flex-col z-10 shadow-2xl overflow-hidden"
-        >
+          {/* Drawer Sheet */}
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+            className="relative w-full max-w-[430px] bg-[#FDFAF6] rounded-t-[32px] max-h-[90vh] flex flex-col z-10 shadow-2xl overflow-hidden overscroll-contain"
+          >
           {/* Handle indicator */}
           <div className="flex justify-center pt-3 pb-1">
             <div className="w-12 h-1.5 bg-[#E2DDD8] rounded-full" />
@@ -112,7 +132,7 @@ export default function CartDrawer() {
               </div>
 
               {/* Scrollable Body */}
-              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-4 space-y-4">
                 {items.length === 0 ? (
                   <div className="py-12 text-center">
                     <p className="text-[15px] font-bold text-[#2C1A0E] mb-1">Your cart is empty</p>
@@ -254,6 +274,7 @@ export default function CartDrawer() {
           )}
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   )
 }

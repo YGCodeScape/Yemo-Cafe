@@ -27,6 +27,9 @@ export type Product = {
   originalPrice?: number
   offer?: number
   rating?: number
+  reviewsCount?: string
+  tag?: string
+  features?: string[]
   image: string
   category?: string
   temp?: 'hot' | 'cold' | 'room'

@@ -1,10 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { SlidersHorizontal, Check, ChevronDown } from 'lucide-react'
+import { Search, SlidersHorizontal, Check, ChevronDown, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export type FilterTab = 'beverages' | 'food'
 export type SubFilter = 'all' | 'coffee' | 'mojitos' | 'mocktails' | 'teas'
 
 export const SUB_FILTERS: { id: SubFilter; label: string; icon: string }[] = [
@@ -16,25 +15,26 @@ export const SUB_FILTERS: { id: SubFilter; label: string; icon: string }[] = [
 ]
 
 type Props = {
-  active: FilterTab
-  onChange: (tab: FilterTab) => void
+  searchQuery?: string
+  onSearchChange?: (query: string) => void
   subFilter?: SubFilter
   onSubFilterChange?: (sub: SubFilter) => void
   className?: string
 }
 
 /**
- * Interactive category toggle — Beverages / Food with smooth layout sliding background,
- * plus a dropdown menu on SlidersHorizontal icon for sub-filter selection.
+ * Top Search Bar + SubFilter Dropdown
+ * Sticky pinned search input allowing seamless search while scrolling food/drink cards.
  */
 export default function FilterTabs({
-  active,
-  onChange,
+  searchQuery = '',
+  onSearchChange,
   subFilter = 'all',
   onSubFilterChange,
   className = '',
 }: Props) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Close dropdown on outside click
@@ -51,41 +51,38 @@ export default function FilterTabs({
   return (
     <div className={`relative ${className}`}>
       <div className="flex items-center gap-2 justify-between">
-        {/* Main Tab Toggle Pill Track */}
-        <div className="flex items-center bg-[#F0E6DC] p-1.5 rounded-full border border-[#E2DDD8]/80 shadow-inner flex-1 max-w-[280px]">
-          {/* Beverages Tab */}
-          <button
-            onClick={() => onChange('beverages')}
-            className="relative flex-1 py-2.5 px-3 rounded-full text-[13px] font-bold transition-colors duration-200 flex items-center justify-center gap-1.5 z-10 select-none"
-            style={{ color: active === 'beverages' ? '#FDFAF6' : '#8C7362' }}
-          >
-            {active === 'beverages' && (
-              <motion.div
-                layoutId="activeFilterTabPill"
-                className="absolute inset-0 bg-[#2C1A0E] rounded-full shadow-md z-[-1]"
-                transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-              />
-            )}
-            <span>☕</span>
-            <span>Beverages</span>
-          </button>
-
-          {/* Food Tab */}
-          <button
-            onClick={() => onChange('food')}
-            className="relative flex-1 py-2.5 px-3 rounded-full text-[13px] font-bold transition-colors duration-200 flex items-center justify-center gap-1.5 z-10 select-none"
-            style={{ color: active === 'food' ? '#FDFAF6' : '#8C7362' }}
-          >
-            {active === 'food' && (
-              <motion.div
-                layoutId="activeFilterTabPill"
-                className="absolute inset-0 bg-[#2C1A0E] rounded-full shadow-md z-[-1]"
-                transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-              />
-            )}
-            <span>🥐</span>
-            <span>Food</span>
-          </button>
+        {/* Search Bar Input Container */}
+        <div
+          className={`flex items-center px-3.5 py-2.5 rounded-full border transition-all duration-200 flex-1 gap-2.5 ${
+            isFocused || searchQuery
+              ? 'bg-white border-[#2C1A0E] shadow-md ring-2 ring-[#2C1A0E]/10'
+              : 'bg-[#F0E6DC] border-[#E2DDD8]/80 shadow-inner'
+          }`}
+        >
+          <Search
+            size={16}
+            className={`shrink-0 transition-colors ${
+              isFocused || searchQuery ? 'text-[#2C1A0E]' : 'text-[#8C7362]'
+            }`}
+          />
+          <input
+            type="text"
+            value={searchQuery}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onChange={e => onSearchChange?.(e.target.value)}
+            placeholder="Search drinks, food & bakery..."
+            className="bg-transparent border-none outline-none text-[13px] text-[#2C1A0E] placeholder:text-[#A89080] font-medium w-full"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => onSearchChange?.('')}
+              className="text-[#8C7362] hover:text-[#2C1A0E] p-0.5 shrink-0"
+              aria-label="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
         </div>
 
         {/* Filter Dropdown Icon Button */}

@@ -113,7 +113,7 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
             className="relative w-full"
             style={{
               height: 200,
-              transform: 'perspective(500px) rotateY(30deg) scale(0.7) translateX(12%)',
+              transform: 'scale(0.7) translateX(12%)',
               opacity: 0.5,
               transformOrigin: 'right center',
             }}
@@ -135,10 +135,10 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
           onClick={goNext}
         >
           <div
-            className="relative w-full"
+            className=" relative w-full"
             style={{
               height: 200,
-              transform: 'perspective(500px) rotateY(-30deg) scale(0.7) translateX(-12%)',
+              transform: 'scale(0.7) translateX(-12%)',
               opacity: 0.5,
               transformOrigin: 'left center',
             }}
@@ -171,7 +171,7 @@ export default function SpecialsCarousel({ items, onAdd }: Props) {
                 src={item.image}
                 alt={item.name}
                 fill
-                className="object-cover drop-shadow-2xl"
+                className="object-contain drop-shadow-2xl"
                 sizes="58vw"
                 priority
               />

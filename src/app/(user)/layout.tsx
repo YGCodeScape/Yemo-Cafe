@@ -25,6 +25,8 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname()
   const [activeHref, setActiveHref] = useState(pathname)
   const isProductDetailOpen = useCartStore(state => Boolean(state.selectedProduct))
+  const isCartOpen = useCartStore(state => state.isCartOpen)
+  const shouldHideBottomNav = isProductDetailOpen || isCartOpen
 
   useEffect(() => {
     setActiveHref(pathname)
@@ -33,13 +35,13 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="flex flex-col min-h-dvh bg-[#FDFAF6] relative">
       {/* Page content */}
-      <main className="flex-1 overflow-y-auto pb-[96px]">
+      <main className={`flex-1 pb-[96px] ${shouldHideBottomNav ? 'overflow-hidden' : 'overflow-y-auto'}`}>
         {children}
       </main>
 
-      {/* Floating Nav - Hidden when Product Detail Modal is open */}
+      {/* Floating Nav - Hidden when Product Detail Modal or Cart Drawer is open */}
       <AnimatePresence>
-        {!isProductDetailOpen && (
+        {!shouldHideBottomNav && (
           <motion.nav
             key="bottom-floating-nav"
             initial={{ opacity: 0, y: 30, x: '-50%' }}
@@ -48,7 +50,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
             transition={{ duration: 0.22, ease: 'easeOut' }}
             className="fixed bottom-5 left-1/2 z-50 pointer-events-auto"
           >
-            <div className="flex items-end gap-1.5 bg-[#1C1008]/95 backdrop-blur-xl rounded-[28px] px-4 pt-1 pb-3 border border-white/[0.08] shadow-2xl">
+            <div className="relative flex items-end gap-1.5 bg-[#1C1008]/95 backdrop-blur-xl rounded-full px-4 pb-2.5 h-[68px] shadow-2xl border border-white/[0.06]">
           {NAV.map(({ href, icon: Icon, label, isCta }) => {
             const active = activeHref === href || (href !== '#' && activeHref.startsWith(href + '/'))
             return (
@@ -57,24 +59,26 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
                 href={href}
                 aria-label={label}
                 onClick={() => setActiveHref(href)}
-                className="focus:outline-none select-none"
+                className="focus:outline-none select-none relative"
               >
                 <motion.div
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                  className={`flex flex-col items-center justify-center group ${
+                  className={`flex flex-col items-center justify-end group ${
                     isCta ? 'w-[64px]' : 'w-[54px]'
                   }`}
                 >
                   {/* Icon Container with smooth animated active background */}
                   <div
                     className={`relative flex items-center justify-center transition-all duration-300 ${
-                      isCta ? 'w-[50px] h-[50px] rounded-full' : 'w-11 h-10 rounded-full'
+                      isCta
+                        ? 'w-[54px] h-[54px] rounded-full -translate-y-1.5 bg-[#1C1008] border border-[#D4956A]/60 shadow-[0_4px_16px_rgba(0,0,0,0.45)]'
+                        : 'w-11 h-9 rounded-full'
                     }`}
                   >
                     {/* Resting highlighted CTA badge for Scan when inactive */}
                     {isCta && !active && (
-                      <div className="absolute inset-0 rounded-full bg-[#D4956A]/20 border border-[#D4956A]/40 shadow-[0_2px_8px_rgba(212,149,106,0.25)]" />
+                      <div className="absolute inset-0 rounded-full bg-[#D4956A]/15" />
                     )}
 
                     {/* Smooth sliding active background pill */}
@@ -83,7 +87,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
                         layoutId="navActivePill"
                         className={`absolute inset-0 rounded-full bg-[#D4956A] ${
                           isCta
-                            ? 'shadow-[0_0_18px_rgba(212,149,106,0.65)]'
+                            ? 'shadow-[0_0_20px_rgba(212,149,106,0.65)]'
                             : 'shadow-sm'
                         }`}
                         transition={{
@@ -95,7 +99,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
                     )}
 
                     <Icon
-                      size={isCta ? 22 : 20}
+                      size={isCta ? 24 : 20}
                       strokeWidth={active ? 2.5 : isCta ? 2.2 : 1.8}
                       className={`relative z-10 transition-colors duration-200 ${
                         active
@@ -109,7 +113,9 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
 
                   {/* Nav label */}
                   <span
-                    className={`text-[12px] mt-1 tracking-tight leading-none transition-colors duration-200 ${
+                    className={`text-[11px] tracking-tight leading-none transition-colors duration-200 ${
+                      isCta ? 'mt-0.5' : 'mt-1'
+                    } ${
                       active
                         ? 'text-[#D4956A] font-bold'
                         : isCta
