@@ -34,6 +34,16 @@ export type DrinkItem = {
   category: 'coffee' | 'mocktail' | 'shake' | 'frappe' | 'tea' | 'food'
 }
 
+export type PairingItem = {
+  id: string
+  label: string        // e.g. '⭐ Café Favourite'
+  labelColor: string   // Tailwind/inline color for the pill
+  reason: string       // Short mood line, e.g. 'Morning favourite'
+  tagline: string      // Longer persuasive line
+  drink: { id: string; name: string; emoji: string; image: string; price: number }
+  food: { id: string; name: string; emoji: string; image: string; price: number }
+}
+
 /** Carousel specials — illustrated transparent-bg product images */
 export const SPECIALS: SpecialItem[] = [
   {
@@ -194,3 +204,111 @@ export const POPULAR_FOOD: DrinkItem[] = [
 export const BEVERAGE_FILTERS = ['All', 'Coffee', 'Mocktails', 'Shakes', 'Frappes', 'Tea'] as const
 export type BeverageFilter = (typeof BEVERAGE_FILTERS)[number]
 
+/** Perfect Pairings — curated combos that feel like café recommendations */
+export const PAIRINGS: PairingItem[] = [
+  {
+    id: 'p1',
+    label: '⭐ Café Favourite',
+    labelColor: '#D4956A',
+    reason: 'Morning favourite',
+    tagline: `Sweet + buttery  a café regular's go-to.`,
+    drink: {
+      id: 's1',
+      name: 'Iced Caramel Latte',
+      emoji: '☕',
+      image: '/specials/iced-caramel-latte.png',
+      price: 249,
+    },
+    food: {
+      id: 'f1',
+      name: 'Butter Croissant',
+      emoji: '🥐',
+      image: '/products/croissant.jpg',
+      price: 149,
+    },
+  },
+  {
+    id: 'p2',
+    label: '❤️ Most Loved',
+    labelColor: '#E8637A',
+    reason: 'The crowd pleaser',
+    tagline: 'Bold brew meets smoky comfort — an unbeatable duo.',
+    drink: {
+      id: 'd3',
+      name: 'Cold Brew',
+      emoji: '☕',
+      image: '/products/cold-brew.jpg',
+      price: 179,
+    },
+    food: {
+      id: 'f2',
+      name: 'Paneer Tikka Sandwich',
+      emoji: '🥪',
+      image: '/products/sandwich.jpg',
+      price: 199,
+    },
+  },
+  {
+    id: 'p3',
+    label: '☀️ Morning Pick',
+    labelColor: '#F0A500',
+    reason: 'Rise and shine',
+    tagline: 'A bright start  light, fresh, and energising.',
+    drink: {
+      id: 's2',
+      name: 'Matcha Green Latte',
+      emoji: '🍵',
+      image: '/specials/matcha-latte.png',
+      price: 229,
+    },
+    food: {
+      id: 'f1',
+      name: 'Butter Croissant',
+      emoji: '🥐',
+      image: '/products/croissant.jpg',
+      price: 149,
+    },
+  },
+  {
+    id: 'p4',
+    label: '🍫 For Sweet Cravings',
+    labelColor: '#7B4F2F',
+    reason: 'Indulge a little',
+    tagline: 'Fruity fizz + chocolate decadence — pure bliss.',
+    drink: {
+      id: 's3',
+      name: 'Berry Blast Mojito',
+      emoji: '🍓',
+      image: '/specials/berry-mojito.png',
+      price: 199,
+    },
+    food: {
+      id: 'f3',
+      name: 'Choco Lava Doughnut',
+      emoji: '🍩',
+      image: '/products/doughnut.jpg',
+      price: 159,
+    },
+  },
+  {
+    id: 'p5',
+    label: '🌙 Evening Pair',
+    labelColor: '#4F5FA0',
+    reason: 'Wind down right',
+    tagline: 'A warm classic to end your day the right way.',
+    drink: {
+      id: 'd4',
+      name: 'Cappuccino',
+      emoji: '☕',
+      image: '/products/cappuccino.jpg',
+      price: 199,
+    },
+    food: {
+      id: 'f3',
+      name: 'Choco Lava Doughnut',
+      emoji: '🍩',
+      image: '/products/doughnut.jpg',
+      price: 159,
+    },
+  },
+]

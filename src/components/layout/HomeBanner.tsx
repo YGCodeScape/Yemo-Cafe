@@ -135,7 +135,7 @@ export default function HomeBanner({ greeting, userName, banners = DEFAULT_BANNE
               textShadow: '0 1px 8px rgba(0,0,0,0.35)',
             }}
           >
-            yemo
+            yemo°
           </h1>
         </div>
 

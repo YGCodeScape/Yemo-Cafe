@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Heart, Star } from 'lucide-react'
+import { ChevronLeft, Heart, Star, ShoppingBag } from 'lucide-react'
 import { useCartStore } from '@/store/useCartStore'
+import { PAIRINGS } from '@/data/menuData'
 
 const SIZES = [
   { label: '200 ml', priceOffset: 0 },
@@ -51,6 +52,14 @@ export default function ProductDetailModal() {
   const sizeObj = SIZES.find(s => s.label === selectedSize) ?? SIZES[0]
   const totalPrice = product.price + sizeObj.priceOffset
 
+  // Pairings that feature this product — shown as contextual suggestions
+  const relatedPairings = PAIRINGS.filter(p =>
+    p.drink.id === product.id ||
+    p.food.id === product.id ||
+    p.drink.name === product.name ||
+    p.food.name === product.name
+  ).slice(0, 2)
+
   const handleAddToCart = () => {
     addItem(
       {
@@ -68,7 +77,7 @@ export default function ProductDetailModal() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex flex-col bg-[#FDFAF6] overflow-y-auto overscroll-contain"
+        className="fixed inset-0 z-50 flex flex-col bg-[#FDFAF6] overflow-y-hidden overscroll-contain"
         style={{ minHeight: '100dvh' }}
       >
         {/* ── Top Floating Action Nav ── */}
@@ -93,7 +102,7 @@ export default function ProductDetailModal() {
         </div>
 
         {/* ── Top Hero Product Banner ── */}
-        <div className="relative w-full h-[340px] sm:h-[380px] bg-gradient-to-b from-[#E7D6C4] via-[#F4ECE2] to-[#FDFAF6] overflow-hidden flex items-center justify-center">
+        <div className="relative w-full h-[280px] sm:h-[380px] bg-gradient-to-b from-[#E7D6C4] via-[#F4ECE2] to-[#FDFAF6] overflow-hidden flex items-center justify-center">
           {/* Decorative artistic background strokes */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
             <div className="w-72 h-72 rounded-full border-2 border-dashed border-[#6B3F2A]" />
@@ -133,7 +142,7 @@ export default function ProductDetailModal() {
           initial={{ y: 60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.35, ease: 'easeOut' }}
-          className="flex-1 bg-white rounded-t-[36px] px-6 pt-7 pb-28 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] border-t border-[#F0E6DC] -mt-6 z-20 flex flex-col"
+          className="overflow-y-scroll flex-1 bg-white rounded-t-[36px] px-6 pt-7 pb-28 shadow-[0_-10px_30px_rgba(0,0,0,0.06)] border-t border-[#F0E6DC] -mt-6 z-20 flex flex-col"
         >
           {/* Title & Description */}
           <h1
@@ -218,6 +227,91 @@ export default function ProductDetailModal() {
               })}
             </div>
           </div>
+
+          {/* ── Based on what you're viewing ── */}
+          {relatedPairings.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-[14px] font-bold text-[#2C1A0E] mb-0.5">
+                Based on what you&apos;re viewing
+              </h3>
+              <p className="text-[11px] text-[#A89080] mb-3">
+                Café regulars love pairing this with&hellip;
+              </p>
+              <div className="flex flex-col gap-3">
+                {relatedPairings.map((pairing, idx) => {
+                  const isViewingDrink =
+                    pairing.drink.id === product.id ||
+                    pairing.drink.name === product.name
+                  const partner = isViewingDrink ? pairing.food : pairing.drink
+                  const comboTotal = pairing.drink.price + pairing.food.price
+                  return (
+                    <motion.div
+                      key={pairing.id}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.08 }}
+                      className="flex items-center gap-3 bg-[#F7F1EB] rounded-[18px] p-3 border border-[#EDE8E3]"
+                    >
+                      {/* Partner thumbnail */}
+                      <div
+                        className="relative w-14 h-14 rounded-[12px] shrink-0 overflow-hidden"
+                        style={{ background: 'linear-gradient(135deg,#F4ECE2,#EAD9C8)' }}
+                      >
+                        <Image
+                          src={partner.image}
+                          alt={partner.name}
+                          fill
+                          className="object-cover"
+                          sizes="56px"
+                        />
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <span
+                          className="text-[9px] font-bold px-2 py-0.5 rounded-full mb-1 inline-block"
+                          style={{
+                            backgroundColor: `${pairing.labelColor}20`,
+                            color: pairing.labelColor,
+                          }}
+                        >
+                          {pairing.label}
+                        </span>
+                        <p className="text-[12px] font-bold text-[#2C1A0E] truncate">
+                          {partner.emoji} {partner.name}
+                        </p>
+                        <p className="text-[10px] text-[#8C7362] leading-snug mt-0.5">
+                          {pairing.tagline}
+                        </p>
+                      </div>
+
+                      {/* Add partner to cart */}
+                      <button
+                        onClick={() =>
+                          addItem(
+                            {
+                              id: partner.id,
+                              name: partner.name,
+                              desc: pairing.tagline,
+                              price: partner.price,
+                              image: partner.image,
+                            },
+                            '1 piece',
+                            []
+                          )
+                        }
+                        className="shrink-0 flex flex-col items-center gap-0.5 bg-[#2C1A0E] text-white px-2.5 py-2 rounded-full shadow-md active:scale-95 transition-transform"
+                        aria-label={`Add ${partner.name} to cart`}
+                      >
+                        <ShoppingBag size={13} strokeWidth={2.5} />
+                        <span className="text-[9px] font-bold">₹{comboTotal}</span>
+                      </button>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Sticky Bottom Add to Cart CTA */}
           <div className="fixed bottom-0 inset-x-0 p-4 bg-white/95 backdrop-blur-md border-t border-[#F0E6DC] z-40 max-w-[430px] mx-auto">

@@ -14,8 +14,9 @@ import AddToCartToast from '@/components/cart/AddToCartToast'
 import MiniCartBar from '@/components/cart/MiniCartBar'
 import CartDrawer from '@/components/cart/CartDrawer'
 
-import { SPECIALS, POPULAR_DRINKS, POPULAR_FOOD } from '@/data/menuData'
+import { SPECIALS, POPULAR_DRINKS, POPULAR_FOOD, PAIRINGS } from '@/data/menuData'
 import { useCartStore } from '@/store/useCartStore'
+import PerfectPairings from '@/components/menu/PerfectPairings'
 
 type Props = {
   profile: { name: string; email: string } | null
@@ -197,6 +198,9 @@ export default function HomeClient({ profile }: Props) {
             </motion.div>
           )}
         </div>
+
+        {/* 6. Perfect Pairings Section */}
+        <PerfectPairings pairings={PAIRINGS} />
 
       </div>
 
