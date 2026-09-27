@@ -47,10 +47,12 @@ type CartState = {
   selectedProduct: Product | null
   toast: ToastInfo | null
   isCartOpen: boolean
+  isStoryOpen: boolean
 
   // Actions
   openProductDetail: (product: Product) => void
   closeProductDetail: () => void
+  setStoryOpen: (open: boolean) => void
   addItem: (product: Product, size: string, extras?: ExtraOption[], quantity?: number) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, delta: number) => void
@@ -67,9 +69,11 @@ export const useCartStore = create<CartState>((set, get) => ({
   selectedProduct: null,
   toast: null,
   isCartOpen: false,
+  isStoryOpen: false,
 
   openProductDetail: (product) => set({ selectedProduct: product }),
   closeProductDetail: () => set({ selectedProduct: null }),
+  setStoryOpen: (open) => set({ isStoryOpen: open }),
 
   addItem: (product, size, extras = [], quantity = 1) => {
     const extrasPrice = extras.reduce((acc, e) => acc + e.price, 0)

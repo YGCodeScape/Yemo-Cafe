@@ -26,7 +26,8 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
   const [activeHref, setActiveHref] = useState(pathname)
   const isProductDetailOpen = useCartStore(state => Boolean(state.selectedProduct))
   const isCartOpen = useCartStore(state => state.isCartOpen)
-  const shouldHideBottomNav = isProductDetailOpen || isCartOpen
+  const isStoryOpen = useCartStore(state => state.isStoryOpen)
+  const shouldHideBottomNav = isProductDetailOpen || isCartOpen || isStoryOpen
 
   useEffect(() => {
     setActiveHref(pathname)
