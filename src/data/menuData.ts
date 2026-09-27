@@ -42,6 +42,11 @@ export type PairingItem = {
   tagline: string      // Longer persuasive line
   drink: { id: string; name: string; emoji: string; image: string; price: number }
   food: { id: string; name: string; emoji: string; image: string; price: number }
+  comboPrice: number   // Final bundled combo price (e.g. 329)
+  originalPrice?: number // Pre-discount total price (e.g. 398)
+  discountPercentage?: number // Discount % (e.g. 20)
+  saveAmount?: number  // Direct savings in Rs (e.g. 69)
+  saveTag?: string     // Custom badge text like 'Save up to 20%'
 }
 
 /** Carousel specials — illustrated transparent-bg product images */
@@ -211,7 +216,7 @@ export const PAIRINGS: PairingItem[] = [
     label: '⭐ Café Favourite',
     labelColor: '#D4956A',
     reason: 'Morning favourite',
-    tagline: `Sweet + buttery  a café regular's go-to.`,
+    tagline: `Sweet + buttery — a café regular's go-to.`,
     drink: {
       id: 's1',
       name: 'Iced Caramel Latte',
@@ -226,6 +231,11 @@ export const PAIRINGS: PairingItem[] = [
       image: '/products/croissant.jpg',
       price: 149,
     },
+    comboPrice: 329,
+    originalPrice: 398,
+    discountPercentage: 20,
+    saveAmount: 69,
+    saveTag: 'Save up to 20%',
   },
   {
     id: 'p2',
@@ -247,13 +257,18 @@ export const PAIRINGS: PairingItem[] = [
       image: '/products/sandwich.jpg',
       price: 199,
     },
+    comboPrice: 299,
+    originalPrice: 378,
+    discountPercentage: 20,
+    saveAmount: 79,
+    saveTag: 'Save up to 20%',
   },
   {
     id: 'p3',
     label: '☀️ Morning Pick',
     labelColor: '#F0A500',
     reason: 'Rise and shine',
-    tagline: 'A bright start  light, fresh, and energising.',
+    tagline: 'A bright start — light, fresh, and energising.',
     drink: {
       id: 's2',
       name: 'Matcha Green Latte',
@@ -268,13 +283,18 @@ export const PAIRINGS: PairingItem[] = [
       image: '/products/croissant.jpg',
       price: 149,
     },
+    comboPrice: 299,
+    originalPrice: 378,
+    discountPercentage: 20,
+    saveAmount: 79,
+    saveTag: 'Save up to 20%',
   },
   {
     id: 'p4',
     label: '🍫 For Sweet Cravings',
     labelColor: '#7B4F2F',
     reason: 'Indulge a little',
-    tagline: 'Fruity fizz + chocolate decadence — pure bliss.',
+    tagline: 'Fruity fizz + chocolate decadence pure bliss.',
     drink: {
       id: 's3',
       name: 'Berry Blast Mojito',
@@ -289,6 +309,11 @@ export const PAIRINGS: PairingItem[] = [
       image: '/products/doughnut.jpg',
       price: 159,
     },
+    comboPrice: 289,
+    originalPrice: 358,
+    discountPercentage: 20,
+    saveAmount: 69,
+    saveTag: 'Save up to 20%',
   },
   {
     id: 'p5',
@@ -310,5 +335,10 @@ export const PAIRINGS: PairingItem[] = [
       image: '/products/doughnut.jpg',
       price: 159,
     },
+    comboPrice: 289,
+    originalPrice: 358,
+    discountPercentage: 20,
+    saveAmount: 69,
+    saveTag: 'Save up to 20%',
   },
 ]

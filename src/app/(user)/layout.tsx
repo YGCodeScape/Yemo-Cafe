@@ -15,7 +15,7 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { href: '/home',    icon: Home,            label: 'Home' },
-  { href: '#',        icon: UtensilsCrossed, label: 'Menu' },
+  { href: '/menu',        icon: UtensilsCrossed, label: 'Menu' },
   { href: '/scan',    icon: ScanLine,        label: 'Scan',    isCta: true },
   { href: '/orders',  icon: ClipboardList,   label: 'Orders' },
   { href: '/profile', icon: User,            label: 'Profile' },
@@ -50,7 +50,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
             transition={{ duration: 0.22, ease: 'easeOut' }}
             className="fixed bottom-5 left-1/2 z-50 pointer-events-auto"
           >
-            <div className="relative flex items-end gap-1.5 bg-[#1C1008]/95 backdrop-blur-xl rounded-full px-4 pb-2.5 h-[68px] shadow-2xl border border-white/[0.06]">
+          <div className="relative flex items-end gap-1.5 bg-[#1C1008]/95 backdrop-blur-xl rounded-full px-3 pb-2.5 h-[65px] shadow-2xl border border-white/[0.06]">
           {NAV.map(({ href, icon: Icon, label, isCta }) => {
             const active = activeHref === href || (href !== '#' && activeHref.startsWith(href + '/'))
             return (
@@ -73,7 +73,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
                     className={`relative flex items-center justify-center transition-all duration-300 ${
                       isCta
                         ? 'w-[54px] h-[54px] rounded-full -translate-y-1.5 bg-[#1C1008] border border-[#D4956A]/60 shadow-[0_4px_16px_rgba(0,0,0,0.45)]'
-                        : 'w-11 h-9 rounded-full'
+                        : 'w-11 h-8 rounded-full'
                     }`}
                   >
                     {/* Resting highlighted CTA badge for Scan when inactive */}

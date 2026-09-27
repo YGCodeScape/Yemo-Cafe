@@ -243,7 +243,8 @@ export default function ProductDetailModal() {
                     pairing.drink.id === product.id ||
                     pairing.drink.name === product.name
                   const partner = isViewingDrink ? pairing.food : pairing.drink
-                  const comboTotal = pairing.drink.price + pairing.food.price
+                  const comboTotal = pairing.comboPrice ?? (pairing.drink.price + pairing.food.price)
+                  const saveLabel = pairing.saveTag ?? (pairing.discountPercentage ? `Save up to ${pairing.discountPercentage}%` : pairing.saveAmount ? `Save ₹${pairing.saveAmount}` : null)
                   return (
                     <motion.div
                       key={pairing.id}
@@ -268,15 +269,22 @@ export default function ProductDetailModal() {
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
-                        <span
-                          className="text-[9px] font-bold px-2 py-0.5 rounded-full mb-1 inline-block"
-                          style={{
-                            backgroundColor: `${pairing.labelColor}20`,
-                            color: pairing.labelColor,
-                          }}
-                        >
-                          {pairing.label}
-                        </span>
+                        <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                          <span
+                            className="text-[9px] font-bold px-2 py-0.5 rounded-full inline-block"
+                            style={{
+                              backgroundColor: `${pairing.labelColor}20`,
+                              color: pairing.labelColor,
+                            }}
+                          >
+                            {pairing.label}
+                          </span>
+                          {saveLabel && (
+                            <span className="text-[8px] font-extrabold px-1.5 py-0.5 rounded-full bg-[#EBF7EE] text-[#1E7E34] border border-[#C3E6CB]">
+                              {saveLabel}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-[12px] font-bold text-[#2C1A0E] truncate">
                           {partner.emoji} {partner.name}
                         </p>
@@ -285,23 +293,26 @@ export default function ProductDetailModal() {
                         </p>
                       </div>
 
-                      {/* Add partner to cart */}
+                      {/* Add combo to cart */}
                       <button
                         onClick={() =>
                           addItem(
                             {
-                              id: partner.id,
-                              name: partner.name,
+                              id: pairing.id,
+                              name: `${pairing.drink.name} + ${pairing.food.name}`,
                               desc: pairing.tagline,
-                              price: partner.price,
+                              price: comboTotal,
+                              originalPrice: pairing.originalPrice ?? (pairing.drink.price + pairing.food.price),
                               image: partner.image,
+                              category: 'combo',
+                              temp: 'cold',
                             },
-                            '1 piece',
+                            'Combo',
                             []
                           )
                         }
                         className="shrink-0 flex flex-col items-center gap-0.5 bg-[#2C1A0E] text-white px-2.5 py-2 rounded-full shadow-md active:scale-95 transition-transform"
-                        aria-label={`Add ${partner.name} to cart`}
+                        aria-label={`Add ${pairing.drink.name} + ${pairing.food.name} combo to cart`}
                       >
                         <ShoppingBag size={13} strokeWidth={2.5} />
                         <span className="text-[9px] font-bold">₹{comboTotal}</span>

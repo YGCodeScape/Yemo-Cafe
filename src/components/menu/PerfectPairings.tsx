@@ -26,10 +26,20 @@ export default function PerfectPairings({ pairings }: Props) {
   const openProductDetail = useCartStore(state => state.openProductDetail)
 
   const handleAddCombo = (pairing: PairingItem) => {
-    const drink = findProduct(pairing.drink.id)
-    const food = findProduct(pairing.food.id)
-    if (drink) addItem({ ...drink, category: (drink as any).category ?? 'special', temp: drink.temp ?? 'cold' }, '200 ml', [])
-    if (food) addItem({ ...food, category: (food as any).category ?? 'food', temp: food.temp ?? 'room' }, '1 piece', [])
+    addItem(
+      {
+        id: pairing.id,
+        name: `${pairing.drink.name} + ${pairing.food.name}`,
+        desc: pairing.tagline,
+        price: pairing.comboPrice,
+        originalPrice: pairing.originalPrice ?? (pairing.drink.price + pairing.food.price),
+        image: pairing.drink.image,
+        category: 'combo',
+        temp: 'cold',
+      },
+      'Combo',
+      []
+    )
   }
 
   const handleOpenDrink = (pairing: PairingItem) => {
@@ -92,7 +102,8 @@ function PairingCard({
   onOpenDrink: () => void
   onOpenFood: () => void
 }) {
-  const comboPrice = pairing.drink.price + pairing.food.price
+  const comboPrice = pairing.comboPrice ?? (pairing.drink.price + pairing.food.price)
+  const saveLabel = pairing.saveTag ?? (pairing.discountPercentage ? `Save up to ${pairing.discountPercentage}%` : pairing.saveAmount ? `Save ₹${pairing.saveAmount}` : null)
 
   return (
     <motion.div
@@ -141,11 +152,10 @@ function PairingCard({
           <span className="text-[10px] text-[#6B3F2A] font-semibold text-center leading-tight max-w-[90px]">
             {pairing.drink.emoji} {pairing.drink.name}
           </span>
-          <span className="text-[11px] font-bold text-[#2C1A0E]">₹{pairing.drink.price}</span>
         </button>
 
         {/* Plus connector */}
-        <div className="mb-10 shrink-0">
+        <div className="mb-6 shrink-0">
           <div
             className="w-7 h-7 rounded-full flex items-center justify-center shadow-sm"
             style={{ background: 'linear-gradient(135deg,#2C1A0E,#6B3F2A)' }}
@@ -174,18 +184,26 @@ function PairingCard({
           <span className="text-[10px] text-[#6B3F2A] font-semibold text-center leading-tight max-w-[90px]">
             {pairing.food.emoji} {pairing.food.name}
           </span>
-          <span className="text-[11px] font-bold text-[#2C1A0E]">₹{pairing.food.price}</span>
         </button>
       </div>
 
       {/* ── Divider ── */}
       <div className="mx-4 border-t border-[#F0E6DC]" />
 
-      {/* ── Tagline + Add combo CTA ── */}
+      {/* ── Tagline + Save Tag + Add combo CTA ── */}
       <div className="px-4 py-3 flex items-center justify-between gap-3">
-        <p className="text-[11px] text-[#8C7362] leading-snug flex-1">
-          {pairing.tagline}
-        </p>
+        <div className="flex-1 min-w-0">
+          {saveLabel && (
+            <div className="mb-1">
+              <span className="inline-flex items-center bg-[#EBF7EE] text-[#1E7E34] border border-[#C3E6CB] text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                {saveLabel}
+              </span>
+            </div>
+          )}
+          <p className="text-[11px] text-[#8C7362] leading-snug line-clamp-2">
+            {pairing.tagline}
+          </p>
+        </div>
         <button
           onClick={onAddCombo}
           className="shrink-0 flex items-center gap-1.5 bg-[#2C1A0E] text-white text-[11px] font-bold px-3 py-2 rounded-full shadow-md active:scale-95 transition-transform"
