@@ -84,7 +84,7 @@ export default function HomeBanner({ greeting, userName, banners = DEFAULT_BANNE
   return (
     <div
       className="relative mb-4 overflow-hidden shadow-xl bg-[#1C0E07] select-none"
-      style={{ height: 260 }}
+      style={{ height: 220 }}
     >
       {/* ── Seamless Sliding banner images ── */}
       <AnimatePresence mode="popLayout" initial={false} custom={dir}>
@@ -156,20 +156,9 @@ export default function HomeBanner({ greeting, userName, banners = DEFAULT_BANNE
         </div>
       </div>
 
-      {/* ── Bottom: Order CTA ── */}
-      <div className="absolute inset-x-0 bottom-4 z-10 flex justify-center pointer-events-auto">
-        <Link
-          href="/menu"
-          className="bg-white/92 text-[#6B3F2A] text-[12px] font-bold px-7 py-2.5 rounded-full shadow-lg active:scale-95 transition-all duration-200 hover:bg-white hover:shadow-xl"
-          style={{ backdropFilter: 'blur(8px)' }}
-        >
-          Order Now →
-        </Link>
-      </div>
-
       {/* ── Clickable Dot indicators (bottom-right) ── */}
       {banners.length > 1 && (
-        <div className="absolute bottom-5 right-6 z-20 flex gap-1.5 items-center pointer-events-auto">
+        <div className="absolute bottom-5 right-35 z-20 flex gap-1 items-center pointer-events-auto">
           {banners.map((_, i) => (
             <button
               key={i}

@@ -120,19 +120,9 @@ export default function VisitingCardSection() {
               </p>
             </div>
           </div>
-
-          <a
-            href={cafe.googleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[12px] font-bold text-[#4A2A18] hover:text-[#D4956A] transition-colors shrink-0 mt-1"
-          >
-            <span>Get Directions</span>
-            <ChevronRight size={14} strokeWidth={2.5} />
-          </a>
         </div>
 
-          {/* Storefront Photo & Address & Map Preview */}
+          {/* Address & Map Preview */}
         <div className="flex gap-3 items-stretch mb-4">
           {/* Café Name & Address */}
           <div className="flex-1 min-w-0 flex flex-col justify-center">
@@ -225,7 +215,6 @@ export default function VisitingCardSection() {
                 ))}
               </div>
             </div>
-            <ChevronRight size={15} className="text-[#A89080] shrink-0 ml-1" />
           </div>
         </div>
 
