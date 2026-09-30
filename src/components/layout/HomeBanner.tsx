@@ -5,7 +5,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const DEFAULT_BANNERS = ['/banners/banner-1.jpg', '/banners/banner-2.jpg', '/banners/banner-3.jpg']
+const DEFAULT_BANNERS = [
+  '/assets/cafe_storefront.jpg',
+  '/banners/banner-1.jpg', 
+  '/banners/banner-2.jpg',
+  '/banners/banner-3.jpg'
+  ]
 
 type Props = {
   greeting: string

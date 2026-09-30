@@ -33,22 +33,16 @@ export default function YemoMoments() {
     return () => setStoryOpen(false)
   }, [expandedMoment, setStoryOpen])
 
-  const videoRef = useRef<HTMLVideoElement | null>(null)
   const total = YEMO_MOMENTS.length
 
   const goNext = () => setCurrent(i => (i + 1) % total)
   const goPrev = () => setCurrent(i => (i - 1 + total) % total)
 
-  // Sync video play/pause
+  // Whenever user slides to a new frame, reset mute to true and play to true so the new frame autoplays muted
   useEffect(() => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.play().catch(() => {})
-      } else {
-        videoRef.current.pause()
-      }
-    }
-  }, [isPlaying, current])
+    setIsMuted(true)
+    setIsPlaying(true)
+  }, [current])
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -115,7 +109,7 @@ export default function YemoMoments() {
                 isPlaying={isPlaying}
                 liked={!!liked[moment.id]}
                 likeCount={likes[moment.id] ?? moment.likes}
-                videoRef={isCenter && moment.type === 'video' ? videoRef : undefined}
+                isModalOpen={Boolean(expandedMoment)}
                 onSwipeLeft={goNext}
                 onSwipeRight={goPrev}
                 onClickSide={() => (relPos < 0 ? goPrev() : goNext())}
@@ -182,7 +176,7 @@ type CardProps = {
   isPlaying: boolean
   liked: boolean
   likeCount: number
-  videoRef?: React.RefObject<HTMLVideoElement | null>
+  isModalOpen: boolean
   onSwipeLeft: () => void
   onSwipeRight: () => void
   onClickSide: () => void
@@ -200,7 +194,7 @@ function MomentCard({
   isPlaying,
   liked,
   likeCount,
-  videoRef,
+  isModalOpen,
   onSwipeLeft,
   onSwipeRight,
   onClickSide,
@@ -209,8 +203,40 @@ function MomentCard({
   onLike,
   onExpand,
 }: CardProps) {
+  const localVideoRef = useRef<HTMLVideoElement | null>(null)
   const dragX = useMotionValue(0)
   const rotate = useTransform(dragX, [-150, 0, 150], [-8, 0, 8])
+
+  // Strictly control video playback: ONLY center card plays, background cards STOP and MUTE immediately
+  useEffect(() => {
+    const video = localVideoRef.current
+    if (!video || moment.type !== 'video') return
+
+    if (isCenter && !isModalOpen) {
+      video.muted = isMuted
+      if (isPlaying) {
+        const playPromise = video.play()
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {})
+        }
+      } else {
+        video.pause()
+      }
+    } else {
+      // Background card or modal open: Stop immediately and silence
+      video.pause()
+      video.muted = true
+      video.currentTime = 0
+    }
+  }, [isCenter, isPlaying, isMuted, isModalOpen, moment.type])
+
+  useEffect(() => {
+    return () => {
+      if (localVideoRef.current) {
+        localVideoRef.current.pause()
+      }
+    }
+  }, [])
 
   // Compute 3D deck properties based on distance from center
   const getDeckStyles = () => {
@@ -226,7 +252,7 @@ function MomentCard({
     }
     if (relPos === -1) {
       return {
-        x: '-32%',
+        x: '-26%',
         scaleX: 0.80,
         scaleY: 0.87,
         zIndex: 20,
@@ -236,7 +262,7 @@ function MomentCard({
     }
     if (relPos === 1) {
       return {
-        x: '32%',
+        x: '26%',
         scaleX: 0.80,
         scaleY: 0.87,
         zIndex: 20,
@@ -246,7 +272,7 @@ function MomentCard({
     }
     if (relPos === -2) {
       return {
-        x: '-56%',
+        x: '-45%',
         scaleX: 0.68,
         scaleY: 0.76,
         zIndex: 10,
@@ -256,7 +282,7 @@ function MomentCard({
     }
     if (relPos === 2) {
       return {
-        x: '56%',
+        x: '45%',
         scaleX: 0.68,
         scaleY: 0.76,
         zIndex: 10,
@@ -311,13 +337,14 @@ function MomentCard({
         {moment.type === 'video' ? (
           <div className="relative w-full h-full">
             <video
-              ref={videoRef as any}
+              ref={localVideoRef}
               src={moment.mediaUrl}
               poster={moment.posterUrl}
-              autoPlay
-              muted={isMuted}
+              autoPlay={isCenter && !isModalOpen}
+              muted={!isCenter || isMuted || isModalOpen}
               loop
               playsInline
+              preload={isCenter ? 'auto' : 'none'}
               className="w-full h-full object-cover"
             />
           </div>
@@ -338,7 +365,7 @@ function MomentCard({
           >
             <Image
               src={moment.posterUrl}
-              alt={moment.title}
+              alt='moment_post'
               fill
               className="object-cover"
               sizes="(max-width: 430px) 260px, 300px"

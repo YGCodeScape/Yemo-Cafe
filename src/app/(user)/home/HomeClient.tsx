@@ -18,6 +18,7 @@ import { SPECIALS, POPULAR_DRINKS, POPULAR_FOOD, PAIRINGS } from '@/data/menuDat
 import { useCartStore } from '@/store/useCartStore'
 import PerfectPairings from '@/components/menu/PerfectPairings'
 import YemoMoments from '@/components/home/YemoMoments'
+import VisitingCardSection from '@/components/home/VisitingCardSection'
 
 type Props = {
   profile: { name: string; email: string } | null
@@ -87,7 +88,7 @@ export default function HomeClient({ profile }: Props) {
       </AnimatePresence>
 
       {/* ── Page ── */}
-      <div className="flex flex-col bg-[#FDFAF6] pb-28" style={{ minHeight: '100dvh' }}>
+      <div className="flex flex-col bg-[#FDFAF6] pb-8" style={{ minHeight: '100dvh' }}>
 
         {/* 1. Banner carousel */}
         <div>
@@ -205,6 +206,9 @@ export default function HomeClient({ profile }: Props) {
 
         {/* 7. Yemo Moments — 3D Visual Experience */}
         <YemoMoments />
+
+        {/* 8. Visiting Card & Rewards Section */}
+        <VisitingCardSection />
 
       </div>
 

@@ -36,7 +36,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="flex flex-col min-h-dvh bg-[#FDFAF6] relative">
       {/* Page content */}
-      <main className={`flex-1 pb-[96px] ${shouldHideBottomNav ? 'overflow-hidden' : 'overflow-y-auto'}`}>
+      <main className={`flex-1 pb-[10px] ${shouldHideBottomNav ? 'overflow-hidden' : 'overflow-y-auto'}`}>
         {children}
       </main>
 
