@@ -31,7 +31,7 @@ export default function VisitingCardSection() {
   const { rewards, cafe, status, contact, amenitiesSection, sweetNote } = CAFE_INFO_DATA
 
   return (
-    <section className="px-4 mt-2 mb-10 space-y-4">
+    <section id="visiting-card" className="px-4 mt-2 mb-10 space-y-4">
       {/* ── 1. Rewards Teaser Card ── */}
       <Link href={rewards.link} className="block group select-none">
         <motion.div

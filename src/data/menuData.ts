@@ -342,3 +342,374 @@ export const PAIRINGS: PairingItem[] = [
     saveTag: 'Save up to 20%',
   },
 ]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Menu Page Extended Types & Dataset
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type DietaryOption = 'vegetarian' | 'vegan'
+export type TempOption = 'hot' | 'cold' | 'room'
+export type TasteOption = 'sweet' | 'strong' | 'creamy'
+export type MenuCategory = 'all' | 'coffee' | 'cold' | 'tea' | 'food' | 'bakery' | 'desserts'
+export type SubCategory = 'signature' | 'hot' | 'cold' | 'specialty' | 'classic' | 'sweet'
+
+export type MenuItem = {
+  id: string
+  name: string
+  desc: string
+  price: number
+  originalPrice?: number
+  offer?: number
+  rating?: number
+  reviewsCount?: string
+  tag?: string
+  temp: TempOption
+  dietary: DietaryOption
+  taste: TasteOption[]
+  tasteNotes: string // e.g. "Creamy • Sweet • Cold"
+  image: string
+  category: MenuCategory
+  subCategory?: SubCategory
+  features?: string[]
+}
+
+export type RecentOrder = {
+  id: string
+  name: string
+  price: number
+  image: string
+  desc: string
+  menuItem: MenuItem
+}
+
+export const MENU_ITEMS: MenuItem[] = [
+  // ── Signature Coffee ──
+  {
+    id: 'm-mocha',
+    name: 'Iced Chocolate Mocha',
+    desc: 'Rich dark espresso melted with Belgian chocolate and cold foam.',
+    price: 220,
+    originalPrice: 260,
+    offer: 15,
+    rating: 4.9,
+    reviewsCount: '2.1k reviews',
+    tag: '⭐ Best Seller',
+    temp: 'cold',
+    dietary: 'vegetarian',
+    taste: ['sweet', 'creamy'],
+    tasteNotes: 'Creamy • Sweet • Cold',
+    image: '/products/mocha.jpg',
+    category: 'coffee',
+    subCategory: 'signature',
+    features: ['🍫 Belgian Chocolate', '☕ Double Espresso', '🧊 Cold Foam'],
+  },
+  {
+    id: 'd1',
+    name: 'Iced Caramel Latte',
+    desc: 'Chilled espresso, golden caramel swirl, and velvety milk.',
+    price: 249,
+    originalPrice: 310,
+    offer: 20,
+    rating: 4.8,
+    reviewsCount: '2.4k reviews',
+    tag: '⭐ Best Seller',
+    temp: 'cold',
+    dietary: 'vegetarian',
+    taste: ['sweet', 'creamy'],
+    tasteNotes: 'Creamy • Sweet • Cold',
+    image: '/products/caramel-latte.jpg',
+    category: 'coffee',
+    subCategory: 'signature',
+    features: ['❄️ Cold Brew', '🥛 Creamy Milk', '🍯 Rich Caramel'],
+  },
+  {
+    id: 'm-vanilla-latte',
+    name: 'Iced Vanilla Latte',
+    desc: 'Espresso poured over house-made vanilla bean syrup & fresh milk.',
+    price: 239,
+    originalPrice: 280,
+    offer: 14,
+    rating: 4.8,
+    reviewsCount: '1.6k reviews',
+    tag: 'Popular',
+    temp: 'cold',
+    dietary: 'vegetarian',
+    taste: ['sweet', 'creamy'],
+    tasteNotes: 'Sweet • Creamy • Cold',
+    image: '/products/vanilla-latte.jpg',
+    category: 'coffee',
+    subCategory: 'signature',
+    features: ['✨ Madagascar Vanilla', '🥛 Fresh Milk', '☕ Smooth Espresso'],
+  },
+
+  // ── Hot Coffee ──
+  {
+    id: 'm-americano',
+    name: 'Caffe Americano',
+    desc: 'Bold double espresso shot topped with steaming hot water.',
+    price: 160,
+    originalPrice: 190,
+    rating: 4.7,
+    reviewsCount: '980 reviews',
+    tag: 'Classic',
+    temp: 'hot',
+    dietary: 'vegan',
+    taste: ['strong'],
+    tasteNotes: 'Bold • Strong • Hot',
+    image: '/products/americano.jpg',
+    category: 'coffee',
+    subCategory: 'hot',
+    features: ['☕ 100% Arabica', '🔥 Steaming Hot', '⚡ High Caffeine'],
+  },
+  {
+    id: 'd4',
+    name: 'Classic Cappuccino',
+    desc: 'Equal parts dark espresso, steamed milk, and velvety foam.',
+    price: 199,
+    originalPrice: 240,
+    rating: 4.8,
+    reviewsCount: '2.8k reviews',
+    tag: 'Classic',
+    temp: 'hot',
+    dietary: 'vegetarian',
+    taste: ['strong', 'creamy'],
+    tasteNotes: 'Rich • Creamy • Hot',
+    image: '/products/cappuccino.jpg',
+    category: 'coffee',
+    subCategory: 'hot',
+    features: ['☕ Hot Espresso', '🥛 Steamed Foam', '🍫 Cocoa Dusting'],
+  },
+
+  // ── Cold Coffee ──
+  {
+    id: 'd3',
+    name: 'Nitro Cold Brew',
+    desc: '18-hour slow steep, naturally sweet, smooth and bold.',
+    price: 179,
+    originalPrice: 210,
+    rating: 4.6,
+    reviewsCount: '1.2k reviews',
+    tag: 'Bestseller',
+    temp: 'cold',
+    dietary: 'vegan',
+    taste: ['strong'],
+    tasteNotes: 'Bold • Strong • Cold',
+    image: '/products/cold-brew.jpg',
+    category: 'coffee',
+    subCategory: 'cold',
+    features: ['☕ 18hr Steeped', '🌿 100% Arabica', '⚡ High Caffeine'],
+  },
+
+  // ── Cold / Refreshers ──
+  {
+    id: 'd2',
+    name: 'Berry Blast Mojito',
+    desc: 'Muddled fresh berries, mint leaves, lime and bubbly sparkling soda.',
+    price: 199,
+    originalPrice: 249,
+    offer: 20,
+    rating: 4.9,
+    reviewsCount: '3.1k reviews',
+    tag: 'Trending 🔥',
+    temp: 'cold',
+    dietary: 'vegan',
+    taste: ['sweet'],
+    tasteNotes: 'Fruity • Sweet • Cold',
+    image: '/products/berry-mojito.jpg',
+    category: 'cold',
+    subCategory: 'cold',
+    features: ['🍓 Real Berries', '🍃 Fresh Mint', '✨ Sparkling Soda'],
+  },
+
+  // ── Tea ──
+  {
+    id: 's2',
+    name: 'Matcha Green Latte',
+    desc: 'Ceremonial grade Japanese matcha whisked with warm oat milk.',
+    price: 229,
+    originalPrice: 280,
+    offer: 18,
+    rating: 4.7,
+    reviewsCount: '1.9k reviews',
+    tag: 'Chef Special ✨',
+    temp: 'cold',
+    dietary: 'vegan',
+    taste: ['creamy', 'sweet'],
+    tasteNotes: 'Creamy • Earthy • Cold',
+    image: '/specials/matcha-latte.png',
+    category: 'tea',
+    subCategory: 'signature',
+    features: ['🌿 Organic Matcha', '🌾 Oat Milk', '✨ Anti-oxidant'],
+  },
+
+  // ── Food ──
+  {
+    id: 'f2',
+    name: 'Paneer Tikka Sandwich',
+    desc: 'Smoky grilled paneer slices, mint chutney, melted cheese in sourdough.',
+    price: 199,
+    originalPrice: 240,
+    offer: 17,
+    rating: 4.8,
+    reviewsCount: '2.1k reviews',
+    tag: 'Hot Pick 🔥',
+    temp: 'hot',
+    dietary: 'vegetarian',
+    taste: ['strong'],
+    tasteNotes: 'Savory • Warm • Cheesy',
+    image: '/products/sandwich.jpg',
+    category: 'food',
+    subCategory: 'hot',
+    features: ['🥪 Whole Wheat', '🧀 Melted Cheese', '🌶️ Smoky Tikka'],
+  },
+
+  // ── Bakery ──
+  {
+    id: 'f1',
+    name: 'French Butter Croissant',
+    desc: 'Golden flaky layers with pure French butter, baked fresh every morning.',
+    price: 149,
+    originalPrice: 180,
+    offer: 15,
+    rating: 4.9,
+    reviewsCount: '1.5k reviews',
+    tag: 'Bestseller 🥐',
+    temp: 'room',
+    dietary: 'vegetarian',
+    taste: ['creamy'],
+    tasteNotes: 'Flaky • Buttery • Warm',
+    image: '/products/croissant.jpg',
+    category: 'bakery',
+    subCategory: 'classic',
+    features: ['🥐 Freshly Baked', '🧈 French Butter', '✨ Warm & Flaky'],
+  },
+  {
+    id: 'm-choco-croissant',
+    name: 'Chocolate Croissant',
+    desc: 'Crisp pastry layered with melted Belgian chocolate & dusted sugar.',
+    price: 189,
+    originalPrice: 220,
+    rating: 4.9,
+    reviewsCount: '2.3k reviews',
+    tag: 'Favourite 🍫',
+    temp: 'room',
+    dietary: 'vegetarian',
+    taste: ['sweet', 'creamy'],
+    tasteNotes: 'Flaky • Sweet • Decadent',
+    image: '/products/choco-croissant.jpg',
+    category: 'bakery',
+    subCategory: 'classic',
+    features: ['🍫 Belgian Chocolate', '🥐 Flaky Crust', '✨ Oven Warmed'],
+  },
+
+  // ── Desserts ──
+  {
+    id: 'm-cheesecake',
+    name: 'Basque Burnt Cheesecake',
+    desc: 'Caramelized rustic burnt crust with an ultra velvety molten center.',
+    price: 249,
+    originalPrice: 290,
+    rating: 4.9,
+    reviewsCount: '1.8k reviews',
+    tag: 'Must Try 🍰',
+    temp: 'cold',
+    dietary: 'vegetarian',
+    taste: ['sweet', 'creamy'],
+    tasteNotes: 'Rich • Creamy • Sweet',
+    image: '/products/cheesecake.jpg',
+    category: 'desserts',
+    subCategory: 'sweet',
+    features: ['🧀 Cream Cheese', '🍮 Molten Center', '🔥 Burnt Top Crust'],
+  },
+  {
+    id: 'f3',
+    name: 'Chocolate Lava Doughnut',
+    desc: 'Glazed brioche doughnut stuffed with warm dark chocolate ganache.',
+    price: 159,
+    originalPrice: 190,
+    rating: 4.9,
+    reviewsCount: '3.4k reviews',
+    tag: 'Chef Special 🍩',
+    temp: 'room',
+    dietary: 'vegetarian',
+    taste: ['sweet', 'creamy'],
+    tasteNotes: 'Sweet • Creamy • Warm',
+    image: '/products/doughnut.jpg',
+    category: 'desserts',
+    subCategory: 'sweet',
+    features: ['🍫 Dark Chocolate', '✨ Gooey Center', '🍩 Soft Dough'],
+  },
+]
+
+export const RECENT_ORDERS: RecentOrder[] = [
+  {
+    id: 'ro-1',
+    name: 'Iced Caramel Latte',
+    price: 249,
+    image: '/products/caramel-latte.jpg',
+    desc: 'Chilled espresso, caramel',
+    menuItem: MENU_ITEMS.find(m => m.id === 'd1') || MENU_ITEMS[1],
+  },
+  {
+    id: 'ro-2',
+    name: 'Chocolate Croissant',
+    price: 189,
+    image: '/products/choco-croissant.jpg',
+    desc: 'Flaky pastry, Belgian chocolate',
+    menuItem: MENU_ITEMS.find(m => m.id === 'm-choco-croissant') || MENU_ITEMS[9],
+  },
+]
+
+export const CATEGORY_TABS: { id: MenuCategory; label: string; icon?: string }[] = [
+  { id: 'all', label: 'All', icon: '✨' },
+  { id: 'coffee', label: 'Coffee', icon: '☕' },
+  { id: 'cold', label: 'Cold', icon: '🧊' },
+  { id: 'tea', label: 'Tea', icon: '🍵' },
+  { id: 'food', label: 'Food', icon: '🥪' },
+  { id: 'bakery', label: 'Bakery', icon: '🥐' },
+  { id: 'desserts', label: 'Desserts', icon: '🍰' },
+]
+
+export const CATEGORY_HEADERS: Record<
+  MenuCategory,
+  {
+    title: string
+    subtitle: string
+    subSections?: { title: string; subCategory: SubCategory }[]
+  }
+> = {
+  all: {
+    title: 'Explore All',
+    subtitle: 'From bold espresso to silky lattes and fresh bakes.',
+  },
+  coffee: {
+    title: 'Coffee',
+    subtitle: 'From bold espresso to silky lattes.',
+    subSections: [
+      { title: 'Signature Coffee', subCategory: 'signature' },
+      { title: 'Hot Coffee', subCategory: 'hot' },
+      { title: 'Cold Coffee', subCategory: 'cold' },
+    ],
+  },
+  cold: {
+    title: 'Cold Brews & Refreshers',
+    subtitle: 'Slow steeped brews, iced teas, and sparking coolers.',
+  },
+  tea: {
+    title: 'Teas & Matcha',
+    subtitle: 'Ceremonial matcha, artisan herbal brews, and comforting warmth.',
+  },
+  food: {
+    title: 'Food & Savouries',
+    subtitle: 'Toasted gourmet sandwiches, warm bowls, and savory delights.',
+  },
+  bakery: {
+    title: 'Fresh Bakery',
+    subtitle: 'Flaky French butter croissants and fresh oven-baked goods.',
+  },
+  desserts: {
+    title: 'Sweet Delights',
+    subtitle: 'Gourmet Basque cheesecakes, lava doughnuts, and sweet treats.',
+  },
+}
+
