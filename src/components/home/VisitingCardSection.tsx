@@ -187,9 +187,9 @@ export default function VisitingCardSection() {
         </div>
 
         {/* ── Status & Timings (2 Columns) ── */}
-        <div className="flex flex-col gap-2.5 mb-3.5">
+        <div className="flex gap-2.5 mb-3.5">
           {/* Left: Open Now Status */}
-          <div className="bg-[#FAF6F2] rounded-[18px] p-3 border border-[#EFE8DF] flex flex-col justify-center">
+          <div className="bg-[#FAF6F2] rounded-[18px] p-2 border border-[#EFE8DF] flex flex-col justify-center">
             <div className="flex items-center gap-1.5 text-[12px] font-bold text-[#1E7E34]">
               <span className="w-2 h-2 rounded-full bg-[#28A745] animate-pulse" />
               <span>{status.statusText}</span>

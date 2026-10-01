@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Heart, Plus } from 'lucide-react'
+import { Heart, Plus, Minus } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useCartStore } from '@/store/useCartStore'
 
 export type CardItem = {
@@ -26,22 +27,29 @@ type Props = {
 }
 
 /**
- * Reusable product card — used in Popular Drinks (home) and Menu page grid.
+ * Reusable product card — used in Popular Drinks & Food (home) and Menu page.
  * Two variants: 'scroll' (fixed 148px width) and 'grid' (full-width, 2-col).
- * Clicking card opens full screen ProductDetailModal; clicking '+' adds item directly.
+ * Clicking card opens full screen ProductDetailModal; progressive '+' button morphs into [-] qty [+] stepper.
  */
 export default function ProductCard({ item, onAdd, variant = 'scroll' }: Props) {
   const [fav, setFav] = useState(false)
   const isGrid = variant === 'grid'
 
-  const openProductDetail = useCartStore(state => state.openProductDetail)
-  const addItem = useCartStore(state => state.addItem)
+  const items = useCartStore((state) => state.items)
+  const openProductDetail = useCartStore((state) => state.openProductDetail)
+  const addItem = useCartStore((state) => state.addItem)
+  const updateQuantity = useCartStore((state) => state.updateQuantity)
+
+  // Find all cart items matching this product
+  const matchingCartItems = items.filter((ci) => ci.productId === item.id)
+  const totalQty = matchingCartItems.reduce((acc, ci) => acc + ci.quantity, 0)
+  const primaryCartItem = matchingCartItems[0]
 
   const handleCardClick = () => {
     openProductDetail(item)
   }
 
-  const handlePlusClick = (e: React.MouseEvent) => {
+  const handleAddDefault = (e: React.MouseEvent) => {
     e.stopPropagation()
     if (onAdd) {
       onAdd(item.id)
@@ -50,11 +58,27 @@ export default function ProductCard({ item, onAdd, variant = 'scroll' }: Props) 
     }
   }
 
+  const handleIncrement = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (primaryCartItem) {
+      updateQuantity(primaryCartItem.id, 1)
+    } else {
+      handleAddDefault(e)
+    }
+  }
+
+  const handleDecrement = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (primaryCartItem) {
+      updateQuantity(primaryCartItem.id, -1)
+    }
+  }
+
   return (
     <div
       onClick={handleCardClick}
       className={
-        'bg-[#FDFAF6] rounded-[20px] overflow-hidden border border-[#EDE8E3] shadow-sm cursor-pointer hover:shadow-md transition-shadow active:scale-[0.98] ' +
+        'bg-[#FDFAF6] rounded-[20px] overflow-hidden border border-[#EDE8E3] shadow-sm cursor-pointer transition-shadow active:scale-[0.98] ' +
         (isGrid ? 'w-full' : 'shrink-0 w-[148px]')
       }
     >
@@ -106,13 +130,53 @@ export default function ProductCard({ item, onAdd, variant = 'scroll' }: Props) 
               </span>
             )}
           </div>
-          <button
-            onClick={handlePlusClick}
-            className="w-7 h-7 bg-[#D4956A] hover:bg-[#b87d55] rounded-full flex items-center justify-center shadow-sm active:scale-90 transition-transform"
-            aria-label={'Add ' + item.name + ' to cart'}
-          >
-            <Plus size={14} className="text-white" strokeWidth={2.5} />
-          </button>
+
+          {/* Progressive Interactive Stepper Button */}
+          <div onClick={(e) => e.stopPropagation()}>
+            <AnimatePresence initial={false} mode="wait">
+              {totalQty === 0 ? (
+                <motion.button
+                  key="add-btn"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.15 }}
+                  onClick={handleAddDefault}
+                  className="w-7 h-7 bg-[#D4956A] hover:bg-[#b87d55] rounded-full flex items-center justify-center shadow-sm active:scale-90 transition-transform"
+                  aria-label={'Add ' + item.name + ' to cart'}
+                >
+                  <Plus size={14} className="text-white" strokeWidth={2.5} />
+                </motion.button>
+              ) : (
+                <motion.div
+                  key="stepper-btn"
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.85 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex items-center bg-[#3D2314] text-white rounded-full p-0.5 shadow-sm"
+                >
+                  <button
+                    onClick={handleDecrement}
+                    className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/10 active:scale-90 transition-transform"
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus size={11} strokeWidth={2.4} />
+                  </button>
+                  <span className="text-[11.5px] font-bold px-1 min-w-[14px] text-center text-[#FDFAF6]">
+                    {totalQty}
+                  </span>
+                  <button
+                    onClick={handleIncrement}
+                    className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/10 active:scale-90 transition-transform"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus size={11} strokeWidth={2.4} />
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>

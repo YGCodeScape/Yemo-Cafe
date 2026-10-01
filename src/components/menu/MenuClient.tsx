@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Search,
@@ -35,7 +36,6 @@ import CartDrawer from '@/components/cart/CartDrawer'
 export default function MenuClient() {
   const [selectedCategory, setSelectedCategory] = useState<MenuCategory>('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [isReturningUser, setIsReturningUser] = useState(true)
 
   const [filters, setFilters] = useState<FilterState>({
@@ -52,6 +52,10 @@ export default function MenuClient() {
   const addItem = useCartStore((state) => state.addItem)
   const updateQuantity = useCartStore((state) => state.updateQuantity)
   const openProductDetail = useCartStore((state) => state.openProductDetail)
+  const isMenuFilterOpen = useCartStore((state) => state.isMenuFilterOpen)
+  const setMenuFilterOpen = useCartStore((state) => state.setMenuFilterOpen)
+  const tableNumber = useCartStore((state) => state.tableNumber)
+  const isTableConfirmed = useCartStore((state) => state.isTableConfirmed)
 
   // Active filter count
   const activeFiltersCount = useMemo(() => {
@@ -150,23 +154,24 @@ export default function MenuClient() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#2C1A0E] pb-32">
       {/* ── Top Bar ── */}
-      <header className="sticky top-0 z-30 bg-[#FAF7F2]/90 backdrop-blur-md px-5 pt-4 pb-3 border-b border-[#EFEAE2]/60">
+      <header className="sticky top-0 z-30 bg-[#FAF7F2]/90 backdrop-blur-md px-5 pt-4 pb-3 ">
         <div className="max-w-lg mx-auto flex items-center justify-between">
-          {/* Logo & Subtitle */}
-          <div>
-            <div className="flex items-baseline gap-1">
-              <span
-                className="text-[26px] font-extrabold tracking-tight text-[#2C1A0E] leading-none"
-                style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-              >
-                yemo
-              </span>
-              <span className="text-[#D4956A] text-[18px] font-bold leading-none">°</span>
-            </div>
-            <p className="text-[10px] font-medium text-[#8F7868] tracking-wider uppercase mt-0.5">
-              Good Food • Good Vibes
-            </p>
+        {/* ── Page Title & Subtitle ── */}
+        <div className="mb-2">
+          <div className="flex items-center gap-2">
+            <h1
+              className="text-[32px] font-extrabold tracking-tight text-[#2C1A0E]"
+              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+            >
+              Menu
+            </h1>
+            <span className="text-[#D4956A] text-[22px] select-none">♡</span>
           </div>
+          <div className="flex items-center gap-1.5 text-[14px] text-[#7A6353] font-medium">
+            <span>What are you craving today?</span>
+            <span className="text-[14px]">🍃</span>
+          </div>
+        </div>
 
           {/* Cart Button */}
           <button
@@ -185,22 +190,23 @@ export default function MenuClient() {
       </header>
 
       <div className="max-w-lg mx-auto px-5 pt-3">
-        {/* ── Page Title & Subtitle ── */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2">
-            <h1
-              className="text-[32px] font-extrabold tracking-tight text-[#2C1A0E]"
-              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+        {/* ── Active Table Pill (Screen 9 in Mockup) ── */}
+        {isTableConfirmed && (
+          <div className="mb-3.5 flex items-center justify-between bg-[#F4ECE3] border border-[#E4D9CC] rounded-2xl px-4 py-2 shadow-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-[14px]">🪑</span>
+              <span className="text-[12.5px] font-bold text-[#2C1A0E]">
+                {tableNumber || 'Table 12'} • Ordering here
+              </span>
+            </div>
+            <Link
+              href="/scan"
+              className="text-[11px] font-semibold text-[#8C6D58] hover:text-[#2C1A0E] underline"
             >
-              Menu
-            </h1>
-            <span className="text-[#D4956A] text-[22px] select-none">♡</span>
+              Change
+            </Link>
           </div>
-          <div className="flex items-center gap-1.5 text-[14px] text-[#7A6353] font-medium">
-            <span>What are you craving today?</span>
-            <span className="text-[14px]">🍃</span>
-          </div>
-        </div>
+        )}
 
         {/* ── Search & Filter Bar ── */}
         <div className="flex items-center gap-2.5 mb-5">
@@ -228,7 +234,7 @@ export default function MenuClient() {
 
           {/* Filter Button */}
           <button
-            onClick={() => setIsFilterOpen(true)}
+            onClick={() => setMenuFilterOpen(true)}
             className={`relative w-11 h-11 rounded-2xl flex items-center justify-center border transition-all active:scale-95 shadow-sm ${
               activeFiltersCount > 0
                 ? 'bg-[#3D2314] text-white border-[#3D2314]'
@@ -560,8 +566,8 @@ export default function MenuClient() {
 
       {/* ── Filter Bottom Sheet Modal ── */}
       <MenuFilterBottomSheet
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
+        isOpen={isMenuFilterOpen}
+        onClose={() => setMenuFilterOpen(false)}
         filters={filters}
         onApply={(updatedFilters) => setFilters(updatedFilters)}
         totalCount={filteredItems.length}

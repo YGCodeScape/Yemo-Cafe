@@ -10,12 +10,13 @@ export default function MiniCartBar() {
   const isCartOpen = useCartStore(state => state.isCartOpen)
   const selectedProduct = useCartStore(state => state.selectedProduct)
   const isStoryOpen = useCartStore(state => state.isStoryOpen)
+  const isMenuFilterOpen = useCartStore(state => state.isMenuFilterOpen)
 
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
   const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
-  // Don't show if cart is empty, or if product detail modal, story viewer, or full cart drawer is open
-  if (items.length === 0 || isCartOpen || selectedProduct || isStoryOpen) return null
+  // Don't show if cart is empty, or if product detail modal, story viewer, filter sheet, or full cart drawer is open
+  if (items.length === 0 || isCartOpen || selectedProduct || isStoryOpen || isMenuFilterOpen) return null
 
   return (
     <AnimatePresence>

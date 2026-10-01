@@ -1,10 +1,12 @@
 'use client'
+
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Home, UtensilsCrossed, ScanLine, ClipboardList, User } from 'lucide-react'
 import { useCartStore } from '@/store/useCartStore'
+import SplashScreen from '@/components/ui/SplashScreen'
 
 type NavItem = {
   href: string
@@ -24,17 +26,55 @@ const NAV: NavItem[] = [
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [activeHref, setActiveHref] = useState(pathname)
+  const [showSplash, setShowSplash] = useState(false)
+
   const isProductDetailOpen = useCartStore(state => Boolean(state.selectedProduct))
   const isCartOpen = useCartStore(state => state.isCartOpen)
   const isStoryOpen = useCartStore(state => state.isStoryOpen)
-  const shouldHideBottomNav = isProductDetailOpen || isCartOpen || isStoryOpen
+  const isMenuFilterOpen = useCartStore(state => state.isMenuFilterOpen)
+  const isScannerActive = useCartStore(state => state.isScannerActive)
+  const shouldHideBottomNav =
+    showSplash ||
+    isProductDetailOpen ||
+    isCartOpen ||
+    isStoryOpen ||
+    isMenuFilterOpen ||
+    isScannerActive
 
   useEffect(() => {
     setActiveHref(pathname)
   }, [pathname])
 
+  // Only show splash screen once per app launch / session (like Instagram)
+  useEffect(() => {
+    try {
+      const hasShown = sessionStorage.getItem('yemo_has_shown_splash')
+      if (!hasShown) {
+        setShowSplash(true)
+      }
+    } catch {
+      setShowSplash(false)
+    }
+  }, [])
+
+  const handleSplashDone = () => {
+    try {
+      sessionStorage.setItem('yemo_has_shown_splash', 'true')
+    } catch {
+      // Ignore
+    }
+    setShowSplash(false)
+  }
+
   return (
     <div className="flex flex-col min-h-dvh bg-[#FDFAF6] relative">
+      {/* ── App Launch Splash (Shows once per session like Instagram) ── */}
+      <AnimatePresence>
+        {showSplash && (
+          <SplashScreen duration={1600} onDone={handleSplashDone} />
+        )}
+      </AnimatePresence>
+
       {/* Page content */}
       <main className={`flex-1 pb-[10px] ${shouldHideBottomNav ? 'overflow-hidden' : 'overflow-y-auto'}`}>
         {children}

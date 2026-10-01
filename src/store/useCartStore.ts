@@ -48,11 +48,18 @@ type CartState = {
   toast: ToastInfo | null
   isCartOpen: boolean
   isStoryOpen: boolean
+  isMenuFilterOpen: boolean
+  isTableConfirmed: boolean
+  isScannerActive: boolean
 
   // Actions
   openProductDetail: (product: Product) => void
   closeProductDetail: () => void
   setStoryOpen: (open: boolean) => void
+  setMenuFilterOpen: (open: boolean) => void
+  setTableNumber: (table: string) => void
+  setTableConfirmed: (confirmed: boolean) => void
+  setScannerActive: (active: boolean) => void
   addItem: (product: Product, size: string, extras?: ExtraOption[], quantity?: number) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, delta: number) => void
@@ -65,15 +72,22 @@ type CartState = {
 
 export const useCartStore = create<CartState>((set, get) => ({
   items: [],
-  tableNumber: 'Table No. 1',
+  tableNumber: 'Table 12',
   selectedProduct: null,
   toast: null,
   isCartOpen: false,
   isStoryOpen: false,
+  isMenuFilterOpen: false,
+  isTableConfirmed: false,
+  isScannerActive: false,
 
   openProductDetail: (product) => set({ selectedProduct: product }),
   closeProductDetail: () => set({ selectedProduct: null }),
   setStoryOpen: (open) => set({ isStoryOpen: open }),
+  setMenuFilterOpen: (open) => set({ isMenuFilterOpen: open }),
+  setTableNumber: (tableNumber) => set({ tableNumber }),
+  setTableConfirmed: (isTableConfirmed) => set({ isTableConfirmed }),
+  setScannerActive: (isScannerActive) => set({ isScannerActive }),
 
   addItem: (product, size, extras = [], quantity = 1) => {
     const extrasPrice = extras.reduce((acc, e) => acc + e.price, 0)
