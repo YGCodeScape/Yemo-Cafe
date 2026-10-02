@@ -119,7 +119,7 @@ export default function ScanClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFAF6] text-[#2C1A0E] flex flex-col justify-between relative overflow-hidden select-none">
+    <div className="h-auto bg-[#FDFAF6] text-[#2C1A0E] flex flex-col justify-between relative overflow-hidden select-none">
       <AnimatePresence mode="wait">
         {/* Screen 1: Landing Page */}
         {view === 'landing' && (

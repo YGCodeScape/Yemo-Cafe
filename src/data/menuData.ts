@@ -649,15 +649,7 @@ export const RECENT_ORDERS: RecentOrder[] = [
     image: '/products/caramel-latte.jpg',
     desc: 'Chilled espresso, caramel',
     menuItem: MENU_ITEMS.find(m => m.id === 'd1') || MENU_ITEMS[1],
-  },
-  {
-    id: 'ro-2',
-    name: 'Chocolate Croissant',
-    price: 189,
-    image: '/products/choco-croissant.jpg',
-    desc: 'Flaky pastry, Belgian chocolate',
-    menuItem: MENU_ITEMS.find(m => m.id === 'm-choco-croissant') || MENU_ITEMS[9],
-  },
+  }
 ]
 
 export const CATEGORY_TABS: { id: MenuCategory; label: string; icon?: string }[] = [
@@ -680,7 +672,7 @@ export const CATEGORY_HEADERS: Record<
 > = {
   all: {
     title: 'Explore All',
-    subtitle: 'From bold espresso to silky lattes and fresh bakes.',
+    subtitle: 'From bold espresso to fresh bakes.',
   },
   coffee: {
     title: 'Coffee',
@@ -693,23 +685,22 @@ export const CATEGORY_HEADERS: Record<
   },
   cold: {
     title: 'Cold Brews & Refreshers',
-    subtitle: 'Slow steeped brews, iced teas, and sparking coolers.',
+    subtitle: 'Slow steeped brews, and sparking coolers.',
   },
   tea: {
     title: 'Teas & Matcha',
-    subtitle: 'Ceremonial matcha, artisan herbal brews, and comforting warmth.',
+    subtitle: 'Ceremonial matcha, and comforting warmth.',
   },
   food: {
     title: 'Food & Savouries',
-    subtitle: 'Toasted gourmet sandwiches, warm bowls, and savory delights.',
+    subtitle: 'Warm bowls, and savory delights.',
   },
   bakery: {
     title: 'Fresh Bakery',
-    subtitle: 'Flaky French butter croissants and fresh oven-baked goods.',
+    subtitle: 'Flaky French butter croissants.',
   },
   desserts: {
     title: 'Sweet Delights',
-    subtitle: 'Gourmet Basque cheesecakes, lava doughnuts, and sweet treats.',
+    subtitle: ' For all your sweet cravings.',
   },
 }
-

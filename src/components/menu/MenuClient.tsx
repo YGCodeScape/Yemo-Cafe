@@ -284,7 +284,7 @@ export default function MenuClient() {
                       <span className="text-[#D4956A] text-[15px] font-bold">↻</span>
                       <h3
                         className="text-[16px] font-bold text-[#2C1A0E]"
-                        style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+                        style={{ fontFamily: '"Montserrat", sans-serif' }}
                       >
                         Order Again
                       </h3>
@@ -304,20 +304,19 @@ export default function MenuClient() {
                 </div>
 
                 {/* 2 Compact Recent Order Cards */}
-                <div className="grid grid-cols-2 gap-2.5">
+                <div>
                   {RECENT_ORDERS.map((order) => {
                     const matching = cartItems.filter((ci) => ci.productId === order.menuItem.id)
                     const qty = matching.reduce((acc, ci) => acc + ci.quantity, 0)
                     const primary = matching[0]
 
                     return (
-                      <div
-                        key={order.id}
+                      <div key={order.id}
                         onClick={() => handleOpenDetail(order.menuItem)}
-                        className="bg-[#FAF7F2] rounded-2xl p-2.5 border border-[#EDE6DD] hover:border-[#D4956A]/60 transition-all cursor-pointer flex flex-col justify-between"
+                        className="bg-[#FAF7F2] rounded-2xl p-2 border border-[#EDE6DD] transition-all"
                       >
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-[#EAE0D5] shrink-0">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="relative w-18 h-14 rounded-xl overflow-hidden bg-[#EAE0D5] shrink-0">
                             <Image
                               src={order.image}
                               alt={order.name}
@@ -325,17 +324,16 @@ export default function MenuClient() {
                               className="object-cover"
                             />
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-[12px] font-bold text-[#2C1A0E] truncate leading-tight">
+                          <div className="min-w-0">
+                            <p className="text-[12px] font-bold text-[#2C1A0E] truncate leading-tight" 
+                             style={{ fontFamily: '"Playfair Display", Georgia, serif' }} >
                               {order.name}
                             </p>
                             <p className="text-[12px] font-bold text-[#8C6D58] mt-0.5">
                               ₹{order.price}
                             </p>
                           </div>
-                        </div>
-
-                        {/* Quick Add or Stepper */}
+                          {/* Quick Add or Stepper */}
                         <div
                           className="flex justify-end"
                           onClick={(e) => e.stopPropagation()}
@@ -366,77 +364,45 @@ export default function MenuClient() {
                             </div>
                           )}
                         </div>
+                        </div>
+
                       </div>
                     )
                   })}
                 </div>
               </div>
 
-              {/* Promotional Banner: Start with Our Best Sellers */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#4A2814] to-[#2B1408] text-white p-4.5 shadow-md flex items-center justify-between">
-                <div className="relative z-10 max-w-[210px]">
-                  <span className="inline-flex items-center gap-1 bg-[#D4956A]/25 border border-[#D4956A]/40 text-[#F5C7A0] text-[9.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1.5">
-                    <Sparkles size={10} />
-                    Handcrafted
-                  </span>
-                  <h4
-                    className="text-[16px] font-bold text-white leading-tight mb-1"
-                    style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-                  >
-                    Start with Our Best Sellers
-                  </h4>
-                  <p className="text-[11px] text-[#D8C7B8] mb-3">
-                    Loved by many, chosen by us.
-                  </p>
-                  <button
-                    onClick={() => setSelectedCategory('coffee')}
-                    className="inline-flex items-center gap-1.5 bg-[#D4956A] hover:bg-[#c28459] text-white text-[11.5px] font-bold px-3.5 py-1.5 rounded-full active:scale-95 transition-transform shadow-sm"
-                  >
-                    <span>Explore</span>
-                    <ArrowRight size={12} strokeWidth={2.5} />
-                  </button>
-                </div>
-
-                <div className="relative w-28 h-28 shrink-0 rounded-2xl overflow-hidden border border-white/10 shadow-lg">
-                  <Image
-                    src="/banners/bestsellers-banner.jpg"
-                    alt="Best Sellers"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
             </div>
           ) : (
             /* New User View: Not sure what to try? */
-            <div className="bg-gradient-to-br from-[#F5EDE4] to-[#EDE3D6] rounded-3xl p-5 border border-[#E3D7C8] shadow-sm flex items-center justify-between">
+            <div className="bg-gradient-to-r from-[#4A2814] to-[#2B1408] rounded-3xl p-5 border border-[#E3D7C8] shadow-sm flex items-center justify-between">
               <div>
-                <span className="text-[11px] font-bold text-[#9C5A2B] uppercase tracking-wider flex items-center gap-1 mb-1">
+                <span className="text-[11px] font-bold text-[#FFF] uppercase tracking-wider flex items-center gap-1 mb-1">
                   <Sparkles size={12} />
                   Not sure what to try?
                 </span>
                 <h3
-                  className="text-[17px] font-bold text-[#2C1A0E] mb-1"
+                  className="text-[16px] font-bold text-[#FFF] mb-1"
                   style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
                 >
                   Start with our favourites
                 </h3>
-                <p className="text-[12px] text-[#7A6353] mb-3">
+                <p className="text-[11px] text-[#E3D7C8] mb-3">
                   Discover the drinks that our guests love the most.
                 </p>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setSelectedCategory('coffee')}
-                    className="inline-flex items-center gap-1.5 bg-[#3D2314] text-white text-[12px] font-bold px-4 py-2 rounded-full active:scale-95 transition-transform"
+                    className="inline-flex items-center gap-1.5 bg-[#c28459] text-white text-[12px] font-bold px-4 py-2 rounded-full active:scale-95 transition-transform"
                   >
                     <span>Best Sellers</span>
                     <ArrowRight size={13} />
                   </button>
                   <button
                     onClick={() => setIsReturningUser(true)}
-                    className="text-[10px] text-[#8F7868] hover:text-[#2C1A0E] underline pl-1"
+                    className="text-[6px] text-[#8F7868] underline pl-1"
                   >
-                    Returning view?
+                    Return?
                   </button>
                 </div>
               </div>
@@ -466,8 +432,8 @@ export default function MenuClient() {
             <div className="flex items-baseline justify-between">
               <div>
                 <h2
-                  className="text-[22px] font-extrabold text-[#2C1A0E] leading-tight"
-                  style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+                  className="text-[22px] font-semibold text-[#2C1A0E] leading-tight"
+                  style={{ fontFamily: '"Montserrat", sans-serif' }} 
                 >
                   {currentCategoryHeader?.title || 'Menu Items'}
                 </h2>
@@ -537,7 +503,8 @@ export default function MenuClient() {
                     <div key={sec.subCategory} className="space-y-3">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-[#D4956A]" />
-                        <h3 className="text-[14px] font-bold text-[#3D2314] tracking-wide uppercase text-[12px]">
+                        <h3 className="text-[14px] font-bold text-[#3D2314] tracking-wide uppercase text-[12px]" 
+                        style={{ fontFamily: '"Montserrat", sans-serif' }} >
                           {sec.title}
                         </h3>
                         <div className="flex-1 h-[1px] bg-[#E8E0D5]" />

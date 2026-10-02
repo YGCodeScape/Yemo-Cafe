@@ -63,7 +63,12 @@ export default function ScanCameraView({
             className="object-cover brightness-[0.75] contrast-[1.05]"
           />
           {/* Viewfinder Frame with Golden Glowing Corners */}
-          <div className="absolute inset-4 rounded-2xl border-2 border-white/40 flex items-center justify-center">
+          <div className="absolute inset-4 rounded-2xl flex items-center justify-center">
+            {/* Glowing corners */}
+            <span className="absolute -top-1 -left-1 w-10 h-10 border-t-4 border-l-4 border-white rounded-tl-lg" />
+            <span className="absolute -top-1 -right-1 w-10 h-10 border-t-4 border-r-4 border-white rounded-tr-lg" />
+            <span className="absolute -bottom-1 -left-1 w-10 h-10 border-b-4 border-l-4 border-white rounded-bl-lg" />
+            <span className="absolute -bottom-1 -right-1 w-10 h-10 border-b-4 border-r-4 border-white rounded-br-lg" />
 
             {/* Animated Sweeping Laser Line */}
             <motion.div

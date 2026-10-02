@@ -56,20 +56,17 @@ export default function ScanLandingView({
 
         {/* Viewfinder Corner Brackets & QR Icon */}
         <div className="absolute inset-0 flex items-center justify-center p-8">
-          <div className="relative w-44 h-44 rounded-2xl border-2 border-white/60 flex flex-col items-center justify-center backdrop-blur-[1px] shadow-lg">
+          <div className="relative w-44 h-44 rounded-2xl flex flex-col items-center justify-center backdrop-blur-[1px] shadow-lg">
             {/* Glowing corners */}
-            <span className="absolute -top-1 -left-1 w-5 h-5 border-t-4 border-l-4 border-white rounded-tl-lg" />
-            <span className="absolute -top-1 -right-1 w-5 h-5 border-t-4 border-r-4 border-white rounded-tr-lg" />
-            <span className="absolute -bottom-1 -left-1 w-5 h-5 border-b-4 border-l-4 border-white rounded-bl-lg" />
-            <span className="absolute -bottom-1 -right-1 w-5 h-5 border-b-4 border-r-4 border-white rounded-br-lg" />
+            <span className="absolute -top-1 -left-1 w-10 h-10 border-t-4 border-l-4 border-white rounded-tl-lg" />
+            <span className="absolute -top-1 -right-1 w-10 h-10 border-t-4 border-r-4 border-white rounded-tr-lg" />
+            <span className="absolute -bottom-1 -left-1 w-10 h-10 border-b-4 border-l-4 border-white rounded-bl-lg" />
+            <span className="absolute -bottom-1 -right-1 w-10 h-10 border-b-4 border-r-4 border-white rounded-br-lg" />
 
             {/* QR Symbol */}
             <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/40 backdrop-blur-md flex items-center justify-center text-white mb-2 shadow-inner">
               <QrCode size={30} strokeWidth={2.2} />
             </div>
-            <span className="text-[11px] font-bold text-white uppercase tracking-wider bg-black/40 px-2.5 py-0.5 rounded-full">
-              Tap to scan
-            </span>
           </div>
         </div>
 
@@ -77,7 +74,7 @@ export default function ScanLandingView({
         <div className="absolute bottom-3 inset-x-0 flex justify-center">
           <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md text-white/90 text-[11.5px] font-medium px-3.5 py-1 rounded-full shadow-sm border border-white/10">
             <span className="text-[#F5C7A0]">ⓘ</span>
-            <span>Align QR code within frame</span>
+            <span>Tap to scan</span>
           </div>
         </div>
       </div>
