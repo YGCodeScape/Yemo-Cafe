@@ -7,7 +7,11 @@ import { X, Trash2, Plus, Minus, ArrowRight, CheckCircle2, Utensils } from 'luci
 import { useCartStore } from '@/store/useCartStore'
 import { POPULAR_DRINKS } from '@/data/menuData'
 
+import { useRouter } from 'next/navigation'
+import { useOrderStore } from '@/store/useOrderStore'
+
 export default function CartDrawer() {
+  const router = useRouter()
   const isCartOpen = useCartStore(state => state.isCartOpen)
   const closeCart = useCartStore(state => state.closeCart)
   const items = useCartStore(state => state.items)
@@ -16,6 +20,7 @@ export default function CartDrawer() {
   const removeItem = useCartStore(state => state.removeItem)
   const clearCart = useCartStore(state => state.clearCart)
   const addItem = useCartStore(state => state.addItem)
+  const createOrderFromCart = useOrderStore(state => state.createOrderFromCart)
 
   const [orderPlaced, setOrderPlaced] = useState(false)
 
@@ -27,12 +32,15 @@ export default function CartDrawer() {
   )
 
   const handlePlaceOrder = () => {
+    if (items.length === 0) return
     setOrderPlaced(true)
     setTimeout(() => {
+      createOrderFromCart(items, tableNumber)
       clearCart()
       setOrderPlaced(false)
       closeCart()
-    }, 2500)
+      router.push('/orders')
+    }, 1600)
   }
 
   // Prevent background scrolling when cart drawer is open

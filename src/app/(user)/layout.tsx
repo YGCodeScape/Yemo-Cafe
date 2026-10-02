@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Home, UtensilsCrossed, ScanLine, ClipboardList, User } from 'lucide-react'
 import { useCartStore } from '@/store/useCartStore'
+import { useOrderStore } from '@/store/useOrderStore'
 import SplashScreen from '@/components/ui/SplashScreen'
 
 type NavItem = {
@@ -33,13 +34,18 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
   const isStoryOpen = useCartStore(state => state.isStoryOpen)
   const isMenuFilterOpen = useCartStore(state => state.isMenuFilterOpen)
   const isScannerActive = useCartStore(state => state.isScannerActive)
+  const isOrderTrackerOpen = useOrderStore(state => Boolean(state.activeTrackerModalId))
+  const isPastDetailOpen = useOrderStore(state => Boolean(state.pastDetailModalId))
+
   const shouldHideBottomNav =
     showSplash ||
     isProductDetailOpen ||
     isCartOpen ||
     isStoryOpen ||
     isMenuFilterOpen ||
-    isScannerActive
+    isScannerActive ||
+    isOrderTrackerOpen ||
+    isPastDetailOpen
 
   useEffect(() => {
     setActiveHref(pathname)
