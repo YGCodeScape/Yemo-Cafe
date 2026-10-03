@@ -9,12 +9,8 @@ import {
   Check, 
   CheckCircle2,
   Coffee, 
-  ChefHat, 
-  Navigation, 
   Sparkles, 
-  HelpCircle,
   Share2,
-  Receipt,
   HeartHandshake
 } from 'lucide-react'
 import { Order, OrderStatus, ORDER_STATUS_STEPS, useOrderStore } from '@/store/useOrderStore'
@@ -294,8 +290,8 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
                       <div
                         className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${
                           isFilled
-                            ? 'bg-[#2C1A0E] text-[#E8C5A5] shadow-md shadow-[#2C1A0E]/15 scale-105'
-                            : 'bg-[#F5ECE3] text-[#A89485] hover:bg-[#EFE2D6]'
+                            ? ' text-[#2C1A0E] shadow-md shadow-[#2C1A0E]/15 scale-105'
+                            : ' text-[#A89485]'
                         }`}
                       >
                         <Coffee
