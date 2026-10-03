@@ -31,9 +31,9 @@ export default function OrdersClient() {
   const resetToMockOrders = useOrderStore(state => state.resetToMockOrders)
   const clearAllOrders = useOrderStore(state => state.clearAllOrders)
 
-  // Active orders are any order not 'completed' (or we consider 'placed', 'confirmed', 'preparing', 'on_the_way', 'served')
+  // Active orders are any order not 'completed' (placed, confirmed, preparing, on_the_way, served)
   const activeOrders = orders.filter(o => o.status !== 'completed')
-  const pastOrders = orders.filter(o => o.status === 'completed' || o.status === 'served')
+  const pastOrders = orders.filter(o => o.status === 'completed')
 
   // Find targeted order for modals
   const activeModalOrder = orders.find(o => o.id === activeTrackerModalId)

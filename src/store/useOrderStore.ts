@@ -76,7 +76,7 @@ export const INITIAL_MOCK_ORDERS: Order[] = [
     id: 'ord-1041',
     orderNumber: '#YMO-1041',
     tableNumber: 'Table 07',
-    status: 'served',
+    status: 'completed',
     placedAt: 'Today, 02:15 PM',
     items: [
       {

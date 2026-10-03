@@ -7,6 +7,7 @@ import {
   ArrowLeft, 
   Clock, 
   Check, 
+  CheckCircle2,
   Coffee, 
   ChefHat, 
   Navigation, 
@@ -42,12 +43,20 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
     setTimeout(() => setShowToast(null), 3000)
   }
 
+  const handleMarkCompleted = () => {
+    setOrderStatus(order.id, 'completed')
+    setShowToast('Order marked as completed! Added to past history ✓')
+    setTimeout(() => {
+      onClose()
+    }, 1200)
+  }
+
   // Visual Assets & Text for each state
   const getStatePresentation = () => {
     switch (order.status) {
       case 'placed':
         return {
-          image: '/orders/preparing.jpg',
+          image: '/mascot-assets/mascot-completed.png',
           title: 'Order Placed!',
           subtitle: 'We have received your order and sent it to the café kitchen.',
           statusBadge: 'Waiting for Barista',
@@ -55,7 +64,7 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
         }
       case 'confirmed':
         return {
-          image: '/orders/preparing.jpg',
+          image: '/mascot-assets/mascot-cheers.png',
           title: 'Barista Accepted!',
           subtitle: 'Your ticket is on the counter. Preparation starting shortly.',
           statusBadge: 'Kitchen Confirmed',
@@ -63,28 +72,35 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
         }
       case 'preparing':
         return {
-          image: '/orders/preparing.jpg',
+          image: '/mascot-assets/mascot-preparing.png',
           title: 'Brewing & Handcrafting',
           subtitle: 'Our baristas are steaming milk and brewing fresh espresso.',
-          statusBadge: 'In the Kitchen · 8–10 mins',
+          statusBadge: 'In the Kitchen · 8-10 mins',
           accentColor: 'text-[#8C4A28]'
         }
       case 'on_the_way':
         return {
-          image: '/orders/ontheway.jpg',
+          image: '/mascot-assets/mascot-on-the-way.png',
           title: 'On the Way to Your Table!',
           subtitle: `Staff is bringing your fresh tray directly to ${order.tableNumber}.`,
           statusBadge: `Staff heading to ${order.tableNumber}`,
           accentColor: 'text-emerald-800'
         }
       case 'served':
-      case 'completed':
         return {
-          image: '/orders/served.jpg',
+          image: '/mascot-assets/mascot-served.png',
           title: 'Served Fresh! Enjoy ☕',
           subtitle: `Delivered right to ${order.tableNumber}. Please take a sip and enjoy the moment.`,
           statusBadge: `Delivered to ${order.tableNumber}`,
           accentColor: 'text-purple-800'
+        }
+      case 'completed':
+        return {
+          image: '/mascot-assets/mascot-completed.png',
+          title: 'Order Completed ✓',
+          subtitle: `Hope you enjoyed your experience at ${order.tableNumber}! Your order is archived in past history.`,
+          statusBadge: `Archived in History`,
+          accentColor: 'text-stone-800'
         }
     }
   }
@@ -151,7 +167,7 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 bg-[#C87D55]/20 rounded-full blur-3xl pointer-events-none" />
 
             {/* Central Graphic */}
-            <div className="relative w-44 h-44 sm:w-48 sm:h-48 mx-auto rounded-[24px] overflow-hidden shadow-2xl border-2 border-white/10 mb-4 bg-[#140A05]">
+            <div className="relative w-44 h-44 sm:w-48 sm:h-48 mx-auto rounded-[24px] overflow-hidden shadow-2xl border-4 border-white mb-6 bg-[#F5EDE4]">
               <Image
                 src={presentation.image}
                 alt={presentation.title}
@@ -174,48 +190,71 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
               {presentation.subtitle}
             </p>
 
-            {/* Live Tracker: Number-only Horizontal Step Circles (Wireframe UI) */}
-            <div className="relative pt-1 pb-1">
-              {/* Background Track Line */}
-              <div className="absolute top-1/2 left-6 right-6 -translate-y-1/2 h-[3px] bg-white/15 rounded-full" />
-
-              {/* Active Filled Progress Line */}
-              <div
-                className="absolute top-1/2 left-6 -translate-y-1/2 h-[3px] bg-[#C87D55] rounded-full transition-all duration-500 ease-out"
-                style={{
-                  width: `${Math.min(100, Math.max(0, (currentStepIndex / 4) * 100))}%`,
-                  maxWidth: 'calc(100% - 48px)',
-                }}
-              />
-
-              {/* 5 Step Number Circles */}
-              <div className="relative z-10 flex items-center justify-between px-1">
-                {[1, 2, 3, 4, 5].map(stepNum => {
-                  const idx = stepNum - 1
-                  const isPassed = order.status === 'completed' || idx < currentStepIndex
-                  const isCurrent = order.status !== 'completed' && idx === currentStepIndex
-
-                  return (
-                    <div
-                      key={stepNum}
-                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-[13px] sm:text-[14px] font-bold transition-all duration-300 ${
-                        isPassed
-                          ? 'bg-[#C87D55] text-white shadow-md'
-                          : isCurrent
-                            ? 'bg-white text-[#2C1A0E] ring-4 ring-[#C87D55]/40 shadow-lg scale-110 font-extrabold'
-                            : 'bg-[#3A281E] text-white/40 border border-white/10'
-                      }`}
-                    >
-                      {isPassed ? (
-                        <Check size={16} className="stroke-[3]" />
-                      ) : (
-                        <span>{stepNum}</span>
-                      )}
-                    </div>
-                  )
-                })}
+            {/* Live Tracker Steps or Served "Mark as Completed" CTA */}
+            {order.status === 'served' ? (
+              <div className="pt-2 pb-1 space-y-2.5">
+                <p className="text-[12px] text-[#D8C7B8] font-medium flex items-center justify-center gap-1.5">
+                  <span>Did you complete your order?</span>
+                </p>
+                <button
+                  onClick={handleMarkCompleted}
+                  className="w-full bg-[#C87D55] hover:bg-[#B36840] active:scale-[0.98] text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-[12px]"
+                >
+                  <CheckCircle2 size={18} />
+                  <span>Mark as Completed</span>
+                </button>
               </div>
-            </div>
+            ) : order.status === 'completed' ? (
+              <div className="pt-2 pb-1">
+                <div className="w-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 font-bold py-2.5 px-4 rounded-2xl flex items-center justify-center gap-2 text-[13px]">
+                  <CheckCircle2 size={16} className="text-emerald-400" />
+                  <span>Order Completed · Moved to Past Orders</span>
+                </div>
+              </div>
+            ) : (
+              /* Live Tracker: Number-only Horizontal Step Circles (1..5) */
+              <div className="relative pt-1 pb-1">
+                {/* Background Track Line */}
+                <div className="absolute top-1/2 left-6 right-6 -translate-y-1/2 h-[3px] bg-white/15 rounded-full" />
+
+                {/* Active Filled Progress Line */}
+                <div
+                  className="absolute top-1/2 left-6 -translate-y-1/2 h-[3px] bg-[#C87D55] rounded-full transition-all duration-500 ease-out"
+                  style={{
+                    width: `${Math.min(100, Math.max(0, (currentStepIndex / 4) * 100))}%`,
+                    maxWidth: 'calc(100% - 48px)',
+                  }}
+                />
+
+                {/* 5 Step Number Circles */}
+                <div className="relative z-10 flex items-center justify-between px-1">
+                  {[1, 2, 3, 4, 5].map(stepNum => {
+                    const idx = stepNum - 1
+                    const isPassed = idx < currentStepIndex
+                    const isCurrent = idx === currentStepIndex
+
+                    return (
+                      <div
+                        key={stepNum}
+                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-[13px] sm:text-[14px] font-bold transition-all duration-300 ${
+                          isPassed
+                            ? 'bg-[#C87D55] text-white shadow-md'
+                            : isCurrent
+                              ? 'bg-white text-[#2C1A0E] ring-4 ring-[#C87D55]/40 shadow-lg scale-110 font-extrabold'
+                              : 'bg-[#3A281E] text-white/40 border border-white/10'
+                        }`}
+                      >
+                        {isPassed ? (
+                          <Check size={16} className="stroke-[3]" />
+                        ) : (
+                          <span>{stepNum}</span>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </motion.div>
 
           {/* Feedback Section (Appears when order is Served or Completed - Mockup Screen 4) */}

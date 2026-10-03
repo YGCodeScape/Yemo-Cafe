@@ -200,13 +200,24 @@ export default function ActiveOrderCard({ order }: ActiveOrderCardProps) {
           </div>
         </div>
 
-        <button
-          onClick={() => openLiveTracker(order.id)}
-          className="shrink-0 ml-2 bg-[#2C1A0E] hover:bg-[#1E110A] text-white px-3.5 py-1.5 rounded-full text-[12px] font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all"
-        >
-          <span>Track</span>
-          <ChevronRight size={13} />
-        </button>
+        <div className="flex items-center gap-1.5 shrink-0 ml-2">
+          {order.status === 'served' && (
+            <button
+              onClick={() => setOrderStatus(order.id, 'completed')}
+              className="bg-[#C87D55] hover:bg-[#B36840] text-white px-3 py-1.5 rounded-full text-[11px] font-bold flex items-center gap-1 shadow-xs active:scale-95 transition-all"
+            >
+              <CheckCircle2 size={12} />
+              <span>Complete</span>
+            </button>
+          )}
+          <button
+            onClick={() => openLiveTracker(order.id)}
+            className="bg-[#2C1A0E] hover:bg-[#1E110A] text-white px-3.5 py-1.5 rounded-full text-[12px] font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all"
+          >
+            <span>Track</span>
+            <ChevronRight size={13} />
+          </button>
+        </div>
       </div>
 
       {/* Interactive Dev State Switcher (for testing all 6 order states) */}
