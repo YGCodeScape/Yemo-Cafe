@@ -151,14 +151,14 @@ export default function ProfileMainView({
       <div className="bg-white rounded-3xl p-5 border border-[#EDE2D5] shadow-xs">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-[15px]">☕</span>
+            <span className="text-[15px]"><Coffee size={16} className="text-[#C87D55]" /></span>
             <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#2C1A0E]">
               Yemo Rewards Hub
             </h2>
           </div>
           <button
             onClick={() => onNavigateSubView('rewards_hub')}
-            className="text-[12px] font-bold text-[#C87D55] hover:underline flex items-center gap-0.5"
+            className="text-[12px] font-bold text-[#C87D55] flex items-center gap-0.5"
           >
             <span>View all</span>
             <ChevronRight size={13} />
@@ -208,7 +208,7 @@ export default function ProfileMainView({
             </span>
             <span
               onClick={() => onNavigateSubView('rewards_hub')}
-              className="text-[11px] font-semibold text-[#8C7362] cursor-pointer hover:underline"
+              className="text-[11px] font-semibold text-[#8C7362]"
             >
               View all →
             </span>
@@ -216,15 +216,15 @@ export default function ProfileMainView({
 
           <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
             {vouchers.slice(0, 3).map((v) => (
-              <div
-                key={v.id}
-                onClick={() => onNavigateSubView('rewards_hub')}
-                className="w-28 shrink-0 bg-[#FAF5EE] rounded-2xl p-2.5 border border-[#EBDCCF] text-center cursor-pointer hover:border-[#D4956A] transition-all"
+              <div key={v.id} onClick={() => onNavigateSubView('rewards_hub')}
+                className="w-28 shrink-0 bg-[#FAF5EE] rounded-2xl p-2.5 border border-[#EBDCCF] text-center transition-all"
               >
                 <div className="relative w-12 h-12 mx-auto rounded-xl overflow-hidden mb-1.5 bg-[#E8DFD5]">
                   <Image src={v.image} alt={v.title} fill className="object-cover" />
                 </div>
-                <h4 className="text-[11px] font-bold text-[#2C1A0E] line-clamp-2 leading-tight">
+                <h4 className="text-[11px] font-bold text-[#2C1A0E] line-clamp-2 leading-tight" 
+                   style={{fontFamily: '"Playfair Display", Georgia, serif'}}
+                  >
                   {v.title}
                 </h4>
                 <span className="text-[10px] font-bold text-[#8C4A28] mt-1 block">

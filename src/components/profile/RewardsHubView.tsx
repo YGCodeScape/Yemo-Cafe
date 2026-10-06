@@ -37,26 +37,35 @@ export default function RewardsHubView({ onBack }: RewardsHubViewProps) {
         </button>
         <h1
           className="text-[19px] font-bold text-[#2C1A0E]"
-          style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+          style={{ fontFamily: '"Montserrat", sans-serif' }}
         >
           Yemo Rewards Hub
         </h1>
       </div>
 
-      {/* Top Dark Mocha Balance Banner */}
-      <div className="bg-gradient-to-r from-[#2C1A0E] via-[#3B2213] to-[#241309] text-white rounded-3xl p-5 shadow-lg relative overflow-hidden mb-5">
-        <div className="absolute right-0 top-0 w-36 h-36 bg-[#C87D55]/20 rounded-full blur-2xl pointer-events-none" />
+      {/* Top Balance Banner */}
+      <div className="relative text-white rounded-3xl p-5 shadow-lg overflow-hidden mb-5">
+        {/* Blurry Background Image */}
+        <Image
+          src="/banners/bestsellers-banner.jpg"
+          alt="Bestsellers background"
+          fill
+          className="object-cover scale-110 blur-[2px]"
+          priority
+        />
+        {/* Transparent dark overlay for crisp text readability */}
+        <div className="absolute inset-0 bg-[#2011084f] backdrop-blur-[0.5x]" />
 
         <div className="relative z-10 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-[#E8C5A5]">
+            <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-[#FBEEDC] shadow-xs">
               <Coffee size={24} />
             </div>
             <div>
-              <div className="text-[26px] font-black text-white leading-none">
+              <div className="text-[26px] font-black text-white leading-none drop-shadow-sm">
                 {profile.beans}
               </div>
-              <div className="text-[12px] font-bold text-[#D8C7B8] mt-0.5">
+              <div className="text-[12px] font-bold text-[#E8DFD5] mt-0.5 drop-shadow-xs">
                 Yemo Beans Available
               </div>
             </div>
@@ -64,7 +73,7 @@ export default function RewardsHubView({ onBack }: RewardsHubViewProps) {
 
           <button
             onClick={() => setQrPassOpen(true)}
-            className="bg-[#C87D55] hover:bg-[#B36840] text-white text-[12px] font-bold px-3.5 py-1.5 rounded-full shadow-xs active:scale-95 transition-all flex items-center gap-1"
+            className="bg-white/15 backdrop-blur-md border border-white/20 text-white text-[12px] font-bold px-3.5 py-1.5 rounded-full shadow-md active:scale-95 transition-all flex items-center gap-1"
           >
             <span>Scan Pass</span>
             <ChevronRight size={13} />
@@ -144,7 +153,8 @@ export default function RewardsHubView({ onBack }: RewardsHubViewProps) {
                     />
                   </div>
                   <div>
-                    <h4 className="text-[13px] font-bold text-[#2C1A0E] leading-tight">
+                    <h4 className="text-[12px] font-bold text-[#2C1A0E] leading-tight" 
+                       style={{fontFamily: '"Playfair Display", Georgia, serif'}}>
                       {voucher.title}
                     </h4>
                     <div className="flex items-center gap-1 mt-1">
