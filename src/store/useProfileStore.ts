@@ -104,7 +104,7 @@ export const useProfileStore = create<ProfileState>()(
   persist(
     (set, get) => ({
       profile: {
-        name: 'Ananya Sharma',
+        name: 'anushka',
         phone: '+91 9082882412',
         email: 'ananya@gmail.com',
         avatar: '/assets/user-avatar.jpg',

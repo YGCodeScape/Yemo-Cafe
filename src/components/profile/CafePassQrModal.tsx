@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Sparkles, Star } from 'lucide-react'
 import { useProfileStore } from '@/store/useProfileStore'
@@ -9,28 +10,46 @@ export default function CafePassQrModal() {
   const setQrPassOpen = useProfileStore((state) => state.setQrPassOpen)
   const profile = useProfileStore((state) => state.profile)
 
-  if (!isQrPassOpen) return null
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (!isQrPassOpen) return
+
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+    const prevBodyTouchAction = document.body.style.touchAction
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.touchAction = 'none'
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+      document.body.style.touchAction = prevBodyTouchAction
+    }
+  }, [isQrPassOpen])
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setQrPassOpen(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs"
-        />
+      {isQrPassOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setQrPassOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+          />
 
-        {/* Modal Card */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.94, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.94, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-[340px] bg-[#FAF5EE] rounded-[32px] p-6 shadow-2xl border border-[#EBDCCF] text-center z-10 overflow-hidden"
-        >
+          {/* Modal Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.94, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="relative w-full max-w-[340px] bg-[#FAF5EE] rounded-[32px] p-6 shadow-2xl border border-[#EBDCCF] text-center z-10 overflow-hidden"
+          >
           {/* Subtle Botanical corner flourishes */}
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#C87D55]/15 via-transparent to-transparent pointer-events-none rounded-tr-[32px]" />
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#DEB892]/20 via-transparent to-transparent pointer-events-none rounded-bl-[32px]" />
@@ -48,18 +67,15 @@ export default function CafePassQrModal() {
           <div className="mb-2">
             <h2
               className="text-[19px] font-bold text-[#2C1A0E] tracking-tight"
-              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-            >
+              style={{ fontFamily: '"Playfair Display", Georgia, serif' }} >
               Your Café Pass
             </h2>
             <div className="flex items-center justify-center gap-1 mt-0.5">
               <span
-                className="text-[15px] font-black text-[#8C4A28] tracking-wider uppercase"
-                style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-              >
-                yemo
+                className="text-[15px] font-black text-[#8C4A28] tracking-wider"
+                style={{ fontFamily: '"Lily Script One", system-ui' }} >
+                yemo cafe
               </span>
-              <span className="text-[10px] text-[#A89280] font-medium">· Good Food • Good Vibes</span>
             </div>
           </div>
 
@@ -108,18 +124,21 @@ export default function CafePassQrModal() {
               <rect x="134" y="142" width="16" height="8" rx="2" fill="#2C1A0E" />
 
               {/* Central Badge */}
-              <circle cx="80" cy="80" r="19" fill="#FAF5EE" stroke="#8C4A28" strokeWidth="2.5" />
-              <text
-                x="80"
-                y="83"
-                textAnchor="middle"
-                fontSize="8"
-                fontWeight="900"
-                fill="#2C1A0E"
-                fontFamily="Georgia, serif"
-              >
-                YEMO
-              </text>
+              <defs>
+                <clipPath id="qr-badge-logo-clip">
+                  <circle cx="80" cy="80" r="18" />
+                </clipPath>
+              </defs>
+              <circle cx="80" cy="80" r="19" fill="#FAF5EE" />
+              <image
+                href="/icons/yemo-logo-bg.png"
+                x="62"
+                y="62"
+                width="36"
+                height="36"
+                clipPath="url(#qr-badge-logo-clip)"
+                preserveAspectRatio="xMidYMid slice"
+              />
             </svg>
           </div>
 
@@ -155,6 +174,7 @@ export default function CafePassQrModal() {
           </button>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   )
 }

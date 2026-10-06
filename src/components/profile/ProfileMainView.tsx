@@ -89,7 +89,7 @@ export default function ProfileMainView({
       </div>
 
       {/* ── 3. Digital Yemo Club Card (Screen 1 & 2 Hero) ── */}
-      <div className="relative overflow-hidden rounded-[26px] p-5 shadow-lg select-none"
+      <div className="relative overflow-hidden rounded-[22px] p-5 shadow-lg select-none"
         style={{
           backgroundImage: "url('/assets/member-card.png')",
           backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
@@ -102,28 +102,27 @@ export default function ProfileMainView({
             {/* Left: Tier, Member ID, Beans */}
             <div>
               <div className="flex items-center gap-1.5 mb-1">
-                <Crown size={14} className="text-[#FFF]" />
-                <span className="text-[14px] font-black uppercase tracking-wider text-[#FFF]">
+                <Crown size={14} className="text-[#802221]" />
+                <span className="text-[14px] font-black uppercase tracking-wider text-[#802221]">
                   Yemo Club
                 </span>
               </div>
 
               {/* Beans Count */}
-              <div className="flex items-center gap-1.5 mb-4">
-                <div className="w-6 h-6 rounded-full bg-[#2C1A0E] text-[#FFC83B] flex items-center justify-center">
-                  <Star size={12} className="fill-[#FFC83B]" />
-                </div>
+              <div className="flex items-center gap-1.5">
+                <div className="flex flex-col my-4">
+                  <span className="text-[16px] font-bold text-[#2C1A0E]">
+                  Yemo Beans
+                </span>
                 <span className="text-[24px] font-black text-[#2C1A0E] leading-none">
                   {profile.beans}
                 </span>
-                <span className="text-[12px] font-bold text-[#6E4E37]">
-                  Yemo Beans
-                </span>
+                </div>
               </div>
 
               {/* Action Button */}
               <button onClick={() => onNavigateSubView('club_card')}
-                className="bg-[#2C1A0E] hover:bg-[#1E110A] text-white text-[11px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
+                className="bg-[#802221] text-white text-[11px] font-bold py-1.5 px-3.5 rounded-full flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
               >
                 <span>View Club Card</span>
               </button>

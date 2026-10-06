@@ -62,56 +62,45 @@ export default function DigitalClubCardView({ onBack }: DigitalClubCardViewProps
         >
           <ArrowLeft size={18} />
         </button>
-        <h1
-          className="text-[19px] font-bold text-[#2C1A0E]"
-          style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+        <h1 className="text-[19px] font-bold text-[#2C1A0E]"
+          style={{ fontFamily: '"Montserrat", sans-serif' }}
         >
-          Digital Yemo Club Card
+          Digital Yemo < br/>Club Card
         </h1>
       </div>
 
       {/* Hero Gold Member Card */}
-      <div
-        className="relative overflow-hidden rounded-[28px] p-5 sm:p-6 shadow-xl border border-[#D8B48B] text-[#2C1A0E] mb-5 select-none"
+      <div className="relative overflow-hidden rounded-[22px] pt-3 pb-5 px-5 shadow-xl mb-5 select-none"
         style={{
-          background: 'linear-gradient(135deg, #DEB892 0%, #E8C8A6 40%, #F5DEC6 80%, #DFBA94 100%)',
+          backgroundImage: "url('/assets/member-card.png')",
+          backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
         }}
       >
-        {/* Subtle Watermark & Botanical Graphics */}
-        <div className="absolute -right-4 -bottom-4 w-40 h-40 opacity-15 pointer-events-none">
-          <svg viewBox="0 0 100 100" fill="currentColor">
-            <path d="M50 0 C70 30 100 50 100 100 C70 100 50 70 50 0 Z" />
-            <path d="M50 0 C30 30 0 50 0 100 C30 100 50 70 50 0 Z" />
-          </svg>
-        </div>
 
         <div className="relative z-10">
           {/* Top row: Brand & Crown */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-7">
             <div className="flex items-center gap-1.5">
-              <span
-                className="text-[20px] font-black tracking-wider text-[#3B1F0E]"
-                style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-              >
-                yemo
-              </span>
-              <span className="text-[11px] font-bold text-[#69442C] tracking-wide uppercase px-2 py-0.5 rounded-full bg-white/40">
-                Gold Member
+              <span className="text-[26px] font-black tracking-wider text-[#2C1A0E]"
+                style={{ fontFamily: '"Lily Script One", system-ui' }} >
+                yemo club
               </span>
             </div>
-            <Crown size={22} className="text-[#8C5E3C] fill-[#8C5E3C]/30" />
+              <span className="text-[11px] font-bold text-[#2C1A0E] tracking-wide uppercase px-2 py-0.5 rounded-full bg-white/80">
+                Gold Member
+              </span>
           </div>
 
           {/* Member Name and ID + QR preview */}
           <div className="flex items-end justify-between">
             <div>
               <h2
-                className="text-[22px] font-bold text-[#2C1A0E] tracking-tight leading-tight"
+                className="text-[22px] font-bold text-[#802221] tracking-tight leading-tight"
                 style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
               >
                 {profile.name}
               </h2>
-              <p className="text-[12px] font-semibold text-[#6E4E37] tracking-wider mt-0.5">
+              <p className="text-[14px] font-semibold text-[#6E4E37] tracking-wider mt-0.5">
                 {profile.memberId}
               </p>
 
@@ -124,7 +113,7 @@ export default function DigitalClubCardView({ onBack }: DigitalClubCardViewProps
                   <div className="text-[20px] font-black text-[#2C1A0E] leading-none">
                     {profile.beans}
                   </div>
-                  <div className="text-[10px] uppercase font-bold text-[#6E4E37] tracking-wider">
+                  <div className="text-[12px] uppercase font-bold text-[#6E4E37] tracking-wider">
                     Yemo Beans
                   </div>
                 </div>
@@ -134,10 +123,10 @@ export default function DigitalClubCardView({ onBack }: DigitalClubCardViewProps
             {/* Scannable Mini QR */}
             <div
               onClick={() => setQrPassOpen(true)}
-              className="bg-white p-2 rounded-2xl border-2 border-white shadow-md cursor-pointer hover:scale-105 active:scale-95 transition-all"
+              className="bg-white p-2 rounded-2xl border-2 border-white shadow-md active:scale-95 transition-all"
               title="Tap to enlarge QR Pass"
             >
-              <div className="w-16 h-16 bg-[#2C1A0E] rounded-xl flex flex-col items-center justify-center text-white p-1">
+              <div className="w-13 h-16 bg-[#2C1A0E] rounded-xl flex flex-col items-center justify-center text-white">
                 <QrCode size={36} className="text-white" />
                 <span className="text-[8px] font-bold uppercase tracking-tighter mt-0.5">
                   Scan Pass
