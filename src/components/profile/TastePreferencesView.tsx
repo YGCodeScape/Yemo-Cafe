@@ -44,16 +44,14 @@ export default function TastePreferencesView({ onBack }: TastePreferencesViewPro
     >
       {/* Top Header */}
       <div className="flex items-center gap-3 mb-5">
-        <button
-          onClick={onBack}
+        <button onClick={onBack}
           className="w-9 h-9 rounded-full bg-white border border-[#E8DFD5] flex items-center justify-center text-[#2C1A0E] shadow-xs active:scale-95 transition-all"
           aria-label="Back to profile"
         >
           <ArrowLeft size={18} />
         </button>
-        <h1
-          className="text-[19px] font-bold text-[#2C1A0E]"
-          style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+        <h1 className="text-[19px] font-bold text-[#2C1A0E]"
+          style={{ fontFamily: '"Montserrat", sans-serif' }}
         >
           Taste &amp; Ordering Preferences
         </h1>
@@ -79,7 +77,7 @@ export default function TastePreferencesView({ onBack }: TastePreferencesViewPro
                   className={`py-2.5 px-4 rounded-full text-[13px] font-bold transition-all flex items-center gap-1.5 active:scale-95 ${
                     selected
                       ? 'bg-[#2C1A0E] text-white shadow-xs'
-                      : 'bg-[#FAF4ED] text-[#6E4E37] border border-[#EBDCCF] hover:bg-[#F2ECE4]'
+                      : 'bg-[#FAF4ED] text-[#6E4E37] border border-[#EBDCCF]'
                   }`}
                 >
                   {selected && <Check size={14} className="stroke-[3]" />}
@@ -109,7 +107,7 @@ export default function TastePreferencesView({ onBack }: TastePreferencesViewPro
                   className={`flex-1 py-2.5 px-4 rounded-full text-[13px] font-bold transition-all flex items-center justify-center gap-2 active:scale-95 ${
                     selected
                       ? 'bg-[#2C1A0E] text-white shadow-xs'
-                      : 'bg-[#FAF4ED] text-[#6E4E37] border border-[#EBDCCF] hover:bg-[#F2ECE4]'
+                      : 'bg-[#FAF4ED] text-[#6E4E37] border border-[#EBDCCF]'
                   }`}
                 >
                   {t === 'Hot' ? <Flame size={15} /> : <Snowflake size={15} />}
@@ -139,7 +137,7 @@ export default function TastePreferencesView({ onBack }: TastePreferencesViewPro
                   className={`py-2.5 px-4 rounded-full text-[13px] font-bold transition-all flex items-center gap-1.5 active:scale-95 ${
                     selected
                       ? 'bg-[#2C1A0E] text-white shadow-xs'
-                      : 'bg-[#FAF4ED] text-[#6E4E37] border border-[#EBDCCF] hover:bg-[#F2ECE4]'
+                      : 'bg-[#FAF4ED] text-[#6E4E37] border border-[#EBDCCF]'
                   }`}
                 >
                   {selected && <Check size={14} className="stroke-[3]" />}
@@ -169,7 +167,7 @@ export default function TastePreferencesView({ onBack }: TastePreferencesViewPro
                   className={`flex-1 py-2.5 px-4 rounded-full text-[13px] font-bold transition-all flex items-center justify-center gap-2 active:scale-95 ${
                     selected
                       ? 'bg-[#EBF7EE] text-emerald-900 border border-emerald-300 shadow-xs'
-                      : 'bg-[#FAF4ED] text-[#6E4E37] border border-[#EBDCCF] hover:bg-[#F2ECE4]'
+                      : 'bg-[#FAF4ED] text-[#6E4E37] border border-[#EBDCCF]'
                   }`}
                 >
                   <Leaf size={14} className={selected ? 'text-emerald-700' : 'text-[#8C7362]'} />
