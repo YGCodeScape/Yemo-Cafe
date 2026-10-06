@@ -241,7 +241,9 @@ export default function ProfileMainView({
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Coffee size={16} className="text-[#C87D55]" />
-            <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#2C1A0E]">
+            <h2 className="text-[12px] font-bold uppercase tracking-wider text-[#2C1A0E]"
+               style={{fontFamily: '"Montserrat", sans-serif'}}
+              >
               Café Habits &amp; Coffee Passport
             </h2>
           </div>
@@ -257,9 +259,8 @@ export default function ProfileMainView({
         {/* 3 Stat Cards in a row */}
         <div className="grid grid-cols-3 gap-2">
           {/* Coffees enjoyed */}
-          <div
-            onClick={() => onNavigateSubView('coffee_passport')}
-            className="bg-[#FAF5EE] rounded-2xl p-3 text-center border border-[#EBDCCF] cursor-pointer hover:border-[#D4956A] transition-all"
+          <div onClick={() => onNavigateSubView('coffee_passport')}
+            className="bg-[#FAF5EE] rounded-2xl p-3 text-center border border-[#EBDCCF] transition-all"
           >
             <div className="w-8 h-8 rounded-full bg-[#F2ECE4] mx-auto flex items-center justify-center text-[#8C4A28] mb-1">
               <Coffee size={14} />
@@ -275,7 +276,7 @@ export default function ProfileMainView({
           {/* Fav Table */}
           <div
             onClick={() => onNavigateSubView('coffee_passport')}
-            className="bg-[#FAF5EE] rounded-2xl p-3 text-center border border-[#EBDCCF] cursor-pointer hover:border-[#D4956A] transition-all"
+            className="bg-[#FAF5EE] rounded-2xl p-3 text-center border border-[#EBDCCF] transition-all"
           >
             <div className="w-8 h-8 rounded-full bg-[#F2ECE4] mx-auto flex items-center justify-center text-[#8C4A28] mb-1">
               <Armchair size={14} />
@@ -291,7 +292,7 @@ export default function ProfileMainView({
           {/* Top Pick */}
           <div
             onClick={() => onNavigateSubView('coffee_passport')}
-            className="bg-[#FAF5EE] rounded-2xl p-3 text-center border border-[#EBDCCF] cursor-pointer hover:border-[#D4956A] transition-all"
+            className="bg-[#FAF5EE] rounded-2xl p-3 text-center border border-[#EBDCCF] transition-all"
           >
             <div className="w-8 h-8 rounded-full bg-[#F2ECE4] mx-auto flex items-center justify-center text-[#8C4A28] mb-1">
               <Heart size={14} />

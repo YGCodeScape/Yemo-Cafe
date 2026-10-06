@@ -30,7 +30,7 @@ export default function CoffeePassportView({ onBack }: CoffeePassportViewProps) 
         </button>
         <h1
           className="text-[19px] font-bold text-[#2C1A0E]"
-          style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+          style={{ fontFamily: '"Montserrat", sans-serif' }}
         >
           Café Habits &amp; Coffee Passport
         </h1>
