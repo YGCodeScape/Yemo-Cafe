@@ -158,7 +158,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
                           ? 'text-[#1C1008]'
                           : isCta
                           ? 'text-[#D4956A]'
-                          : 'text-white/50 group-hover:text-white/80'
+                          : 'text-white/50'
                       }`}
                     />
                   </div>
@@ -172,7 +172,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
                         ? 'text-[#D4956A] font-bold'
                         : isCta
                         ? 'text-[#D4956A] font-semibold'
-                        : 'text-white/50 group-hover:text-white/80 font-medium'
+                        : 'text-white/50 font-medium'
                     }`}
                   >
                     {label}

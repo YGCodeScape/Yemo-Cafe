@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, ChevronDown, Clock, Navigation } from 'lucide-react'
+import { useProfileStore } from '@/store/useProfileStore'
 
 const DEFAULT_BANNERS = [
   '/assets/cafe_storefront.jpg',
@@ -46,8 +47,10 @@ export default function HomeBanner({
   greeting,
   userName,
   banners = DEFAULT_BANNERS,
-  avatarUrl = '/assets/user-avatar.jpg',
+  avatarUrl,
 }: Props) {
+  const profileAvatar = useProfileStore((state) => state.profile.avatar)
+  const displayAvatar = avatarUrl || profileAvatar || '/mascot-assets/mascot-welcome.png'
   const [index, setIndex] = useState(0)
   const [dir, setDir] = useState(1)
   const [isCafeDropdownOpen, setIsCafeDropdownOpen] = useState(false)
@@ -154,7 +157,7 @@ export default function HomeBanner({
             className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-md ring-1 ring-[#DFD4C5] shrink-0 active:scale-95 transition-transform hover:ring-[#CDB8A0]"
           >
             <Image
-              src={avatarUrl}
+              src={displayAvatar}
               alt={userName || 'User Profile'}
               fill
               className="object-cover"

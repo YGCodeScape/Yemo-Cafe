@@ -60,7 +60,7 @@ export default function AccountSupportView({
         </button>
         <h1
           className="text-[19px] font-bold text-[#2C1A0E]"
-          style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+          style={{ fontFamily: '"Montserrat", sans-serif' }}
         >
           Account &amp; Café Support
         </h1>
@@ -78,7 +78,7 @@ export default function AccountSupportView({
             </div>
             <button
               onClick={onOpenEditProfile}
-              className="text-[12px] font-bold text-[#8C4A28] hover:underline flex items-center gap-0.5"
+              className="text-[12px] font-bold text-[#8C4A28] flex items-center gap-0.5"
             >
               <span>Edit</span>
               <ChevronRight size={13} />
@@ -94,9 +94,13 @@ export default function AccountSupportView({
               <span className="text-[#A08878]">Phone</span>
               <span className="font-semibold text-[#2C1A0E]">{profile.phone}</span>
             </div>
-            <div className="flex justify-between py-1">
+            <div className="flex justify-between py-1 border-b border-[#FAF5EE]">
               <span className="text-[#A08878]">Email</span>
               <span className="font-semibold text-[#2C1A0E]">{profile.email}</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-[#A08878]">Date of Birth (DOB)</span>
+              <span className="font-semibold text-[#2C1A0E]">{profile.dob || profile.birthday || '14 August 1998'}</span>
             </div>
           </div>
 
@@ -106,7 +110,7 @@ export default function AccountSupportView({
               <Gift size={18} className="text-[#C87D55]" />
               <div>
                 <h4 className="text-[12px] font-bold text-[#2C1A0E]">
-                  Birthday Perk ({profile.birthday})
+                  Birthday Perk ({profile.dob || profile.birthday})
                 </h4>
                 <p className="text-[11px] text-[#8C7362]">
                   Get a free handcrafted drink on your birthday!
@@ -122,7 +126,7 @@ export default function AccountSupportView({
           {/* Order Receipts */}
           <Link
             href="/orders"
-            className="py-3 flex items-center justify-between text-[#2C1A0E] hover:text-[#8C4A28] transition-colors"
+            className="py-3 flex items-center justify-between text-[#2C1A0E] transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-[#FAF5EE] flex items-center justify-center text-[#8C4A28]">
@@ -169,7 +173,7 @@ export default function AccountSupportView({
             href="https://wa.me/919876543210"
             target="_blank"
             rel="noopener noreferrer"
-            className="py-3 flex items-center justify-between text-[#2C1A0E] hover:text-[#8C4A28] transition-colors"
+            className="py-3 flex items-center justify-between text-[#2C1A0E] transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-[#EBF7EE] flex items-center justify-center text-emerald-700">
@@ -190,7 +194,7 @@ export default function AccountSupportView({
           {/* Call Us */}
           <a
             href="tel:+91"
-            className="py-3 flex items-center justify-between text-[#2C1A0E] hover:text-[#8C4A28] transition-colors"
+            className="py-3 flex items-center justify-between text-[#2C1A0E] transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-[#FAF5EE] flex items-center justify-center text-[#8C4A28]">
@@ -207,7 +211,7 @@ export default function AccountSupportView({
           {/* Feedback & Review shortcut */}
           <div
             onClick={onOpenFeedback}
-            className="py-3 flex items-center justify-between text-[#2C1A0E] cursor-pointer hover:text-[#8C4A28] transition-colors"
+            className="py-3 flex items-center justify-between text-[#2C1A0E] cursor-pointer transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-[#FAF5EE] flex items-center justify-center text-[#C87D55]">
@@ -229,7 +233,7 @@ export default function AccountSupportView({
         {/* 3. Logout Button */}
         <button
           onClick={handleLogout}
-          className="w-full bg-[#2C1A0E] hover:bg-[#1E110A] text-white py-3.5 rounded-2xl text-[14px] font-bold flex items-center justify-center gap-2 shadow-xs active:scale-[0.98] transition-all"
+          className="w-full bg-[#2C1A0E] text-white py-3.5 rounded-2xl text-[14px] font-bold flex items-center justify-center gap-2 shadow-xs active:scale-[0.98] transition-all"
         >
           <LogOut size={16} />
           <span>Logout</span>

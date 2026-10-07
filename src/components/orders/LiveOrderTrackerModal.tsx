@@ -7,13 +7,12 @@ import {
   ArrowLeft, 
   Clock, 
   Check, 
-  CheckCircle2,
-  Coffee, 
-  Sparkles, 
+  CheckCircle2, 
   Share2,
   HeartHandshake
 } from 'lucide-react'
 import { Order, OrderStatus, ORDER_STATUS_STEPS, useOrderStore } from '@/store/useOrderStore'
+import FeedbackForm, { FeedbackFormData } from '@/components/ui/FeedbackForm'
 
 interface LiveOrderTrackerModalProps {
   order: Order
@@ -24,16 +23,15 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
   const setOrderStatus = useOrderStore(state => state.setOrderStatus)
   const setOrderRating = useOrderStore(state => state.setOrderRating)
 
-  const [selectedRating, setSelectedRating] = useState<number>(order.rating || 5)
-  const [selectedTag, setSelectedTag] = useState<string>('Super smooth coffee')
-  const [feedbackSubmitted, setFeedbackSubmitted] = useState<boolean>(Boolean(order.feedbackNote))
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState<boolean>(Boolean(order.feedbackNote || order.rating))
   const [showToast, setShowToast] = useState<string | null>(null)
 
   const stepKeys: OrderStatus[] = ['placed', 'confirmed', 'preparing', 'on_the_way', 'served']
   const currentStepIndex = order.status === 'completed' ? 4 : Math.max(0, stepKeys.indexOf(order.status))
 
-  const handleShareFeedback = () => {
-    setOrderRating(order.id, selectedRating, selectedTag)
+  const handleOrderFeedbackSubmit = (data: FeedbackFormData) => {
+    const feedbackNote = [data.tag, data.comment].filter(Boolean).join(' — ') || data.tag || 'Great experience'
+    setOrderRating(order.id, data.rating, feedbackNote)
     setFeedbackSubmitted(true)
     setShowToast('Thank you! Your feedback warms our hearts ☕')
     setTimeout(() => setShowToast(null), 3000)
@@ -194,7 +192,7 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
                 </p>
                 <button
                   onClick={handleMarkCompleted}
-                  className="w-full bg-[#C87D55] hover:bg-[#B36840] active:scale-[0.98] text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-[12px]"
+                  className="w-full bg-[#C87D55] active:scale-[0.98] text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-[12px]"
                 >
                   <CheckCircle2 size={18} />
                   <span>Mark as Completed</span>
@@ -255,90 +253,28 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
 
           {/* Feedback Section (Appears when order is Served or Completed - Mockup Screen 4) */}
           {(order.status === 'served' || order.status === 'completed') && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-3xl p-5 border border-[#EDE2D5] shadow-sm relative overflow-hidden"
-            >
-              <div className="text-center mb-4">
-                <div className="inline-flex items-center gap-1 text-[11px] font-bold text-[#C87D55] uppercase tracking-wider bg-[#F9EFE6] px-3 py-1 rounded-full mb-1.5">
-                  <Sparkles size={12} />
-                  <span>Your Feedback Matters</span>
-                </div>
-                <h3
-                  className="text-[18px] font-bold text-[#2C1A0E]"
-                  style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-                >
-                  How was your Yemo experience?
-                </h3>
-                <p className="text-[12px] text-[#7A6251]">
-                  Tap a coffee cup to rate your café visit
-                </p>
-              </div>
-
-              {/* 5 Coffee Cup Interactive Rating Icons */}
-              <div className="flex items-center justify-center gap-3 my-3">
-                {[1, 2, 3, 4, 5].map(star => {
-                  const isFilled = star <= selectedRating
-                  return (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setSelectedRating(star)}
-                      className="group flex flex-col items-center gap-1 active:scale-90 transition-all p-1.5"
-                    >
-                      <div
-                        className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${
-                          isFilled
-                            ? ' text-[#2C1A0E] shadow-md shadow-[#2C1A0E]/15 scale-105'
-                            : ' text-[#A89485]'
-                        }`}
-                      >
-                        <Coffee
-                          size={22}
-                          className={`transition-colors ${isFilled ? 'fill-[#E8C5A5]' : ''}`}
-                        />
-                      </div>
-                      <span className="text-[10px] font-bold text-[#7A6251]">
-                        {star}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-
-              {/* Quick feedback tags */}
-              <div className="flex flex-wrap gap-1.5 justify-center my-3">
-                {[
-                  'Loved the coffee! ☕',
-                  'Super fast service ⚡',
-                  'Cozy vibe ✨',
-                  'Warm & flaky pastry 🥐',
-                  'Friendly barista 💛'
-                ].map(tag => (
-                  <button
-                    key={tag}
-                    onClick={() => setSelectedTag(tag)}
-                    className={`text-[11px] font-semibold px-3 py-1.5 rounded-full transition-all ${
-                      selectedTag === tag
-                        ? 'bg-[#2C1A0E] text-white shadow-xs'
-                        : 'bg-[#FAF4ED] text-[#7A6251] border border-[#EBDCCF] hover:bg-[#F2ECE3]'
-                    }`}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-
-              {/* Share Feedback Button */}
-              <button
-                onClick={handleShareFeedback}
-                className="w-full bg-[#2C1A0E] hover:bg-[#1E110A] text-white py-3 rounded-full text-[13px] font-bold flex items-center justify-center gap-1.5 shadow-md active:scale-98 transition-all mt-2"
-              >
-                <HeartHandshake size={16} />
-                <span>{feedbackSubmitted ? 'Feedback Sent ✓' : 'Share Feedback'}</span>
-              </button>
-            </motion.div>
+            <FeedbackForm
+              badgeText="Your Feedback Matters"
+              title="How was your Yemo experience?"
+              subtitle={`Rate your visit for ${order.tableNumber} (${order.orderNumber})`}
+              initialRating={order.rating || 5}
+              initialTag={order.feedbackNote || 'Loved the coffee! ☕'}
+              tags={[
+                'Loved the coffee! ☕',
+                'Super fast service ⚡',
+                'Cozy vibe ✨',
+                'Warm & flaky pastry 🥐',
+                'Friendly barista 💛'
+              ]}
+              showCommentInput={true}
+              commentPlaceholder="Add any order notes or compliments (optional)..."
+              commentRows={2}
+              submitButtonText="Share Feedback"
+              submittedButtonText="Feedback Sent ✓"
+              submitIcon={<HeartHandshake size={16} />}
+              isSubmitted={feedbackSubmitted}
+              onSubmit={handleOrderFeedbackSubmit}
+            />
           )}
 
           {/* Order Items Breakdown */}
@@ -417,7 +353,7 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
                 className={`text-[11px] font-bold px-2.5 py-1.5 rounded-lg shrink-0 transition-all ${
                   order.status === st
                     ? 'bg-[#2C1A0E] text-white shadow-xs'
-                    : 'bg-[#F2ECE4] text-[#6E5442] hover:bg-[#EAE2D7]'
+                    : 'bg-[#F2ECE4] text-[#6E5442]'
                 }`}
               >
                 {st.replace(/_/g, ' ')}

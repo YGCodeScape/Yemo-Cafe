@@ -12,6 +12,7 @@ export interface UserProfile {
   milestoneTarget: number
   memberSince: string
   birthday: string
+  dob?: string
   bio: string
 }
 
@@ -107,13 +108,14 @@ export const useProfileStore = create<ProfileState>()(
         name: 'anushka',
         phone: '+91 9082882412',
         email: 'ananya@gmail.com',
-        avatar: '/assets/user-avatar.jpg',
+        avatar: '/mascot-assets/mascot-welcome.png',
         tier: 'Gold Member',
         memberId: '#YMO-VIP-88',
         beans: 120,
         milestoneTarget: 200,
         memberSince: 'March 2024',
         birthday: '14 August',
+        dob: '14 August 1998',
         bio: 'Good food, better days ☕',
       },
       taste: {
