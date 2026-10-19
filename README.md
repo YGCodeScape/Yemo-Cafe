@@ -31,7 +31,7 @@ Welcome to the **yemo° Café** Customer Web App.
 > [!NOTE]
 > **Beta Demo Version**: This application is a fully functional, self-contained client-side demo version. It comes pre-equipped with an independent local authentication engine, table allocation simulator, persistent cart and kitchen order state machine, and interactive rewards allowing anyone to explore, test, and experience the complete end-to-end customer journey directly in their browser without requiring backend database provisioning.
 
-Designed with an artisan warm café aesthetic (`#FDFAF6` cream, `#6B3F2A` roasted espresso, and `#D4956A` warm caramel), the app simulates the real in-store ritual: arriving at the café, scanning a table, customizing artisan drinks, and tracking food preparation in real time.
+Designed with an artisan warm café aesthetic the app simulates the real in-store ritual: arriving at the café, scanning a table, customizing artisan drinks, and tracking food preparation in real time.
 
 ---
 
@@ -84,7 +84,6 @@ Designed with an artisan warm café aesthetic (`#FDFAF6` cream, `#6B3F2A` roaste
 
 ---
 
-## 🚀 Getting Started Locally
 
 ### Prerequisites
 - Node.js 18.18+ or Node.js 20+
@@ -124,5 +123,5 @@ yemo° Café is designed from the ground up as a mobile progressive web applicat
 ---
 
 <p align="center">
-  Crafted with ☕ and passion for <strong>yemo° Café</strong>.
+  This project is open source and available under the MIT License.
 </p>
