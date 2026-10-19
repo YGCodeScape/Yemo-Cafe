@@ -49,7 +49,7 @@ export default function SignupPage() {
       setError(result.error || 'Failed to create account')
       setLoading(false)
     } else {
-      updateProfile({ name: name.trim(), email: email.trim().toLowerCase() })
+      updateProfile({ name: name.trim(), email: email.trim().toLowerCase(), phone: '' })
       router.push('/home')
     }
   }

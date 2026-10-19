@@ -217,11 +217,12 @@ export function signUpUser(
   users.push(newUser)
   saveStoredUsers(users)
 
-  // Clear orders and cart for fresh user signup
+  // Clear orders, cart and old profile data for fresh user signup
   if (typeof window !== 'undefined') {
     try {
       localStorage.removeItem('yemo_orders_store')
       localStorage.removeItem('yemo_cart_store')
+      localStorage.removeItem('yemo_profile_store')
     } catch {}
   }
 
@@ -303,6 +304,7 @@ export function logoutUser(): void {
     localStorage.removeItem(STORAGE_USERS_KEY)
     localStorage.removeItem('yemo_orders_store')
     localStorage.removeItem('yemo_cart_store')
+    localStorage.removeItem('yemo_profile_store')
     clearSessionCookie()
   } catch (err) {
     console.error('Failed to logout:', err)

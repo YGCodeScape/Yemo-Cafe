@@ -214,8 +214,8 @@ export default function EditProfileModal() {
                   type="text"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  required
-                  className="w-full bg-white border border-[#EBDCCF] rounded-xl px-3.5 py-2.5 text-[13px] text-[#2C1A0E] focus:outline-none focus:ring-2 focus:ring-[#C87D55]/30 font-medium"
+                  placeholder="Add phone number"
+                  className="w-full bg-white border border-[#EBDCCF] rounded-xl px-3.5 py-2.5 text-[13px] text-[#2C1A0E] focus:outline-none focus:ring-2 focus:ring-[#C87D55]/30 font-medium placeholder:text-[#A89080]"
                 />
               </div>
 

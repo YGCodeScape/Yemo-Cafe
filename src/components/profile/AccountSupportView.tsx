@@ -96,7 +96,7 @@ export default function AccountSupportView({
             </div>
             <div className="flex justify-between py-1 border-b border-[#FAF5EE]">
               <span className="text-[#A08878]">Phone</span>
-              <span className="font-semibold text-[#2C1A0E]">{profile.phone}</span>
+              <span className="font-semibold text-[#2C1A0E]">{profile.phone || ''}</span>
             </div>
             <div className="flex justify-between py-1 border-b border-[#FAF5EE]">
               <span className="text-[#A08878]">Email</span>

@@ -47,6 +47,7 @@ export default function LoginPage() {
     updateProfile({
       name: 'Guest Explorer',
       email: 'guest@yemocafe.com',
+      phone: '',
     })
     router.push('/home')
   }

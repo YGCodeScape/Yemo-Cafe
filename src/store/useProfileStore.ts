@@ -105,9 +105,9 @@ export const useProfileStore = create<ProfileState>()(
   persist(
     (set, get) => ({
       profile: {
-        name: 'anushka',
-        phone: '+91 0000000000',
-        email: 'user@gmail.com',
+        name: 'Guest Explorer',
+        phone: '',
+        email: 'guest@yemocafe.com',
         avatar: '/mascot-assets/mascot-welcome.png',
         tier: 'Gold Member',
         memberId: '#YMO-VIP-88',
