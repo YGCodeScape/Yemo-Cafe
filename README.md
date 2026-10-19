@@ -91,7 +91,7 @@ yemo° Café is designed from the ground up as a mobile progressive web applicat
 ---
 
 <p align="center">
-  <img src="./public/icons/yemo-logo-bg.png" alt="yemo logo" width="80" style="border-radius: 20px;" />
+  <img src="./public/assets/onboarding-mascot-1.png" alt="yemo mascot" width="220" />
   <br />
   This project is open source and available under the MIT License.
 </p>
