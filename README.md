@@ -1,7 +1,5 @@
 <p align="center">
   <img src="./public/icons/yemo-logo-bg.png" alt="yemo logo" width="80" style="border-radius: 20px;" />
-  <br />
-  <img src="./public/assets/onboarding-mascot-1.png" alt="yemo mascot" width="220" />
 </p>
 
 <h1 align="center">yemo° Café Customer App</h1>
@@ -84,36 +82,6 @@ Designed with an artisan warm café aesthetic the app simulates the real in-stor
 
 ---
 
-
-### Prerequisites
-- Node.js 18.18+ or Node.js 20+
-- npm, pnpm, or yarn
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/your-username/Y16-cafe.git
-cd Y16-cafe
-```
-
-### 2. Install dependencies
-```bash
-npm install
-```
-
-### 3. Start the development server
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser. For mobile preview, press `F12` and switch to mobile device emulation (e.g., iPhone 14 / 15 Pro, 390px × 844px).
-
-### 4. Build for production
-```bash
-npm run build
-```
-
----
-
 ## 📱 Mobile-First Recommendations
 
 yemo° Café is designed from the ground up as a mobile progressive web application. For the best viewing experience:
@@ -123,5 +91,7 @@ yemo° Café is designed from the ground up as a mobile progressive web applicat
 ---
 
 <p align="center">
+  <img src="./public/icons/yemo-logo-bg.png" alt="yemo logo" width="80" style="border-radius: 20px;" />
+  <br />
   This project is open source and available under the MIT License.
 </p>
