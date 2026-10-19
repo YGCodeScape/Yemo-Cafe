@@ -13,7 +13,6 @@ import {
   ChevronRight, 
   LogOut, 
   Copy, 
-  Check,
   Star,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -207,7 +206,7 @@ export default function AccountSupportView({
               </div>
               <div>
                 <span className="text-[13px] font-bold block">Call Counter</span>
-                <span className="text-[11px] text-[#A08878]">+91</span>
+                <span className="text-[11px] text-[#A08878]">+91 8930004530</span>
               </div>
             </div>
             <ChevronRight size={16} className="text-[#A08878]" />
