@@ -106,8 +106,8 @@ export const useProfileStore = create<ProfileState>()(
     (set, get) => ({
       profile: {
         name: 'anushka',
-        phone: '+91 9082882412',
-        email: 'ananya@gmail.com',
+        phone: '+91 0000000000',
+        email: 'user@gmail.com',
         avatar: '/mascot-assets/mascot-welcome.png',
         tier: 'Gold Member',
         memberId: '#YMO-VIP-88',

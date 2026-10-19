@@ -207,7 +207,7 @@ export default function AccountSupportView({
               </div>
               <div>
                 <span className="text-[13px] font-bold block">Call Counter</span>
-                <span className="text-[11px] text-[#A08878]">+91 90828802412</span>
+                <span className="text-[11px] text-[#A08878]">+91</span>
               </div>
             </div>
             <ChevronRight size={16} className="text-[#A08878]" />
