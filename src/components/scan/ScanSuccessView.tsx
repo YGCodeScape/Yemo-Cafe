@@ -6,6 +6,7 @@ import { ChevronLeft, Check, ArrowRight } from 'lucide-react'
 
 type Props = {
   tableNumber: string
+  hasCartItems?: boolean
   onStartOrdering: () => void
   onChangeTable: () => void
   onBack: () => void
@@ -18,6 +19,7 @@ type Props = {
  */
 export default function ScanSuccessView({
   tableNumber,
+  hasCartItems = false,
   onStartOrdering,
   onChangeTable,
   onBack,
@@ -47,7 +49,7 @@ export default function ScanSuccessView({
           >
             Scan
           </h3>
-          <p className="text-[11px] text-[#8F7868]">Find your table</p>
+          <p className="text-[11px] text-[#8F7868]">Table Confirmed</p>
         </div>
         <div className="w-9" />
       </div>
@@ -87,10 +89,12 @@ export default function ScanSuccessView({
         {/* Reassuring Note */}
         <div className="bg-[#FAF2E8] border border-[#E9DFD0] rounded-2xl p-3.5 max-w-[280px] mx-auto shadow-sm">
           <p className="text-[14px] font-bold text-[#2C1A0E] mb-0.5">
-            You're all set!
+            You&apos;re all set!
           </p>
           <p className="text-[12px] text-[#7A6353]">
-            Start adding your favourites to your table order.
+            {hasCartItems
+              ? 'Your table is confirmed. You can now place your order!'
+              : 'Start adding your favourites to your table order.'}
           </p>
         </div>
       </div>
@@ -101,7 +105,7 @@ export default function ScanSuccessView({
           onClick={onStartOrdering}
           className="w-full py-4 rounded-full bg-[#2C1A0E] hover:bg-[#1C1008] text-white font-bold text-[15px] shadow-lg shadow-[#2C1A0E]/20 flex items-center justify-center gap-2 active:scale-98 transition-all"
         >
-          <span>Start Ordering</span>
+          <span>{hasCartItems ? 'View Cart & Place Order' : 'Start Ordering'}</span>
           <ArrowRight size={17} />
         </button>
 

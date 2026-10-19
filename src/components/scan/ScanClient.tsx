@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { AnimatePresence } from 'framer-motion'
 import { useCartStore } from '@/store/useCartStore'
 
@@ -12,7 +12,6 @@ import CameraPermissionModal from '@/components/scan/CameraPermissionModal'
 import ScanSuccessView from '@/components/scan/ScanSuccessView'
 import TableAlreadyActiveView from '@/components/scan/TableAlreadyActiveView'
 import ScanFailedView from '@/components/scan/ScanFailedView'
-import ManualCodeEntryView from '@/components/scan/ManualCodeEntryView'
 import SwitchTableModal from '@/components/scan/SwitchTableModal'
 
 export type ScanView =
@@ -22,8 +21,7 @@ export type ScanView =
   | 'success'         // Screen 4: Table confirmed
   | 'already_active'  // Screen 5: Already ordering from table
   | 'failed'          // Screen 6: Unrecognized QR
-  | 'manual_code'     // Screen 7: Enter table code
-  | 'switch_confirm'  // Screen 8: Switch table confirmation
+  | 'switch_confirm'  // Screen 7: Switch table confirmation
 
 /**
  * ScanClient Orchestrator
@@ -31,7 +29,11 @@ export type ScanView =
  */
 export default function ScanClient() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const needTableParam = searchParams.get('needTable') === 'true'
 
+  const items = useCartStore((state) => state.items)
+  const openCart = useCartStore((state) => state.openCart)
   const tableNumber = useCartStore((state) => state.tableNumber)
   const isTableConfirmed = useCartStore((state) => state.isTableConfirmed)
   const setTableNumber = useCartStore((state) => state.setTableNumber)
@@ -40,18 +42,17 @@ export default function ScanClient() {
 
   // Current view state (if table is already confirmed, default to active table screen)
   const [view, setView] = useState<ScanView>(() => {
-    return isTableConfirmed ? 'already_active' : 'landing'
+    return isTableConfirmed && tableNumber ? 'already_active' : 'landing'
   })
 
   // Pending table candidate for the switch confirmation dialog
-  const [pendingTable, setPendingTable] = useState('Table 8')
+  const [pendingTable, setPendingTable] = useState('Table 08')
 
   // Auto-hide bottom navigation when full-screen scanner or modals are active
   useEffect(() => {
     const isFullscreen =
       view === 'camera' ||
       view === 'permission' ||
-      view === 'manual_code' ||
       view === 'failed' ||
       view === 'switch_confirm' ||
       view === 'success'
@@ -64,14 +65,14 @@ export default function ScanClient() {
 
   // Handlers
   const handleOpenScanner = () => {
-    setView('permission')
+    setView('camera')
   }
 
   const handleAllowCamera = () => {
     setView('camera')
   }
 
-  const handleScanSuccess = (detectedTable: string = 'Table 12') => {
+  const handleScanSuccess = (detectedTable: string) => {
     if (isTableConfirmed && tableNumber && tableNumber !== detectedTable) {
       setPendingTable(detectedTable)
       setView('switch_confirm')
@@ -86,29 +87,9 @@ export default function ScanClient() {
     setView('failed')
   }
 
-  const handleManualCodeSubmit = (rawCode: string) => {
-    let formatted = rawCode
-    if (rawCode.startsWith('T') && rawCode.length > 1) {
-      formatted = `Table ${rawCode.slice(1)}`
-    } else if (!isNaN(Number(rawCode))) {
-      formatted = `Table ${rawCode}`
-    } else {
-      formatted = `Table ${rawCode}`
-    }
-
-    if (isTableConfirmed && tableNumber && tableNumber !== formatted) {
-      setPendingTable(formatted)
-      setView('switch_confirm')
-    } else {
-      setTableNumber(formatted)
-      setTableConfirmed(true)
-      setView('success')
-    }
-  }
-
   const handleResetSession = () => {
     setTableConfirmed(false)
-    setTableNumber('Table 12')
+    setTableNumber('')
     setView('landing')
   }
 
@@ -118,6 +99,17 @@ export default function ScanClient() {
     setView('success')
   }
 
+  const handleStartOrdering = () => {
+    if (items.length > 0) {
+      router.push('/menu')
+      setTimeout(() => {
+        openCart()
+      }, 300)
+    } else {
+      router.push('/menu')
+    }
+  }
+
   return (
     <div className="h-auto bg-[#FDFAF6] text-[#2C1A0E] flex flex-col justify-between relative overflow-hidden select-none">
       <AnimatePresence mode="wait">
@@ -125,7 +117,7 @@ export default function ScanClient() {
         {view === 'landing' && (
           <ScanLandingView
             onOpenScanner={handleOpenScanner}
-            onEnterCodeManually={() => setView('manual_code')}
+            needTableNotice={needTableParam && !isTableConfirmed}
           />
         )}
 
@@ -134,7 +126,6 @@ export default function ScanClient() {
           <CameraPermissionModal
             onAllowCamera={handleAllowCamera}
             onClose={() => setView('landing')}
-            onEnterCodeManually={() => setView('manual_code')}
           />
         )}
 
@@ -150,8 +141,9 @@ export default function ScanClient() {
         {/* Screen 4: Scan Success */}
         {view === 'success' && (
           <ScanSuccessView
-            tableNumber={tableNumber || 'Table 12'}
-            onStartOrdering={() => router.push('/menu')}
+            tableNumber={tableNumber || 'Table 01'}
+            hasCartItems={items.length > 0}
+            onStartOrdering={handleStartOrdering}
             onChangeTable={() => setView('camera')}
             onBack={() => setView('landing')}
           />
@@ -160,10 +152,11 @@ export default function ScanClient() {
         {/* Screen 5: Table Already In Use */}
         {view === 'already_active' && (
           <TableAlreadyActiveView
-            tableNumber={tableNumber || 'Table 12'}
+            tableNumber={tableNumber || 'Table 01'}
             onContinueOrdering={() => router.push('/menu')}
             onScanAnotherTable={() => {
-              setPendingTable('Table 8')
+              const randomNum = Math.floor(Math.random() * 12) + 1
+              setPendingTable(`Table ${randomNum < 10 ? '0' + randomNum : randomNum}`)
               setView('switch_confirm')
             }}
             onResetSession={handleResetSession}
@@ -175,23 +168,14 @@ export default function ScanClient() {
         {view === 'failed' && (
           <ScanFailedView
             onTryAgain={() => setView('camera')}
-            onEnterTableCode={() => setView('manual_code')}
             onBack={() => setView('landing')}
           />
         )}
 
-        {/* Screen 7: Enter Table Code Manually */}
-        {view === 'manual_code' && (
-          <ManualCodeEntryView
-            onCodeSubmit={handleManualCodeSubmit}
-            onBack={() => setView('landing')}
-          />
-        )}
-
-        {/* Screen 8: Switch Table Confirmation Dialog */}
+        {/* Screen 7: Switch Table Confirmation Dialog */}
         {view === 'switch_confirm' && (
           <SwitchTableModal
-            currentTable={tableNumber || 'Table 12'}
+            currentTable={tableNumber || 'Table 01'}
             pendingTable={pendingTable}
             onConfirmSwitch={handleConfirmSwitch}
             onCancel={() => setView(isTableConfirmed ? 'already_active' : 'landing')}

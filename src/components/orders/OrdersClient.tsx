@@ -1,15 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  ClipboardList, 
-  RotateCcw, 
-  Trash2, 
-  Sparkles, 
-  SlidersHorizontal,
-  ChevronDown
-} from 'lucide-react'
+import { AnimatePresence } from 'framer-motion'
+import { ClipboardList } from 'lucide-react'
 import { useOrderStore } from '@/store/useOrderStore'
 import ActiveOrderCard from './ActiveOrderCard'
 import PastOrderCard from './PastOrderCard'
@@ -21,49 +14,36 @@ type TabType = 'all' | 'active' | 'past'
 
 export default function OrdersClient() {
   const [activeTab, setActiveTab] = useState<TabType>('all')
-  const [showDemoTools, setShowDemoTools] = useState<boolean>(false)
 
-  const orders = useOrderStore(state => state.orders)
-  const activeTrackerModalId = useOrderStore(state => state.activeTrackerModalId)
-  const pastDetailModalId = useOrderStore(state => state.pastDetailModalId)
-  const closeLiveTracker = useOrderStore(state => state.closeLiveTracker)
-  const closePastDetail = useOrderStore(state => state.closePastDetail)
-  const resetToMockOrders = useOrderStore(state => state.resetToMockOrders)
-  const clearAllOrders = useOrderStore(state => state.clearAllOrders)
+  const orders = useOrderStore((state) => state.orders)
+  const activeTrackerModalId = useOrderStore((state) => state.activeTrackerModalId)
+  const pastDetailModalId = useOrderStore((state) => state.pastDetailModalId)
+  const closeLiveTracker = useOrderStore((state) => state.closeLiveTracker)
+  const closePastDetail = useOrderStore((state) => state.closePastDetail)
 
   // Active orders are any order not 'completed' (placed, confirmed, preparing, on_the_way, served)
-  const activeOrders = orders.filter(o => o.status !== 'completed')
-  const pastOrders = orders.filter(o => o.status === 'completed')
+  const activeOrders = orders.filter((o) => o.status !== 'completed')
+  const pastOrders = orders.filter((o) => o.status === 'completed')
 
   // Find targeted order for modals
-  const activeModalOrder = orders.find(o => o.id === activeTrackerModalId)
-  const pastModalOrder = orders.find(o => o.id === pastDetailModalId)
+  const activeModalOrder = orders.find((o) => o.id === activeTrackerModalId)
+  const pastModalOrder = orders.find((o) => o.id === pastDetailModalId)
 
   // Empty state check
   if (orders.length === 0) {
     return (
       <div className="h-auto bg-[#FDFAF6] pt-6 pb-28 px-4">
         {/* Top Header */}
-        <div className="flex items-center justify-between max-w-md mx-auto mb-4">
-          <div>
-            <h1
-              className="text-[28px] font-bold text-[#2C1A0E] tracking-tight leading-none"
-              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-            >
-              Orders
-            </h1>
-            <p className="text-[13px] text-[#8C7362] mt-1">
-              Live tracker &amp; your café history
-            </p>
-          </div>
-          <button
-            onClick={resetToMockOrders}
-            className="flex items-center gap-1.5 text-[11px] font-bold text-[#8C4A28] bg-[#F7EBE1] hover:bg-[#EFE2D5] px-3 py-1.5 rounded-full border border-[#E8D4C5] transition-all"
-            title="Restore sample orders for testing"
+        <div className="max-w-md mx-auto mb-4">
+          <h1
+            className="text-[28px] font-bold text-[#2C1A0E] tracking-tight leading-none"
+            style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
           >
-            <RotateCcw size={12} />
-            <span>Load Demo Orders</span>
-          </button>
+            Orders
+          </h1>
+          <p className="text-[13px] text-[#8C7362] mt-1">
+            Live tracker &amp; your café history
+          </p>
         </div>
 
         <OrdersEmptyState />
@@ -74,66 +54,17 @@ export default function OrdersClient() {
   return (
     <div className="min-h-screen bg-[#FDFAF6] pt-5 pb-32 px-4 max-w-md mx-auto">
       {/* Top Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1
-            className="text-[28px] font-bold text-[#2C1A0E] tracking-tight leading-none"
-            style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-          >
-            Orders
-          </h1>
-          <p className="text-[13px] text-[#8C7362] mt-1">
-            Live tracker &amp; café history
-          </p>
-        </div>
-
-        {/* Demo Tools Button */}
-        <button
-          onClick={() => setShowDemoTools(!showDemoTools)}
-          className="flex items-center gap-1.5 text-[11px] font-bold text-[#7A6251] bg-white border border-[#E8DFD5] px-3 py-1.5 rounded-full shadow-xs hover:bg-[#F9F5F0] transition-all"
+      <div className="mb-4">
+        <h1
+          className="text-[28px] font-bold text-[#2C1A0E] tracking-tight leading-none"
+          style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
         >
-          <SlidersHorizontal size={12} className="text-[#C87D55]" />
-          <span>Demo Controls</span>
-          <ChevronDown size={12} className={`transition-transform ${showDemoTools ? 'rotate-180' : ''}`} />
-        </button>
+          Orders
+        </h1>
+        <p className="text-[13px] text-[#8C7362] mt-1">
+          Live tracker &amp; café history
+        </p>
       </div>
-
-      {/* Demo Controls Dropdown */}
-      <AnimatePresence>
-        {showDemoTools && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="bg-white rounded-2xl p-3 border border-[#EBDCCF] mb-4 shadow-sm space-y-2 overflow-hidden"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-[#2C1A0E]">
-                Test Mode Controls:
-              </span>
-              <span className="text-[10px] text-[#9E8777]">
-                {orders.length} order{orders.length === 1 ? '' : 's'} stored
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={resetToMockOrders}
-                className="flex-1 bg-[#F5EDE4] hover:bg-[#EAE0D5] text-[#2C1A0E] py-2 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all"
-              >
-                <RotateCcw size={12} />
-                <span>Reset Demo Orders</span>
-              </button>
-              <button
-                onClick={clearAllOrders}
-                className="flex-1 bg-red-50 hover:bg-red-100 text-red-700 py-2 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all"
-              >
-                <Trash2 size={12} />
-                <span>Clear (Empty State)</span>
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Segmented Filter Tabs */}
       <div className="flex bg-[#EFE8DF] p-1 rounded-2xl mb-5">
@@ -189,7 +120,7 @@ export default function OrdersClient() {
             </div>
 
             <div className="space-y-3">
-              {activeOrders.map(order => (
+              {activeOrders.map((order) => (
                 <ActiveOrderCard key={order.id} order={order} />
               ))}
             </div>
@@ -209,7 +140,7 @@ export default function OrdersClient() {
             </div>
 
             <div className="space-y-3">
-              {pastOrders.map(order => (
+              {pastOrders.map((order) => (
                 <PastOrderCard key={order.id} order={order} />
               ))}
             </div>

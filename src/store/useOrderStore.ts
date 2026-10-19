@@ -39,103 +39,6 @@ export const ORDER_STATUS_STEPS: { key: OrderStatus; label: string; sublabel: st
   { key: 'completed', label: 'Completed', sublabel: 'Order session finished', stepNumber: 6 },
 ]
 
-export const INITIAL_MOCK_ORDERS: Order[] = [
-  {
-    id: 'ord-1042',
-    orderNumber: '#YMO-1042',
-    tableNumber: 'Table 07',
-    status: 'preparing',
-    placedAt: 'Today, 04:32 PM',
-    estimatedTime: '8–10 mins',
-    items: [
-      {
-        id: 'ord-item-1',
-        productId: 'iced-caramel-latte',
-        name: 'Iced Caramel Latte',
-        price: 280,
-        image: '/products/caramel-latte.jpg',
-        size: 'Medium (350ml)',
-        quantity: 1,
-        extras: [{ name: 'Oat Milk', price: 40 }]
-      },
-      {
-        id: 'ord-item-2',
-        productId: 'choco-croissant',
-        name: 'Chocolate Croissant',
-        price: 220,
-        image: '/products/croissant.jpg',
-        size: 'Regular',
-        quantity: 1,
-      }
-    ],
-    subtotal: 500,
-    tax: 25,
-    total: 525,
-  },
-  {
-    id: 'ord-1041',
-    orderNumber: '#YMO-1041',
-    tableNumber: 'Table 07',
-    status: 'completed',
-    placedAt: 'Today, 02:15 PM',
-    items: [
-      {
-        id: 'ord-item-3',
-        productId: 'cappuccino',
-        name: 'Artisan Cappuccino',
-        price: 220,
-        image: '/products/cappuccino.jpg',
-        size: 'Medium (300ml)',
-        quantity: 2,
-      },
-      {
-        id: 'ord-item-4',
-        productId: 'cheesecake',
-        name: 'New York Cheesecake',
-        price: 280,
-        image: '/products/cheesecake.jpg',
-        size: 'Slice',
-        quantity: 1,
-      }
-    ],
-    subtotal: 720,
-    tax: 36,
-    total: 756,
-    rating: 5,
-  },
-  {
-    id: 'ord-1039',
-    orderNumber: '#YMO-1039',
-    tableNumber: 'Table 04',
-    status: 'completed',
-    placedAt: 'Yesterday, 06:40 PM',
-    items: [
-      {
-        id: 'ord-item-5',
-        productId: 'vanilla-latte',
-        name: 'Vanilla Bean Latte',
-        price: 260,
-        image: '/products/vanilla-latte.jpg',
-        size: 'Regular (250ml)',
-        quantity: 1,
-      },
-      {
-        id: 'ord-item-6',
-        productId: 'choco-croissant',
-        name: 'Almond Croissant',
-        price: 240,
-        image: '/products/croissant.jpg',
-        size: 'Regular',
-        quantity: 1,
-      }
-    ],
-    subtotal: 500,
-    tax: 25,
-    total: 525,
-    rating: 4,
-  }
-]
-
 interface OrderState {
   orders: Order[]
   activeTrackerModalId: string | null
@@ -149,14 +52,59 @@ interface OrderState {
   openPastDetail: (orderId: string) => void
   closePastDetail: () => void
   createOrderFromCart: (cartItems: CartItem[], tableNumber: string) => string
-  resetToMockOrders: () => void
   clearAllOrders: () => void
+}
+
+// Automatic live kitchen simulation schedule (in seconds)
+const SIMULATION_TIMERS = new Map<string, NodeJS.Timeout[]>()
+
+function scheduleOrderProgression(
+  orderId: string,
+  updateStatus: (id: string, st: OrderStatus) => void
+) {
+  // Clear any existing timers for this order
+  const existing = SIMULATION_TIMERS.get(orderId)
+  if (existing) {
+    existing.forEach(clearTimeout)
+  }
+
+  const timers: NodeJS.Timeout[] = []
+
+  // 1. Placed -> Confirmed after 8s
+  timers.push(
+    setTimeout(() => {
+      updateStatus(orderId, 'confirmed')
+    }, 8000)
+  )
+
+  // 2. Confirmed -> Preparing after 20s
+  timers.push(
+    setTimeout(() => {
+      updateStatus(orderId, 'preparing')
+    }, 20000)
+  )
+
+  // 3. Preparing -> On The Way after 40s
+  timers.push(
+    setTimeout(() => {
+      updateStatus(orderId, 'on_the_way')
+    }, 40000)
+  )
+
+  // 4. On The Way -> Served after 60s
+  timers.push(
+    setTimeout(() => {
+      updateStatus(orderId, 'served')
+    }, 60000)
+  )
+
+  SIMULATION_TIMERS.set(orderId, timers)
 }
 
 export const useOrderStore = create<OrderState>()(
   persist(
     (set, get) => ({
-      orders: INITIAL_MOCK_ORDERS,
+      orders: [],
       activeTrackerModalId: null,
       pastDetailModalId: null,
 
@@ -193,7 +141,7 @@ export const useOrderStore = create<OrderState>()(
       },
 
       createOrderFromCart: (cartItems: CartItem[], tableNumber: string) => {
-        const nextOrderNum = Math.floor(1043 + Math.random() * 900)
+        const nextOrderNum = Math.floor(1001 + Math.random() * 8999)
         const orderId = `ord-${nextOrderNum}`
         const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
         const tax = Math.round(subtotal * 0.05)
@@ -206,10 +154,10 @@ export const useOrderStore = create<OrderState>()(
         const newOrder: Order = {
           id: orderId,
           orderNumber: `#YMO-${nextOrderNum}`,
-          tableNumber: tableNumber || 'Table 07',
+          tableNumber: tableNumber || 'Table 12',
           status: 'placed',
           placedAt,
-          estimatedTime: '10–12 mins',
+          estimatedTime: '8–12 mins',
           items: cartItems.map((ci, idx) => ({
             id: `item-${orderId}-${idx}`,
             productId: ci.productId,
@@ -230,14 +178,18 @@ export const useOrderStore = create<OrderState>()(
           activeTrackerModalId: newOrder.id,
         })
 
+        // Automatically simulate live kitchen workflow progress in the background
+        scheduleOrderProgression(newOrder.id, (id, st) => {
+          get().setOrderStatus(id, st)
+        })
+
         return orderId
       },
 
-      resetToMockOrders: () => {
-        set({ orders: INITIAL_MOCK_ORDERS })
-      },
-
       clearAllOrders: () => {
+        // Clear simulation timers
+        SIMULATION_TIMERS.forEach(timers => timers.forEach(clearTimeout))
+        SIMULATION_TIMERS.clear()
         set({ orders: [], activeTrackerModalId: null, pastDetailModalId: null })
       }
     }),

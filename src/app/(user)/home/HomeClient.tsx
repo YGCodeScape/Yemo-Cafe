@@ -38,7 +38,7 @@ export default function HomeClient({ profile }: Props) {
       addItem(
         {
           ...item,
-          temp: (item as any).temp ?? 'cold',
+          temp: item.temp ?? 'cold',
         },
         '200 ml',
         []

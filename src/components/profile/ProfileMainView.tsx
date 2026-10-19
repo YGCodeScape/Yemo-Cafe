@@ -21,6 +21,8 @@ import {
   MessageSquare,
   ArrowRight,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { logoutUser } from '@/lib/auth'
 import { useProfileStore, ProfileSubView } from '@/store/useProfileStore'
 
 interface ProfileMainViewProps {
@@ -32,12 +34,19 @@ export default function ProfileMainView({
   onNavigateSubView,
   onOpenEditProfile,
 }: ProfileMainViewProps) {
+  const router = useRouter()
   const profile = useProfileStore((state) => state.profile)
   const taste = useProfileStore((state) => state.taste)
   const stats = useProfileStore((state) => state.stats)
   const vouchers = useProfileStore((state) => state.vouchers)
   const setQrPassOpen = useProfileStore((state) => state.setQrPassOpen)
   const showToast = useProfileStore((state) => state.showToast)
+
+  const handleLogout = () => {
+    logoutUser()
+    showToast('Logged out successfully')
+    router.push('/auth/login')
+  }
 
   const progressPercent = Math.min(100, Math.round((profile.beans / profile.milestoneTarget) * 100))
   const beansNeeded = Math.max(0, profile.milestoneTarget - profile.beans)
@@ -505,8 +514,8 @@ export default function ProfileMainView({
           </div>
 
           <div
-            onClick={() => showToast('Logged out of demo session')}
-            className="bg-[#FAF5EE] rounded-2xl p-2.5 border border-[#EBDCCF] transition-all"
+            onClick={handleLogout}
+            className="bg-[#FAF5EE] rounded-2xl p-2.5 border border-[#EBDCCF] transition-all cursor-pointer"
           >
             <div className="w-8 h-8 rounded-full bg-white mx-auto flex items-center justify-center text-[#8C4A28] mb-1 shadow-2xs">
               <LogOut size={14} />

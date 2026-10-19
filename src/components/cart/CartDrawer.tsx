@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Trash2, Plus, Minus, ArrowRight, CheckCircle2, Utensils } from 'lucide-react'
+import { X, Trash2, Plus, Minus, ArrowRight, CheckCircle2, Utensils, ScanLine } from 'lucide-react'
 import { useCartStore } from '@/store/useCartStore'
 import { POPULAR_DRINKS } from '@/data/menuData'
 
@@ -16,6 +17,7 @@ export default function CartDrawer() {
   const closeCart = useCartStore(state => state.closeCart)
   const items = useCartStore(state => state.items)
   const tableNumber = useCartStore(state => state.tableNumber)
+  const isTableConfirmed = useCartStore(state => state.isTableConfirmed)
   const updateQuantity = useCartStore(state => state.updateQuantity)
   const removeItem = useCartStore(state => state.removeItem)
   const clearCart = useCartStore(state => state.clearCart)
@@ -33,6 +35,14 @@ export default function CartDrawer() {
 
   const handlePlaceOrder = () => {
     if (items.length === 0) return
+
+    // Priority check: Table MUST be scanned first
+    if (!isTableConfirmed || !tableNumber) {
+      closeCart()
+      router.push('/scan?needTable=true')
+      return
+    }
+
     setOrderPlaced(true)
     setTimeout(() => {
       createOrderFromCart(items, tableNumber)
@@ -126,10 +136,21 @@ export default function CartDrawer() {
                   >
                     Your Cart
                   </h2>
-                  <span className="bg-[#2C1A0E] text-[#FDFAF6] text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
-                    <Utensils size={11} />
-                    {tableNumber}
-                  </span>
+                  {isTableConfirmed && tableNumber ? (
+                    <span className="bg-[#2C1A0E] text-[#FDFAF6] text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                      <Utensils size={11} />
+                      {tableNumber}
+                    </span>
+                  ) : (
+                    <Link
+                      href="/scan?needTable=true"
+                      onClick={closeCart}
+                      className="bg-[#FAF2E8] border border-[#E8D6C3] text-[#8C4A28] hover:bg-[#F4E8D8] text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1 transition-all"
+                    >
+                      <ScanLine size={11} />
+                      <span>Scan Table</span>
+                    </Link>
+                  )}
                 </div>
                 <button
                   onClick={closeCart}
@@ -263,6 +284,22 @@ export default function CartDrawer() {
               {/* Footer */}
               {items.length > 0 && (
                 <div className="p-5 bg-white border-t border-[#F0E6DC] space-y-3">
+                  {!isTableConfirmed && (
+                    <div className="bg-[#FAF2E8] border border-[#E8D6C3] rounded-2xl p-3 flex items-center justify-between text-[12px]">
+                      <div className="flex items-center gap-2 text-[#7A5338]">
+                        <ScanLine size={16} className="text-[#C87D55] shrink-0" />
+                        <span className="font-semibold">Scan table first to place order</span>
+                      </div>
+                      <Link
+                        href="/scan?needTable=true"
+                        onClick={closeCart}
+                        className="text-[#8C4A28] font-bold underline"
+                      >
+                        Scan now
+                      </Link>
+                    </div>
+                  )}
+
                   <div className="flex items-center justify-between">
                     <span className="text-[13px] text-[#8C7362] font-medium">Total</span>
                     <span className="text-[20px] font-bold text-[#2C1A0E]">
@@ -273,7 +310,7 @@ export default function CartDrawer() {
                     onClick={handlePlaceOrder}
                     className="w-full bg-[#2C1A0E] hover:bg-[#1E110A] text-white text-[15px] font-bold py-3.5 rounded-full shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                   >
-                    <span>Proceed to Order</span>
+                    <span>{isTableConfirmed && tableNumber ? 'Proceed to Order' : 'Scan Table First to Order'}</span>
                     <ArrowRight size={16} />
                   </button>
                 </div>

@@ -335,33 +335,6 @@ export default function LiveOrderTrackerModal({ order, onClose }: LiveOrderTrack
           </div>
         </div>
 
-        {/* Persistent Bottom Dev Switcher Bar (For testing all screens smoothly) */}
-        <div className="sticky bottom-0 z-30 bg-white/95 backdrop-blur-md px-4 py-3 border-t border-[#EFE7DE] shadow-lg">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#A08878]">
-              🛠️ Switch State for Testing:
-            </span>
-            <span className="text-[10px] font-bold text-[#C87D55]">
-              Current: {order.status}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-            {(['placed', 'confirmed', 'preparing', 'on_the_way', 'served', 'completed'] as OrderStatus[]).map(st => (
-              <button
-                key={st}
-                onClick={() => setOrderStatus(order.id, st)}
-                className={`text-[11px] font-bold px-2.5 py-1.5 rounded-lg shrink-0 transition-all ${
-                  order.status === st
-                    ? 'bg-[#2C1A0E] text-white shadow-xs'
-                    : 'bg-[#F2ECE4] text-[#6E5442]'
-                }`}
-              >
-                {st.replace(/_/g, ' ')}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Toast alert */}
         <AnimatePresence>
           {showToast && (

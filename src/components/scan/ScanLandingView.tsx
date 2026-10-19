@@ -2,21 +2,21 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { QrCode, Keyboard } from 'lucide-react'
+import { QrCode, Camera, AlertCircle } from 'lucide-react'
 
 type Props = {
   onOpenScanner: () => void
-  onEnterCodeManually: () => void
+  needTableNotice?: boolean
 }
 
 /**
  * Screen 1: Scan Landing Page
  * Displays barista mascot header, viewfinder preview card,
- * manual table code trigger, and "How it works" 3-step guide.
+ * prominent Scan Table QR button, and "How it works" 3-step guide.
  */
 export default function ScanLandingView({
   onOpenScanner,
-  onEnterCodeManually,
+  needTableNotice,
 }: Props) {
   return (
     <motion.div
@@ -27,6 +27,20 @@ export default function ScanLandingView({
       transition={{ duration: 0.2 }}
       className="flex-1 flex flex-col justify-between max-w-md mx-auto w-full px-5 pt-5 pb-24"
     >
+      {/* Priority Notice Banner when redirected from Cart */}
+      {needTableNotice && (
+        <div className="mb-4 bg-[#FAF0E6] border border-[#E8D4C0] rounded-2xl p-3.5 flex items-start gap-2.5 shadow-xs">
+          <AlertCircle size={18} className="text-[#C87D55] shrink-0 mt-0.5" />
+          <div>
+            <h4 className="text-[13px] font-bold text-[#2C1A0E]">
+              Table scan required for orders
+            </h4>
+            <p className="text-[11.5px] text-[#7A5A44] mt-0.5 leading-snug">
+              Please scan your table QR code first so our kitchen knows where to serve your order.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Title & Subtitle */}
       <div className="mb-5">
@@ -42,7 +56,8 @@ export default function ScanLandingView({
       </div>
 
       {/* Central Viewfinder Preview Card */}
-      <div onClick={onOpenScanner}
+      <div
+        onClick={onOpenScanner}
         className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-md cursor-pointer border border-[#E8DFC8] group active:scale-[0.985] transition-all bg-[#2C1A0E]"
       >
         {/* Warm café table background */}
@@ -79,19 +94,19 @@ export default function ScanLandingView({
         </div>
       </div>
 
-      {/* Enter Table Code Manually Button */}
-      <div className="mt-4 mb-4">
+      {/* Primary Scan Button */}
+      <div className="mt-5 mb-5">
         <button
-          onClick={onEnterCodeManually}
-          className="w-full py-3.5 px-4 rounded-full border border-[#D9CEBF] bg-white hover:bg-[#FAF4ED] text-[#4A3222] font-semibold text-[13.5px] shadow-sm flex items-center justify-center gap-2 active:scale-95 transition-all"
+          onClick={onOpenScanner}
+          className="w-full py-4 px-5 rounded-full bg-[#2C1A0E] hover:bg-[#1C1008] text-white font-bold text-[14.5px] shadow-lg shadow-[#2C1A0E]/15 flex items-center justify-center gap-2.5 active:scale-98 transition-all"
         >
-          <Keyboard size={16} className="text-[#8C6D58]" />
-          <span>Enter table code manually</span>
+          <Camera size={18} className="text-[#D4956A]" />
+          <span>Open Camera Scanner</span>
         </button>
       </div>
 
       {/* "How it works" Card */}
-      <div className="bg-[#F6EFE6]/80 rounded-2xl p-4 border mb-6 border-[#EAE0D2]">
+      <div className="bg-[#F6EFE6]/80 rounded-2xl p-4 border mb-4 border-[#EAE0D2]">
         <div className="flex items-center justify-between mb-3">
           <span className="text-[13px] font-bold text-[#3D2314] tracking-wide">
             How it works
@@ -122,7 +137,7 @@ export default function ScanLandingView({
               Confirm Table
             </span>
             <span className="text-[9.5px] text-[#8C6D58] leading-tight mt-0.5">
-              Lock session
+              Assigns table
             </span>
           </div>
 
@@ -132,7 +147,7 @@ export default function ScanLandingView({
               3
             </div>
             <span className="text-[11.5px] font-bold text-[#3D2314]">
-              Start Ordering
+              Place Order
             </span>
             <span className="text-[9.5px] text-[#8C6D58] leading-tight mt-0.5">
               Direct to kitchen

@@ -1,15 +1,18 @@
-import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 import HomeClient from './HomeClient'
 
 export default async function HomePage() {
   let profile = null
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    profile = user ? {
-      name: user.user_metadata?.full_name ?? user.email?.split('@')[0] ?? 'there',
-      email: user.email ?? '',
-    } : null
+    const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get('yemo_session')
+    if (sessionCookie?.value) {
+      const parsed = JSON.parse(decodeURIComponent(sessionCookie.value))
+      profile = {
+        name: parsed.name || 'there',
+        email: parsed.email || '',
+      }
+    }
   } catch {
     profile = null
   }

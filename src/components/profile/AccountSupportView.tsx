@@ -14,8 +14,10 @@ import {
   LogOut, 
   Copy, 
   Check,
-  Star
+  Star,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { logoutUser } from '@/lib/auth'
 import { useProfileStore } from '@/store/useProfileStore'
 
 interface AccountSupportViewProps {
@@ -29,6 +31,7 @@ export default function AccountSupportView({
   onOpenEditProfile,
   onOpenFeedback,
 }: AccountSupportViewProps) {
+  const router = useRouter()
   const profile = useProfileStore((state) => state.profile)
   const showToast = useProfileStore((state) => state.showToast)
 
@@ -38,7 +41,9 @@ export default function AccountSupportView({
   }
 
   const handleLogout = () => {
-    showToast('Logged out of demo session')
+    logoutUser()
+    showToast('Logged out successfully')
+    router.push('/auth/login')
   }
 
   return (

@@ -56,7 +56,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     try {
       if (localStorage.getItem('yemo-onboarded') === 'true') {
-        // router.replace('/auth/login')  need to undo after testing 
+        router.replace('/auth/login')
       }
     } catch {
       /* localStorage blocked (private/incognito) — proceed normally */

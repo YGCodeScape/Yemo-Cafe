@@ -2,12 +2,13 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
-import { Eye, EyeOff, ChevronLeft } from 'lucide-react'
+import { signUpUser } from '@/lib/auth'
+import { useProfileStore } from '@/store/useProfileStore'
+import { Eye, EyeOff } from 'lucide-react'
 
 function strengthScore(pw: string) {
   let score = 0
-  if (pw.length >= 8)    score++
+  if (pw.length >= 8) score++
   if (/[A-Z]/.test(pw)) score++
   if (/[0-9]/.test(pw)) score++
   if (/[^A-Za-z0-9]/.test(pw)) score++
@@ -16,14 +17,15 @@ function strengthScore(pw: string) {
 
 export default function SignupPage() {
   const router = useRouter()
-  const [name, setName]         = useState('')
-  const [email, setEmail]       = useState('')
+  const updateProfile = useProfileStore((state) => state.updateProfile)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirm, setConfirm]   = useState('')
-  const [showPw, setShowPw]     = useState(false)
+  const [confirm, setConfirm] = useState('')
+  const [showPw, setShowPw] = useState(false)
   const [showConfirmPw, setShowConfirmPw] = useState(false)
-  const [loading, setLoading]   = useState(false)
-  const [error, setError]       = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const score = strengthScore(password)
   const strengthColors = ['bg-[#E2DDD8]', 'bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-green-400']
@@ -31,41 +33,53 @@ export default function SignupPage() {
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault()
-    if (password !== confirm) { setError('Passwords do not match'); return }
-    if (score < 2) { setError('Please use a stronger password'); return }
+    if (password !== confirm) {
+      setError('Passwords do not match')
+      return
+    }
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
     setLoading(true)
     setError(null)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: name },
-      },
-    })
-    if (error) { setError(error.message); setLoading(false) }
-    else { router.push('/home') }
+
+    const result = signUpUser(name, email, password)
+    if (!result.success) {
+      setError(result.error || 'Failed to create account')
+      setLoading(false)
+    } else {
+      updateProfile({ name: name.trim(), email: email.trim().toLowerCase() })
+      router.push('/home')
+    }
   }
 
   return (
     <div className='flex flex-col min-h-dvh p-6 pt-10'>
-
       <div className='mb-6'>
         <h1 className='font-display text-[36px] font-bold text-[#2C1A0E] leading-tight'>
-          Be a Part of <br /> <span style={{ fontFamily: '"Lily Script One", system-ui' }} className='text-[#6B3F2A]' >yemo</span> Family
+          Be a Part of <br />{' '}
+          <span
+            style={{ fontFamily: '"Lily Script One", system-ui' }}
+            className='text-[#6B3F2A]'
+          >
+            yemo
+          </span>{' '}
+          Family
         </h1>
         <p className='text-sm text-[#A89080] mt-2'>Create your account to start ordering</p>
       </div>
 
       <form onSubmit={handleSignup} className='flex flex-col gap-3 flex-1'>
-
         {/* Full Name */}
         <div>
-          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Full Name</label>
+          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>
+            Full Name
+          </label>
           <input
             type='text'
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             placeholder='Your name'
             required
             className='w-full h-12 px-4 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
@@ -74,11 +88,13 @@ export default function SignupPage() {
 
         {/* Email */}
         <div>
-          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Email address</label>
+          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>
+            Email address
+          </label>
           <input
             type='email'
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder='you@email.com'
             required
             className='w-full h-12 px-4 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
@@ -87,13 +103,15 @@ export default function SignupPage() {
 
         {/* Password */}
         <div>
-          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Password</label>
+          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>
+            Password
+          </label>
           <div className='relative'>
             <input
               type={showPw ? 'text' : 'password'}
               value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder='Min. 8 characters'
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder='Min. 6 characters'
               required
               className='w-full h-12 px-4 pr-11 bg-[#F2EAE1] border-2 border-[#E2DDD8] rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none focus:border-[#6B3F2A] transition-colors'
             />
@@ -108,7 +126,7 @@ export default function SignupPage() {
           {password && (
             <div className='mt-2'>
               <div className='flex gap-1'>
-                {[1, 2, 3, 4].map(i => (
+                {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
                     className={`flex-1 h-1 rounded-full transition-colors ${
@@ -124,12 +142,14 @@ export default function SignupPage() {
 
         {/* Confirm Password */}
         <div>
-          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>Confirm Password</label>
+          <label className='text-sm font-semibold text-[#2C1A0E] block mb-1.5'>
+            Confirm Password
+          </label>
           <div className='relative'>
             <input
               type={showConfirmPw ? 'text' : 'password'}
               value={confirm}
-              onChange={e => setConfirm(e.target.value)}
+              onChange={(e) => setConfirm(e.target.value)}
               placeholder='Repeat password'
               required
               className={`w-full h-12 px-4 pr-11 bg-[#F2EAE1] border-2 rounded-xl text-sm text-[#2C1A0E] placeholder:text-[#A89080] outline-none transition-colors ${
@@ -171,7 +191,9 @@ export default function SignupPage() {
 
         <p className='text-center text-md text-[#A89080] mt-auto pt-2'>
           Have an account?{' '}
-          <Link href='/auth/login' className='text-[#6B3F2A] font-bold'>Log in</Link>
+          <Link href='/auth/login' className='text-[#6B3F2A] font-bold'>
+            Log in
+          </Link>
         </p>
       </form>
     </div>

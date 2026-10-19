@@ -1,22 +1,19 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ChevronLeft, QrCode, RefreshCw } from 'lucide-react'
+import { ChevronLeft, QrCode, RefreshCw, Home } from 'lucide-react'
 
 type Props = {
   onTryAgain: () => void
-  onEnterTableCode: () => void
   onBack: () => void
 }
 
 /**
  * Screen 6: Scan Failed View (Unrecognized QR)
- * Displays error graphic with exclamation badge and CTAs
- * (Try Again and Enter Table Code).
+ * Displays error graphic with exclamation badge and Try Again CTA.
  */
 export default function ScanFailedView({
   onTryAgain,
-  onEnterTableCode,
   onBack,
 }: Props) {
   return (
@@ -59,14 +56,14 @@ export default function ScanFailedView({
           className="text-[22px] font-extrabold text-[#2C1A0E] leading-snug mb-2 max-w-[270px] mx-auto"
           style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
         >
-          Hmm... we couldn't recognize that QR
+          Hmm... we couldn&apos;t recognize that QR
         </h2>
         <p className="text-[13px] text-[#7A6353] leading-relaxed max-w-[260px] mx-auto">
-          Make sure you're scanning the QR code provided by Yemo.
+          Please make sure you are scanning the official QR stand placed on your Yemo Café table.
         </p>
       </div>
 
-      {/* CTAs: Try Again & Enter Table Code */}
+      {/* CTAs: Try Again & Back */}
       <div className="space-y-3 pt-2">
         <button
           onClick={onTryAgain}
@@ -77,10 +74,11 @@ export default function ScanFailedView({
         </button>
 
         <button
-          onClick={onEnterTableCode}
-          className="w-full py-3.5 rounded-full border border-[#D9CEBF] bg-white text-[#5C3D2E] font-semibold text-[13.5px] hover:bg-[#FAF4ED] active:scale-98 transition-all"
+          onClick={onBack}
+          className="w-full py-3.5 rounded-full border border-[#D9CEBF] bg-white text-[#5C3D2E] font-semibold text-[13.5px] hover:bg-[#FAF4ED] active:scale-98 transition-all flex items-center justify-center gap-2"
         >
-          Enter Table Code
+          <Home size={15} />
+          <span>Back to Home</span>
         </button>
       </div>
     </motion.div>

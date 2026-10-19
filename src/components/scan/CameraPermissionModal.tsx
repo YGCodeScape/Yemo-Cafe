@@ -6,20 +6,15 @@ import { ChevronLeft, Camera, Sparkles } from 'lucide-react'
 type Props = {
   onAllowCamera: () => void
   onClose: () => void
-  onEnterCodeManually: () => void
 }
 
 /**
  * Screen 3: Camera Permission Request Modal / Bottom Sheet
- * Asks user for camera access with 3 clear options:
- * 1. Allow Camera
- * 2. Not now
- * 3. Enter table code manually
+ * Asks user for camera access.
  */
 export default function CameraPermissionModal({
   onAllowCamera,
   onClose,
-  onEnterCodeManually,
 }: Props) {
   return (
     <motion.div
@@ -86,13 +81,6 @@ export default function CameraPermissionModal({
             className="w-full py-3.5 rounded-full border border-[#DED4C7] bg-white text-[#5C3D2E] font-semibold text-[14px] hover:bg-[#F8F4EE] active:scale-98 transition-all"
           >
             Not now
-          </button>
-
-          <button
-            onClick={onEnterCodeManually}
-            className="pt-2 text-[12.5px] font-semibold text-[#8C6D58] hover:text-[#2C1A0E] underline tracking-tight"
-          >
-            Enter table code manually
           </button>
         </div>
       </motion.div>

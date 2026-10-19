@@ -1,26 +1,43 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ChevronLeft, Flashlight } from 'lucide-react'
+import { ChevronLeft, QrCode, Sparkles } from 'lucide-react'
 
 type Props = {
   onClose: () => void
   onScanSuccess: (table: string) => void
-  onScanFail: () => void
+  onScanFail?: () => void
 }
 
 /**
- * Screen 2: Full Screen Active Camera Scanner
- * Displays camera viewfinder with animated laser line, flashlight toggle,
- * status indicator, and instant demo simulation triggers.
+ * Screen 2: Active Camera Scanner
+ * Shows camera viewfinder with animated laser line.
+ * Automatically scans and assigns a random table from Table 1 to Table 12
+ * without test/demo controls.
  */
 export default function ScanCameraView({
   onClose,
   onScanSuccess,
-  onScanFail,
 }: Props) {
+  const [isScanning, setIsScanning] = useState(true)
+
+  const handleScanAction = () => {
+    setIsScanning(false)
+    const randomNum = Math.floor(Math.random() * 12) + 1
+    const assignedTable = `Table ${randomNum < 10 ? '0' + randomNum : randomNum}`
+    onScanSuccess(assignedTable)
+  }
+
+  // Realistic auto-scan detection after ~1.6 seconds of viewfinder alignment
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleScanAction()
+    }, 1600)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
     <motion.div
@@ -45,15 +62,15 @@ export default function ScanCameraView({
             className="text-[20px] font-bold tracking-tight text-white"
             style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
           >
-            Scan
+            Scan Table
           </h2>
-          <p className="text-[11px] text-white/70">Find your table</p>
+          <p className="text-[11px] text-white/70">Align QR within frame</p>
         </div>
 
         <div className="w-10" />
       </div>
 
-      {/* Central Camera Viewfinder with Realistic Table Image & Laser */}
+      {/* Central Camera Viewfinder with Realistic Table Image & Sweeping Laser */}
       <div className="relative flex-1 flex items-center justify-center px-6">
         <div className="relative w-full max-w-[320px] aspect-[1/1] rounded-3xl overflow-hidden border border-white/20 shadow-2xl bg-black">
           <Image
@@ -62,6 +79,7 @@ export default function ScanCameraView({
             fill
             className="object-cover brightness-[0.75] contrast-[1.05]"
           />
+
           {/* Viewfinder Frame with Golden Glowing Corners */}
           <div className="absolute inset-4 rounded-2xl flex items-center justify-center">
             {/* Glowing corners */}
@@ -74,7 +92,7 @@ export default function ScanCameraView({
             <motion.div
               animate={{ y: [-110, 110, -110] }}
               transition={{
-                duration: 2.4,
+                duration: 2.2,
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
@@ -84,34 +102,26 @@ export default function ScanCameraView({
         </div>
       </div>
 
-      {/* Bottom Controls: Flashlight & Status */}
-      <div className="pb-10 pt-4 px-6 text-center z-20 space-y-4">
-
-        {/* Status Text */}
+      {/* Bottom Controls: Scanning Status & Immediate Trigger */}
+      <div className="pb-12 pt-4 px-6 text-center z-20 space-y-4 max-w-sm mx-auto w-full">
+        {/* Status Indicator */}
         <div className="flex items-center justify-center gap-2 text-white/80 text-[13px] font-medium">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-            className="w-3.5 h-3.5 border-2 border-[#D4956A] border-t-transparent rounded-full"
+            transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
+            className="w-4 h-4 border-2 border-[#D4956A] border-t-transparent rounded-full"
           />
-          <span>Looking for QR code...</span>
+          <span>Scanning table QR code...</span>
         </div>
 
-        {/* Quick Demo Simulation Buttons */}
-        <div className="pt-2 flex items-center justify-center gap-2">
-          <button
-            onClick={() => onScanSuccess('Table 12')}
-            className="px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold backdrop-blur-md border border-white/25 active:scale-95 transition-all"
-          >
-            ✓ Simulate Table 12
-          </button>
-          <button
-            onClick={onScanFail}
-            className="px-3.5 py-1.5 rounded-full bg-red-500/25 hover:bg-red-500/35 text-red-200 text-[11px] font-semibold backdrop-blur-md border border-red-400/30 active:scale-95 transition-all"
-          >
-            ✕ Simulate Unknown QR
-          </button>
-        </div>
+        {/* Instant Scan Button */}
+        <button
+          onClick={handleScanAction}
+          className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-[#D4956A] to-[#B36840] text-white font-bold text-[14px] shadow-lg shadow-[#D4956A]/20 flex items-center justify-center gap-2 active:scale-98 transition-all"
+        >
+          <QrCode size={18} />
+          <span>Tap to Scan Now</span>
+        </button>
       </div>
     </motion.div>
   )

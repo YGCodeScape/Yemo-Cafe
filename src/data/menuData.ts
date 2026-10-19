@@ -1,6 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// yemo° Menu Mock Data
-// Replace with real Supabase queries once the menu_items table is populated.
+// yemo° Menu Data (Beta Dataset)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type SpecialItem = {

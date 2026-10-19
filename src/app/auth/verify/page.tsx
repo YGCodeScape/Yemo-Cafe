@@ -1,21 +1,19 @@
 'use client'
 import { useState, useRef, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 
 function VerifyForm() {
-  const router  = useRouter()
-  const params  = useSearchParams()
-  const email   = params.get('email') ?? ''
+  const router = useRouter()
+  const params = useSearchParams()
+  const email = params.get('email') ?? 'your email'
 
-  const [otp, setOtp]             = useState(['', '', '', '', '', ''])
-  const [loading, setLoading]     = useState(false)
-  const [error, setError]         = useState<string | null>(null)
+  const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  const [loading, setLoading] = useState(false)
   const [countdown, setCountdown] = useState(60)
   const inputs = useRef<(HTMLInputElement | null)[]>([])
 
   useEffect(() => {
-    const t = setInterval(() => setCountdown(c => c > 0 ? c - 1 : 0), 1000)
+    const t = setInterval(() => setCountdown((c) => (c > 0 ? c - 1 : 0)), 1000)
     return () => clearInterval(t)
   }, [])
 
@@ -37,16 +35,12 @@ function VerifyForm() {
     const token = otp.join('')
     if (token.length < 6) return
     setLoading(true)
-    setError(null)
-    const supabase = createClient()
-    const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
-    if (error) { setError(error.message); setLoading(false) }
-    else router.push('/home')
+    setTimeout(() => {
+      router.push('/home')
+    }, 400)
   }
 
-  async function handleResend() {
-    const supabase = createClient()
-    await supabase.auth.resend({ type: 'signup', email })
+  function handleResend() {
     setCountdown(60)
   }
 
@@ -72,25 +66,21 @@ function VerifyForm() {
         {otp.map((d, i) => (
           <input
             key={i}
-            ref={el => { inputs.current[i] = el }}
+            ref={(el) => {
+              inputs.current[i] = el
+            }}
             type='text'
             inputMode='numeric'
             maxLength={1}
             value={d}
-            onChange={e => handleChange(i, e.target.value)}
-            onKeyDown={e => handleKeyDown(i, e)}
+            onChange={(e) => handleChange(i, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(i, e)}
             className={`w-11 h-14 text-center text-xl font-bold text-[#2C1A0E] bg-[#F2EAE1] border-2 rounded-2xl outline-none transition-colors ${
               d ? 'border-[#6B3F2A]' : 'border-[#E2DDD8]'
             } focus:border-[#D4956A]`}
           />
         ))}
       </div>
-
-      {error && (
-        <div className='w-full bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-xs text-red-600 mb-4'>
-          {error}
-        </div>
-      )}
 
       <button
         onClick={handleVerify}
@@ -128,10 +118,14 @@ function VerifyForm() {
 
 export default function VerifyPage() {
   return (
-    <Suspense fallback={<div className='flex min-h-dvh items-center justify-center text-[#A89080] text-sm'>Loading…</div>}>
+    <Suspense
+      fallback={
+        <div className='flex min-h-dvh items-center justify-center text-[#A89080] text-sm'>
+          Loading…
+        </div>
+      }
+    >
       <VerifyForm />
     </Suspense>
   )
 }
-
-

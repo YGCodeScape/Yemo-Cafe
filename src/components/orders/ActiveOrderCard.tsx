@@ -219,33 +219,6 @@ export default function ActiveOrderCard({ order }: ActiveOrderCardProps) {
           </button>
         </div>
       </div>
-
-      {/* Interactive Dev State Switcher (for testing all 6 order states) */}
-      <div className="pt-2 border-t border-[#F0E6DA] mt-2 relative z-10">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-[#A08878]">
-            🛠️ Preview State (Testing):
-          </span>
-          <span className="text-[10px] text-[#C87D55] font-semibold">
-            {order.status}
-          </span>
-        </div>
-        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-0.5">
-          {(['placed', 'confirmed', 'preparing', 'on_the_way', 'served', 'completed'] as OrderStatus[]).map(st => (
-            <button
-              key={st}
-              onClick={() => setOrderStatus(order.id, st)}
-              className={`text-[10px] font-bold px-2 py-1 rounded-md shrink-0 transition-all ${
-                order.status === st
-                  ? 'bg-[#2C1A0E] text-white shadow-xs'
-                  : 'bg-[#F2ECE4] text-[#6E5442] hover:bg-[#EAE2D7]'
-              }`}
-            >
-              {st.replace(/_/g, ' ')}
-            </button>
-          ))}
-        </div>
-      </div>
     </motion.div>
   )
 }
